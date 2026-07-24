@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Loader2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 import { formatCFA } from "@/lib/format";
 import { cartStore } from "@/lib/cart-store";
-import { getSalePrice, type Product } from "@/lib/products";
+import { getSalePrice, PLACEHOLDER_IMAGE, type Product } from "@/lib/products";
 
 function AddToCartButton({ productId, productName }: { productId: string; productName: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "added">("idle");
@@ -49,26 +50,38 @@ export function ProductCard({ product }: { product: Product }) {
   const salePrice = getSalePrice(product);
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
+    <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[var(--shadow-warm)]">
       <a
         href={`/produits/${product.id}`}
         className="relative aspect-square w-full overflow-hidden bg-muted"
       >
-        <img
-          src={product.image}
-          alt={product.alt}
-          loading="lazy"
-          className="h-full w-full object-cover"
-        />
+        {product.image === PLACEHOLDER_IMAGE ? (
+          <ProductImagePlaceholder
+            categorySlug={product.categorySlug}
+            alt={product.alt}
+            className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <img
+            src={product.image}
+            alt={product.alt}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
         {product.discountPercent > 0 && (
           <Badge variant="destructive" className="absolute left-2 top-2 shadow">
             -{product.discountPercent}%
           </Badge>
         )}
-        {product.isNew && <Badge className="absolute right-2 top-2 shadow">Nouveau</Badge>}
+        {product.isNew && (
+          <Badge className="absolute right-2 top-2 bg-accent text-accent-foreground shadow">
+            Nouveau
+          </Badge>
+        )}
       </a>
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-sm font-semibold text-card-foreground">
+        <h3 className="font-display text-sm font-semibold text-card-foreground">
           <a href={`/produits/${product.id}`} className="hover:underline">
             {product.name}
           </a>

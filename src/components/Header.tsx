@@ -19,12 +19,14 @@ function Logo() {
       <div
         role="img"
         aria-label="Logo Techno Office Sarl"
-        className="flex h-10 w-10 items-center justify-center rounded-md bg-primary font-bold text-primary-foreground"
+        className="flex h-10 w-10 items-center justify-center rounded-md bg-primary font-display font-bold text-primary-foreground"
       >
         TO
       </div>
       <div className="hidden flex-col leading-tight sm:flex">
-        <span className="text-sm font-bold text-foreground">Techno Office Sarl</span>
+        <span className="font-display text-sm font-semibold text-foreground">
+          Techno Office Sarl
+        </span>
         <span className="text-[11px] text-muted-foreground">La Qualité à moindre Coût</span>
       </div>
     </Link>

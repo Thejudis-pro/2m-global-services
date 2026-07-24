@@ -1,9 +1,11 @@
 import { CATEGORIES } from "@/lib/categories";
-import { PRODUCTS, type Product } from "@/lib/products";
+import { PLACEHOLDER_IMAGE, PRODUCTS, type Product } from "@/lib/products";
 
 export type Dimensions = { height: number; width: number; depth: number };
 
-export type GalleryImage = { src: string; alt: string };
+// src is null when no real photo exists yet — the gallery renders a designed
+// placeholder (see ProductImagePlaceholder) for that slot instead.
+export type GalleryImage = { src: string | null; alt: string };
 
 export type ProductDetails = {
   sku: string;
@@ -80,13 +82,14 @@ function buildGallery(product: Product): GalleryImage[] {
   if (product.images && product.images.length > 0) {
     return product.images;
   }
-  const base = product.image.split("?")[0];
-  const shortName = encodeURIComponent(product.name.split(" ").slice(0, 2).join(" "));
-  return [
-    { src: `${base}?text=${shortName}`, alt: product.alt },
-    { src: `${base}?text=${shortName}+vue+2`, alt: `${product.alt} — vue de côté` },
-    { src: `${base}?text=${shortName}+vue+3`, alt: `${product.alt} — vue de détail` },
-  ];
+  if (product.image === PLACEHOLDER_IMAGE) {
+    return [
+      { src: null, alt: product.alt },
+      { src: null, alt: `${product.alt} — vue de côté` },
+      { src: null, alt: `${product.alt} — vue de détail` },
+    ];
+  }
+  return [{ src: product.image, alt: product.alt }];
 }
 
 export function getProductDetails(product: Product): ProductDetails {

@@ -11,6 +11,7 @@ import { getReviewSummary, reviewsStore, useApprovedReviews } from "@/lib/review
 import { formatCFA } from "@/lib/format";
 import { cartStore } from "@/lib/cart-store";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -73,7 +74,13 @@ function StarRating({ value, outOf = 5 }: { value: number; outOf?: number }) {
   );
 }
 
-function Gallery({ images }: { images: { src: string; alt: string }[] }) {
+function Gallery({
+  images,
+  categorySlug,
+}: {
+  images: { src: string | null; alt: string }[];
+  categorySlug: string;
+}) {
   const [selected, setSelected] = useState(0);
   const current = images[selected];
 
@@ -87,26 +94,44 @@ function Gallery({ images }: { images: { src: string; alt: string }[] }) {
             className="block w-full overflow-hidden rounded-xl border border-border bg-muted"
             style={{ touchAction: "pinch-zoom" }}
           >
-            <img
-              src={current.src}
-              alt={current.alt}
-              className="aspect-square w-full object-cover"
-            />
+            {current.src ? (
+              <img
+                src={current.src}
+                alt={current.alt}
+                className="aspect-square w-full object-cover"
+              />
+            ) : (
+              <ProductImagePlaceholder
+                categorySlug={categorySlug}
+                alt={current.alt}
+                variant={selected}
+                className="aspect-square w-full"
+              />
+            )}
           </button>
         </DialogTrigger>
         <DialogContent className="max-w-3xl border-none bg-transparent p-0 shadow-none">
-          <img
-            src={current.src}
-            alt={current.alt}
-            className="h-auto max-h-[85vh] w-full rounded-lg object-contain"
-            style={{ touchAction: "pinch-zoom" }}
-          />
+          {current.src ? (
+            <img
+              src={current.src}
+              alt={current.alt}
+              className="h-auto max-h-[85vh] w-full rounded-lg object-contain"
+              style={{ touchAction: "pinch-zoom" }}
+            />
+          ) : (
+            <ProductImagePlaceholder
+              categorySlug={categorySlug}
+              alt={current.alt}
+              variant={selected}
+              className="aspect-square w-full rounded-lg"
+            />
+          )}
         </DialogContent>
       </Dialog>
       <div className="mt-3 grid grid-cols-3 gap-3">
         {images.map((img, i) => (
           <button
-            key={img.src}
+            key={i}
             type="button"
             onClick={() => setSelected(i)}
             aria-label={`Voir : ${img.alt}`}
@@ -115,7 +140,16 @@ function Gallery({ images }: { images: { src: string; alt: string }[] }) {
               i === selected ? "border-primary" : "border-transparent"
             }`}
           >
-            <img src={img.src} alt={img.alt} className="aspect-square w-full object-cover" />
+            {img.src ? (
+              <img src={img.src} alt={img.alt} className="aspect-square w-full object-cover" />
+            ) : (
+              <ProductImagePlaceholder
+                categorySlug={categorySlug}
+                alt={img.alt}
+                variant={i}
+                className="aspect-square w-full"
+              />
+            )}
           </button>
         ))}
       </div>
@@ -220,7 +254,7 @@ function ProductDetailPage() {
     "@context": "https://schema.org/",
     "@type": "Product",
     name: product.name,
-    image: details.images.map((img) => img.src),
+    image: details.images.map((img) => img.src).filter((src): src is string => src !== null),
     description: details.description,
     sku: details.sku,
     category: categoryLabel,
@@ -281,7 +315,7 @@ function ProductDetailPage() {
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <Gallery images={details.images} />
+        <Gallery images={details.images} categorySlug={product.categorySlug} />
 
         <div>
           <div className="mb-2 flex flex-wrap gap-2">

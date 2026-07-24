@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 
 const schema = z.string().trim().email({ message: "Adresse e-mail invalide" }).max(255);
 
-export function Newsletter() {
+export function Newsletter({ variant = "light" }: { variant?: "light" | "dark" }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const dark = variant === "dark";
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,10 +26,15 @@ export function Newsletter() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-2">
-      <label htmlFor="newsletter-email" className="block text-sm font-semibold text-foreground">
+      <label
+        htmlFor="newsletter-email"
+        className={`block text-sm font-semibold ${dark ? "text-primary-foreground" : "text-foreground"}`}
+      >
         Newsletter
       </label>
-      <p className="text-xs text-muted-foreground">Recevez nos offres et nouveautés.</p>
+      <p className={`text-xs ${dark ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+        Recevez nos offres et nouveautés.
+      </p>
       <div className="flex flex-col gap-2 sm:flex-row">
         <Input
           id="newsletter-email"
@@ -43,8 +49,16 @@ export function Newsletter() {
           }}
           aria-invalid={status === "error"}
           aria-describedby="newsletter-msg"
+          className={
+            dark
+              ? "bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/50"
+              : ""
+          }
         />
-        <Button type="submit" className="sm:w-auto">
+        <Button
+          type="submit"
+          className={`sm:w-auto ${dark ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}`}
+        >
           S'inscrire
         </Button>
       </div>
@@ -55,8 +69,12 @@ export function Newsletter() {
           status === "error"
             ? "text-destructive"
             : status === "success"
-              ? "text-primary"
-              : "text-muted-foreground"
+              ? dark
+                ? "text-accent"
+                : "text-primary"
+              : dark
+                ? "text-primary-foreground/60"
+                : "text-muted-foreground"
         }`}
       >
         {message}
