@@ -369,7 +369,7 @@ function ProduitsPage() {
               {currentPage > 1 ? (
                 <Link
                   to="/produits"
-                  search={(prev) => ({
+                  search={(prev: ProduitsSearch) => ({
                     ...prev,
                     page: currentPage - 1 === 1 ? undefined : currentPage - 1,
                   })}
