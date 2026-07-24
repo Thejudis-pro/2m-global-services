@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ShoppingCart, User, ChevronDown } from "lucide-react";
-import { CATEGORIES } from "@/lib/categories";
+import { useAllCategories } from "@/lib/category-store";
 import { useCartCount } from "@/lib/cart-store";
 import {
   DropdownMenu,
@@ -9,18 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "@/components/ui/sheet";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@/components/ui/collapsible";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 
 function Logo() {
@@ -45,6 +35,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const count = useCartCount();
+  const categories = useAllCategories();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -63,13 +54,19 @@ export function Header() {
               Produits <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-64">
-              {CATEGORIES.map((c) => (
+              {categories.map((c) => (
                 <DropdownMenuItem key={c.slug} asChild>
-                  <a href={`/produits/${c.slug}`}>{c.label}</a>
+                  <a href={`/produits?category=${c.slug}`}>{c.label}</a>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <a
+            href="/a-propos"
+            className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
+          >
+            À propos
+          </a>
           <a
             href="/contact"
             className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
@@ -140,10 +137,10 @@ export function Header() {
                     />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="ml-3 flex flex-col border-l border-border pl-3">
-                    {CATEGORIES.map((c) => (
+                    {categories.map((c) => (
                       <a
                         key={c.slug}
-                        href={`/produits/${c.slug}`}
+                        href={`/produits?category=${c.slug}`}
                         onClick={() => setOpen(false)}
                         className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary"
                       >
@@ -152,6 +149,13 @@ export function Header() {
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
+                <a
+                  href="/a-propos"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-3 text-base font-medium hover:bg-secondary"
+                >
+                  À propos
+                </a>
                 <a
                   href="/contact"
                   onClick={() => setOpen(false)}

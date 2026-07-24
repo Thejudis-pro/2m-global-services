@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail, Facebook } from "lucide-react";
-import { CATEGORIES, CONTACT } from "@/lib/categories";
+import { CONTACT } from "@/lib/categories";
+import { useAllCategories } from "@/lib/category-store";
 import { Newsletter } from "./Newsletter";
 
 function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -11,12 +12,17 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export function Footer() {
+  const categories = useAllCategories();
+
   return (
     <footer className="mt-16 border-t border-border bg-secondary/40">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
         <div className="grid gap-10 md:grid-cols-3">
           <section aria-labelledby="footer-contact">
-            <h2 id="footer-contact" className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground">
+            <h2
+              id="footer-contact"
+              className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground"
+            >
               Contactez-nous
             </h2>
             <ul className="space-y-3 text-sm text-muted-foreground">
@@ -70,14 +76,17 @@ export function Footer() {
           </section>
 
           <nav aria-labelledby="footer-products">
-            <h2 id="footer-products" className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground">
+            <h2
+              id="footer-products"
+              className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground"
+            >
               Nos Produits
             </h2>
             <ul className="space-y-2 text-sm">
-              {CATEGORIES.map((c) => (
+              {categories.map((c) => (
                 <li key={c.slug}>
                   <a
-                    href={`/produits/${c.slug}`}
+                    href={`/produits?category=${c.slug}`}
                     className="text-muted-foreground hover:text-primary hover:underline"
                   >
                     {c.label}
@@ -88,7 +97,9 @@ export function Footer() {
           </nav>
 
           <section aria-labelledby="footer-newsletter">
-            <h2 id="footer-newsletter" className="sr-only">Newsletter</h2>
+            <h2 id="footer-newsletter" className="sr-only">
+              Newsletter
+            </h2>
             <Newsletter />
           </section>
         </div>

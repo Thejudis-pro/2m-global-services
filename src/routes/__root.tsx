@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -94,8 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Techno Office Sarl — La Qualité à moindre Coût" },
       {
         property: "og:description",
-        content:
-          "Mobilier de bureau et de maison à Dakar, Sénégal. Qualité et prix accessibles.",
+        content: "Mobilier de bureau et de maison à Dakar, Sénégal. Qualité et prix accessibles.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Techno Office Sarl" },
@@ -141,6 +141,7 @@ function RootComponent() {
         </main>
         <Footer />
         <WhatsAppButton />
+        <Toaster />
       </div>
     </QueryClientProvider>
   );
