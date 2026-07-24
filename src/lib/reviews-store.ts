@@ -157,6 +157,7 @@ const EMPTY_REVIEWS: Review[] = [];
 // Cache snapshots so useSyncExternalStore sees a stable reference between
 // renders (Object.is check). Invalidated whenever the store emits.
 const approvedCache = new Map<string, Review[]>();
+const approvedSeedCache = new Map<string, Review[]>();
 let pendingCache: Review[] = submitted.filter((r) => !r.approved);
 
 function invalidateCaches() {
@@ -179,11 +180,19 @@ function getApprovedSnapshot(productId: string): Review[] {
   return next;
 }
 
+function getApprovedServerSnapshot(productId: string): Review[] {
+  const cached = approvedSeedCache.get(productId);
+  if (cached) return cached;
+  const next = SEED_REVIEWS.filter((r) => r.productId === productId && r.approved);
+  approvedSeedCache.set(productId, next);
+  return next;
+}
+
 export function useApprovedReviews(productId: string) {
   return useSyncExternalStore(
     subscribeWithInvalidation,
     () => getApprovedSnapshot(productId),
-    () => SEED_REVIEWS.filter((r) => r.productId === productId && r.approved),
+    () => getApprovedServerSnapshot(productId),
   );
 }
 
