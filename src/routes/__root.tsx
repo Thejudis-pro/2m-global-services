@@ -85,21 +85,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // unique <title> and <meta name="description"> via head(). The values
       // below are fallbacks only for routes that have not yet been given
       // page-specific SEO metadata.
-      { title: "Techno Office Sarl — La Qualité à moindre Coût" },
+      { title: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
       {
         name: "description",
         content:
-          "Techno Office Sarl, distributeur de mobilier de bureau et de maison à Dakar : meubles, fauteuils, armoires, électroniques et coffres-forts.",
+          "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { name: "author", content: "Techno Office Sarl" },
-      { property: "og:title", content: "Techno Office Sarl — La Qualité à moindre Coût" },
+      { property: "og:title", content: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
       {
         property: "og:description",
-        content: "Mobilier de bureau et de maison à Dakar, Sénégal. Qualité et prix accessibles.",
+        content: "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Techno Office Sarl" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
+      { name: "twitter:description", content: "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/945eb88d-d0f8-4340-b540-c51fd054c7df/id-preview-1e883afa--b608c19b-895b-429f-9388-ceb32b26f009.lovable.app-1784864819533.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/945eb88d-d0f8-4340-b540-c51fd054c7df/id-preview-1e883afa--b608c19b-895b-429f-9388-ceb32b26f009.lovable.app-1784864819533.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

@@ -17,10 +17,10 @@ export const Route = createFileRoute("/")({
         content:
           "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
-      { property: "og:title", content: "Accueil — Techno Office Sarl" },
+      { property: "og:title", content: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
       {
         property: "og:description",
-        content: "Mobilier de bureau et de maison à Dakar, Sénégal. La Qualité à moindre Coût.",
+        content: "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:url", content: "/" },
     ],
