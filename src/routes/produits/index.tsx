@@ -394,7 +394,7 @@ function ProduitsPage() {
               {currentPage < totalPages ? (
                 <Link
                   to="/produits"
-                  search={(prev) => ({ ...prev, page: currentPage + 1 })}
+                  search={(prev: ProduitsSearch) => ({ ...prev, page: currentPage + 1 })}
                   aria-label="Page suivante"
                   className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium hover:bg-accent"
                 >
