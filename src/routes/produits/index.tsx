@@ -146,14 +146,14 @@ function ProduitsPage() {
 
   function applyFilterChange(patch: Partial<ProduitsSearch>) {
     navigate({
-      search: (prev) => ({ ...prev, ...patch, page: undefined }),
+      search: (prev: ProduitsSearch) => ({ ...prev, ...patch, page: undefined }),
       replace: true,
     });
   }
 
   function goToPage(nextPage: number) {
     navigate({
-      search: (prev) => ({ ...prev, page: nextPage === 1 ? undefined : nextPage }),
+      search: (prev: ProduitsSearch) => ({ ...prev, page: nextPage === 1 ? undefined : nextPage }),
       replace: true,
     });
   }
