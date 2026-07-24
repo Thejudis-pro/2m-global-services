@@ -146,14 +146,14 @@ function ProduitsPage() {
 
   function applyFilterChange(patch: Partial<ProduitsSearch>) {
     navigate({
-      search: (prev) => ({ ...prev, ...patch, page: undefined }),
+      search: (prev: ProduitsSearch) => ({ ...prev, ...patch, page: undefined }),
       replace: true,
     });
   }
 
   function goToPage(nextPage: number) {
     navigate({
-      search: (prev) => ({ ...prev, page: nextPage === 1 ? undefined : nextPage }),
+      search: (prev: ProduitsSearch) => ({ ...prev, page: nextPage === 1 ? undefined : nextPage }),
       replace: true,
     });
   }
@@ -369,7 +369,7 @@ function ProduitsPage() {
               {currentPage > 1 ? (
                 <Link
                   to="/produits"
-                  search={(prev) => ({
+                  search={(prev: ProduitsSearch) => ({
                     ...prev,
                     page: currentPage - 1 === 1 ? undefined : currentPage - 1,
                   })}
@@ -394,7 +394,7 @@ function ProduitsPage() {
               {currentPage < totalPages ? (
                 <Link
                   to="/produits"
-                  search={(prev) => ({ ...prev, page: currentPage + 1 })}
+                  search={(prev: ProduitsSearch) => ({ ...prev, page: currentPage + 1 })}
                   aria-label="Page suivante"
                   className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium hover:bg-accent"
                 >
