@@ -154,43 +154,29 @@ export const reviewsStore = {
 
 const EMPTY_REVIEWS: Review[] = [];
 
-// Cache snapshots by productId so useSyncExternalStore sees a stable
-// reference between renders (Object.is). Invalidated on every emit().
+// Cache snapshots so useSyncExternalStore sees a stable reference between
+// renders (Object.is check). Invalidated whenever the store emits.
 const approvedCache = new Map<string, Review[]>();
-let pendingCache: Review[] = reviewsStore.getPending();
+let pendingCache: Review[] = submitted.filter((r) => !r.approved);
 
-const originalEmit = emit;
 function invalidateCaches() {
   approvedCache.clear();
   pendingCache = submitted.filter((r) => !r.approved);
 }
-// Wrap listeners set to also invalidate caches before notifying subscribers.
-const _origAdd = listeners.add.bind(listeners);
-listeners.add = (l: () => void) => _origAdd(l);
-const _emitInterval = () => {};
-void originalEmit;
-void _emitInterval;
 
-// Hook into store mutations by wrapping emit via monkey-patch on listeners.forEach.
-// Simpler: rebuild caches lazily inside the snapshot getters.
+function subscribeWithInvalidation(l: () => void) {
+  return reviewsStore.subscribe(() => {
+    invalidateCaches();
+    l();
+  });
+}
+
 function getApprovedSnapshot(productId: string): Review[] {
   const cached = approvedCache.get(productId);
   if (cached) return cached;
   const next = reviewsStore.getApprovedForProduct(productId);
   approvedCache.set(productId, next);
   return next;
-}
-
-function getPendingSnapshot(): Review[] {
-  return pendingCache;
-}
-
-function subscribeWithInvalidation(l: () => void) {
-  const wrapped = () => {
-    invalidateCaches();
-    l();
-  };
-  return reviewsStore.subscribe(wrapped);
 }
 
 export function useApprovedReviews(productId: string) {
@@ -202,7 +188,11 @@ export function useApprovedReviews(productId: string) {
 }
 
 export function usePendingReviews() {
-  return useSyncExternalStore(subscribeWithInvalidation, getPendingSnapshot, () => EMPTY_REVIEWS);
+  return useSyncExternalStore(
+    subscribeWithInvalidation,
+    () => pendingCache,
+    () => EMPTY_REVIEWS,
+  );
 }
 
 export function getReviewSummary(reviews: Review[]) {
