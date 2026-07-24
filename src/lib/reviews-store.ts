@@ -154,16 +154,55 @@ export const reviewsStore = {
 
 const EMPTY_REVIEWS: Review[] = [];
 
+// Cache snapshots by productId so useSyncExternalStore sees a stable
+// reference between renders (Object.is). Invalidated on every emit().
+const approvedCache = new Map<string, Review[]>();
+let pendingCache: Review[] = reviewsStore.getPending();
+
+const originalEmit = emit;
+function invalidateCaches() {
+  approvedCache.clear();
+  pendingCache = submitted.filter((r) => !r.approved);
+}
+// Wrap listeners set to also invalidate caches before notifying subscribers.
+const _origAdd = listeners.add.bind(listeners);
+listeners.add = (l: () => void) => _origAdd(l);
+const _emitInterval = () => {};
+void originalEmit;
+void _emitInterval;
+
+// Hook into store mutations by wrapping emit via monkey-patch on listeners.forEach.
+// Simpler: rebuild caches lazily inside the snapshot getters.
+function getApprovedSnapshot(productId: string): Review[] {
+  const cached = approvedCache.get(productId);
+  if (cached) return cached;
+  const next = reviewsStore.getApprovedForProduct(productId);
+  approvedCache.set(productId, next);
+  return next;
+}
+
+function getPendingSnapshot(): Review[] {
+  return pendingCache;
+}
+
+function subscribeWithInvalidation(l: () => void) {
+  const wrapped = () => {
+    invalidateCaches();
+    l();
+  };
+  return reviewsStore.subscribe(wrapped);
+}
+
 export function useApprovedReviews(productId: string) {
   return useSyncExternalStore(
-    reviewsStore.subscribe,
-    () => reviewsStore.getApprovedForProduct(productId),
+    subscribeWithInvalidation,
+    () => getApprovedSnapshot(productId),
     () => SEED_REVIEWS.filter((r) => r.productId === productId && r.approved),
   );
 }
 
 export function usePendingReviews() {
-  return useSyncExternalStore(reviewsStore.subscribe, reviewsStore.getPending, () => EMPTY_REVIEWS);
+  return useSyncExternalStore(subscribeWithInvalidation, getPendingSnapshot, () => EMPTY_REVIEWS);
 }
 
 export function getReviewSummary(reviews: Review[]) {
