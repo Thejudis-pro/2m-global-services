@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 function NotFoundComponent() {
   return (
@@ -77,14 +80,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      // NOTE: Global title template. Every child route MUST define its own
+      // unique <title> and <meta name="description"> via head(). The values
+      // below are fallbacks only for routes that have not yet been given
+      // page-specific SEO metadata.
+      { title: "Techno Office Sarl — La Qualité à moindre Coût" },
+      {
+        name: "description",
+        content:
+          "Techno Office Sarl, distributeur de mobilier de bureau et de maison à Dakar : meubles, fauteuils, armoires, électroniques et coffres-forts.",
+      },
+      { name: "author", content: "Techno Office Sarl" },
+      { property: "og:title", content: "Techno Office Sarl — La Qualité à moindre Coût" },
+      {
+        property: "og:description",
+        content:
+          "Mobilier de bureau et de maison à Dakar, Sénégal. Qualité et prix accessibles.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Techno Office Sarl" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -119,8 +134,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <Header />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+        <WhatsAppButton />
+      </div>
     </QueryClientProvider>
   );
 }
