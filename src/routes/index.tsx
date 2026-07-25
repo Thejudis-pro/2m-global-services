@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAllCategories } from "@/lib/category-store";
+import { getCategoryIcon } from "@/lib/category-icons";
 import { BlueprintCard } from "@/components/BlueprintCard";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
@@ -36,7 +37,9 @@ const STATS = [
 ];
 
 function Index() {
-  const featuredProducts = useAllProducts().filter((p) => p.featured).slice(0, 4);
+  const featuredProducts = useAllProducts()
+    .filter((p) => p.featured)
+    .slice(0, 4);
   const categories = useAllCategories();
 
   return (
@@ -52,9 +55,12 @@ function Index() {
         </p>
         <a
           href="/produits"
-          className="mt-[13.6px] inline-flex items-center gap-1.5 border border-primary bg-primary px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold text-primary-foreground hover:bg-[color:var(--color-steel-600)]"
+          className="group mt-[13.6px] inline-flex items-center gap-2 border border-primary bg-primary px-[13.6px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.04em] text-primary-foreground transition-colors hover:bg-[color:var(--color-steel-600)]"
         >
           Explorer le catalogue
+          <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+            →
+          </span>
         </a>
       </section>
 
@@ -109,15 +115,18 @@ function Index() {
           <div>
             <h2 className="m-0 text-[28px]">Économisez jusqu'à 70%</h2>
             <p className="mt-[6.8px] max-w-[520px] text-[14px] opacity-90">
-              Profitez de nos remises sur le mobilier de bureau, les électroniques et plus, tant
-              que les stocks durent.
+              Profitez de nos remises sur le mobilier de bureau, les électroniques et plus, tant que
+              les stocks durent.
             </p>
           </div>
           <a
             href="/produits"
-            className="inline-flex items-center border border-primary-foreground/30 px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.02em] text-primary-foreground hover:bg-primary-foreground/10"
+            className="group inline-flex items-center gap-2 border border-primary-foreground/30 px-[13.6px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.04em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
           >
             Voir les promotions
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+              →
+            </span>
           </a>
         </section>
       </Reveal>
@@ -129,24 +138,33 @@ function Index() {
           <hr className="rule-hr my-[13.6px]" />
           <h2 className="m-0">Nos catégories</h2>
           <div className="mt-[20.4px] grid grid-cols-1 gap-[17px] sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((c) => (
-              <BlueprintCard key={c.slug} className="flex flex-col p-[13.6px]">
-                <a
-                  href={`/produits?category=${c.slug}`}
-                  className="-mx-[13.6px] -mt-[13.6px] mb-[10.2px] block aspect-[2.4/1] stripe-placeholder"
-                  aria-label={c.label}
-                />
-                <div className="font-display text-[17px] font-semibold leading-tight normal-case tracking-normal">
-                  {c.label}
-                </div>
-                <a
-                  href={`/produits?category=${c.slug}`}
-                  className="mt-[3.4px] inline-flex font-display text-[14px] font-semibold text-primary hover:underline"
-                >
-                  Voir la sélection →
-                </a>
-              </BlueprintCard>
-            ))}
+            {categories.map((c) => {
+              const Icon = getCategoryIcon(c.slug);
+              return (
+                <BlueprintCard key={c.slug} className="flex flex-col p-[13.6px]">
+                  <a
+                    href={`/produits?category=${c.slug}`}
+                    className="stripe-placeholder relative -mx-[13.6px] -mt-[13.6px] mb-[10.2px] flex aspect-[2.4/1] items-center justify-center"
+                    aria-label={c.label}
+                  >
+                    <Icon
+                      className="h-10 w-10 text-[color:var(--color-steel-700)]"
+                      strokeWidth={1.25}
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <div className="font-display text-[17px] font-semibold leading-tight normal-case tracking-normal">
+                    {c.label}
+                  </div>
+                  <a
+                    href={`/produits?category=${c.slug}`}
+                    className="mt-[3.4px] inline-flex font-display text-[14px] font-semibold text-primary hover:underline"
+                  >
+                    Voir la sélection →
+                  </a>
+                </BlueprintCard>
+              );
+            })}
           </div>
         </section>
       </Reveal>

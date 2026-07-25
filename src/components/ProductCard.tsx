@@ -49,7 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
     <BlueprintCard className="flex flex-col p-[13.6px]">
       <a
         href={`/produits/${product.id}`}
-        className="relative -mx-[13.6px] -mt-[13.6px] block aspect-square overflow-hidden stripe-placeholder"
+        className="relative -mx-[13.6px] -mt-[13.6px] block aspect-square overflow-hidden"
       >
         {hasRealPhoto ? (
           <img
@@ -59,16 +59,16 @@ export function ProductCard({ product }: { product: Product }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center">
+          <>
             <ProductImagePlaceholder
               categorySlug={product.categorySlug}
               alt={product.alt}
-              className="h-full w-full opacity-0"
+              className="h-full w-full"
             />
-            <span className="pointer-events-none absolute font-mono text-[11px] opacity-60">
-              photo produit
+            <span className="tag-accent pointer-events-none absolute bottom-2 left-2 opacity-80">
+              Photo à venir
             </span>
-          </div>
+          </>
         )}
         {product.discountPercent > 0 && (
           <span className="tag-accent absolute left-2 top-2">-{product.discountPercent}%</span>
