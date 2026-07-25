@@ -45,9 +45,7 @@ function Index() {
       <section className="px-[13.6px] pb-[20.4px] pt-[27.2px]">
         <span className="kicker mb-[6.8px]">Mobilier de bureau &amp; maison — Dakar</span>
         <hr className="rule-hr mb-[13.6px]" />
-        <h1 className="max-w-[760px] normal-case-off">
-          L'exigence du mobilier fait catalogue
-        </h1>
+        <h1 className="max-w-[760px]">L'exigence du mobilier fait catalogue</h1>
         <p className="mt-[10.2px] max-w-[560px] text-[16px] leading-[1.6] text-[color:var(--muted-foreground)]">
           Quinze années à équiper les bureaux et foyers de Dakar — bureaux de direction, sièges,
           rangements, électroniques et coffres-forts, choisis pour leur tenue dans le temps.
