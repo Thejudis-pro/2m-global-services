@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock, LayoutGrid, Package, Users } from "lucide-react";
 import { useAllCategories } from "@/lib/category-store";
-import { getCategoryIcon } from "@/lib/category-icons";
-import { Button } from "@/components/ui/button";
+import { BlueprintCard } from "@/components/BlueprintCard";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reveal } from "@/components/Reveal";
@@ -11,16 +9,17 @@ import { useAllProducts } from "@/lib/product-store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
+      { title: "Accueil — Techno Office | Mobilier de bureau à Dakar" },
       {
         name: "description",
         content:
-          "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "Techno Office à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
-      { property: "og:title", content: "Accueil — Techno Office Sarl | Mobilier de bureau à Dakar" },
+      { property: "og:title", content: "Accueil — Techno Office | Mobilier de bureau à Dakar" },
       {
         property: "og:description",
-        content: "Techno Office Sarl à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+        content:
+          "Techno Office à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:url", content: "/" },
     ],
@@ -30,94 +29,75 @@ export const Route = createFileRoute("/")({
 });
 
 const STATS = [
-  { value: "15", label: "Années d'expérience", icon: Clock },
-  { value: "228", label: "Produits en catalogue", icon: Package },
-  { value: "3 200+", label: "Clients satisfaits", icon: Users },
-  { value: "6", label: "Catégories de produits", icon: LayoutGrid },
+  { value: "15", label: "Années d'expérience" },
+  { value: "228", label: "Produits en catalogue" },
+  { value: "3 200+", label: "Clients satisfaits" },
+  { value: "6", label: "Catégories de produits" },
 ];
 
 function Index() {
-  const featuredProducts = useAllProducts().filter((p) => p.featured);
+  const featuredProducts = useAllProducts().filter((p) => p.featured).slice(0, 4);
   const categories = useAllCategories();
 
   return (
-    <>
-      <section className="relative h-[480px] w-full overflow-hidden border-b border-border bg-primary md:h-[600px]">
-        {/* Decorative composition standing in for real lifestyle photography —
-            swap for a photo of the Dakar showroom once one is available. */}
-        <div
-          role="img"
-          aria-label="Espace de bureau moderne aménagé avec du mobilier Techno Office Sarl à Dakar"
-          className="absolute inset-0"
+    <div className="mx-auto max-w-[1280px]">
+      {/* Hero */}
+      <section className="px-[13.6px] pb-[20.4px] pt-[27.2px]">
+        <span className="kicker mb-[6.8px]">Mobilier de bureau &amp; maison — Dakar</span>
+        <hr className="rule-hr mb-[13.6px]" />
+        <h1 className="max-w-[760px] normal-case-off">
+          L'exigence du mobilier fait catalogue
+        </h1>
+        <p className="mt-[10.2px] max-w-[560px] text-[16px] leading-[1.6] text-[color:var(--muted-foreground)]">
+          Quinze années à équiper les bureaux et foyers de Dakar — bureaux de direction, sièges,
+          rangements, électroniques et coffres-forts, choisis pour leur tenue dans le temps.
+        </p>
+        <a
+          href="/produits"
+          className="mt-[13.6px] inline-flex items-center gap-1.5 border border-primary bg-primary px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold text-primary-foreground hover:bg-[color:var(--color-steel-600)]"
         >
-          <svg
-            className="absolute inset-0 h-full w-full text-accent opacity-[0.14]"
-            preserveAspectRatio="xMidYMid slice"
-            aria-hidden="true"
-          >
-            <defs>
-              <pattern
-                id="herringbone"
-                width="44"
-                height="44"
-                patternUnits="userSpaceOnUse"
-                patternTransform="rotate(45)"
-              >
-                <rect width="20" height="8" x="0" y="0" fill="currentColor" />
-                <rect width="20" height="8" x="22" y="22" fill="currentColor" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#herringbone)" />
-          </svg>
-          <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/85 to-primary/55" />
-          <div className="absolute -right-32 -top-32 h-[26rem] w-[26rem] rounded-full bg-accent/25 blur-3xl" />
-          <div className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
-        </div>
-        <div className="relative mx-auto flex h-full max-w-7xl flex-col items-start justify-center px-4 md:px-6">
-          <h1 className="text-4xl font-black leading-tight text-primary-foreground md:text-6xl">
-            Techno Office Sarl
-          </h1>
-          <p className="mt-3 max-w-xl text-lg text-primary-foreground/90 md:text-2xl">
-            La Qualité à moindre Coût
-          </p>
-          <Button
-            asChild
-            size="lg"
-            className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
-          >
-            <a href="/produits">Explorer Maintenant</a>
-          </Button>
-        </div>
+          Explorer le catalogue
+        </a>
       </section>
 
-      <Reveal>
-        <section className="border-b border-border bg-secondary/40 py-14">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 md:grid-cols-4 md:gap-6 md:px-6">
-            {STATS.map((stat) => (
+      {/* Stats — blueprint fiche */}
+      <section className="px-[13.6px] pb-[27.2px]">
+        <BlueprintCard className="p-0">
+          <div className="flex items-center border-b border-[color:var(--divider)]">
+            <span className="flex-1 px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em]">
+              Techno Office — Fiche d'exploitation
+            </span>
+            <span className="border-l border-[color:var(--divider)] px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em] opacity-70 whitespace-nowrap">
+              Feuille 01
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4">
+            {STATS.map((s, i) => (
               <div
-                key={stat.label}
-                className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-warm-sm)]"
+                key={s.label}
+                className={`p-[13.6px] ${i > 0 ? "md:border-l md:border-[color:var(--divider)]" : ""} ${
+                  i % 2 === 1 ? "border-l border-[color:var(--divider)] md:border-l" : ""
+                } ${i >= 2 ? "border-t border-[color:var(--divider)] md:border-t-0" : ""}`}
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/20 text-accent-foreground">
-                  <stat.icon className="h-6 w-6 text-primary" aria-hidden="true" />
-                </span>
-                <p className="text-3xl font-black text-primary md:text-4xl">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <div className="font-display text-[32px] font-semibold leading-none tracking-[0.02em] normal-case">
+                  {s.value}
+                </div>
+                <div className="mt-[3.4px] text-[12px] uppercase tracking-[0.04em] text-[color:var(--muted-foreground)]">
+                  {s.label}
+                </div>
               </div>
             ))}
           </div>
-        </section>
-      </Reveal>
+        </BlueprintCard>
+      </section>
 
+      {/* Latest offers */}
       <Reveal>
-        <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
-          <h2 className="text-2xl font-bold text-foreground md:text-3xl">
-            Consultez les dernières mises à jour
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Des promotions sur une sélection de nos produits phares.
-          </p>
-          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        <section className="px-[13.6px] pb-[27.2px]">
+          <span className="kicker">02 · En ce moment</span>
+          <hr className="rule-hr my-[13.6px]" />
+          <h2 className="m-0">Nos dernières offres</h2>
+          <div className="mt-[20.4px] grid grid-cols-1 gap-[17px] sm:grid-cols-2 lg:grid-cols-4">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -125,76 +105,68 @@ function Index() {
         </section>
       </Reveal>
 
+      {/* Promo band */}
       <Reveal>
-        <section className="relative overflow-hidden border-y border-border bg-primary py-14 text-primary-foreground">
-          <div
-            className="absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-accent/20 blur-3xl"
-            aria-hidden="true"
-          />
-          <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 text-center md:px-6">
-            <h2 className="text-3xl font-black md:text-4xl">Économisez jusqu'à 70%</h2>
-            <p className="max-w-xl text-sm opacity-90 md:text-base">
-              Profitez de nos remises exceptionnelles sur le mobilier de bureau, les électroniques
-              et bien plus encore, tant que les stocks durent.
+        <section className="mx-[13.6px] mb-[27.2px] flex flex-wrap items-center justify-between gap-[20.4px] bg-[color:var(--color-steel-800)] px-[27.2px] py-[27.2px] text-primary-foreground">
+          <div>
+            <h2 className="m-0 text-[28px]">Économisez jusqu'à 70%</h2>
+            <p className="mt-[6.8px] max-w-[520px] text-[14px] opacity-90">
+              Profitez de nos remises sur le mobilier de bureau, les électroniques et plus, tant
+              que les stocks durent.
             </p>
-            <Button
-              asChild
-              size="lg"
-              className="mt-2 bg-accent text-accent-foreground hover:bg-accent/90"
-            >
-              <a href="/produits">Voir les promotions</a>
-            </Button>
           </div>
+          <a
+            href="/produits"
+            className="inline-flex items-center border border-primary-foreground/30 px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.02em] text-primary-foreground hover:bg-primary-foreground/10"
+          >
+            Voir les promotions
+          </a>
         </section>
       </Reveal>
 
+      {/* Categories */}
       <Reveal>
-        <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
-          <h2 className="text-2xl font-bold text-foreground md:text-3xl">Nos catégories</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Une sélection complète pour équiper vos bureaux et votre maison.
-          </p>
-          <div className="mt-8 grid gap-4 lg:grid-cols-4">
-            {categories.map((c, index) => {
-              const Icon = getCategoryIcon(c.slug);
-              const featured = index % 3 === 0;
-              return (
+        <section className="px-[13.6px] pb-[27.2px]">
+          <span className="kicker">03 · Le catalogue</span>
+          <hr className="rule-hr my-[13.6px]" />
+          <h2 className="m-0">Nos catégories</h2>
+          <div className="mt-[20.4px] grid grid-cols-1 gap-[17px] sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((c) => (
+              <BlueprintCard key={c.slug} className="flex flex-col p-[13.6px]">
                 <a
-                  key={c.slug}
                   href={`/produits?category=${c.slug}`}
-                  className={`group flex min-h-[180px] flex-col justify-between rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[var(--shadow-warm)] ${
-                    featured ? "lg:col-span-2" : "lg:col-span-1"
-                  }`}
+                  className="-mx-[13.6px] -mt-[13.6px] mb-[10.2px] block aspect-[2.4/1] stripe-placeholder"
+                  aria-label={c.label}
+                />
+                <div className="font-display text-[17px] font-semibold leading-tight normal-case tracking-normal">
+                  {c.label}
+                </div>
+                <a
+                  href={`/produits?category=${c.slug}`}
+                  className="mt-[3.4px] inline-flex font-display text-[14px] font-semibold text-primary hover:underline"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/20 transition-colors group-hover:bg-accent/30">
-                    <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-semibold text-card-foreground">{c.label}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Voir la sélection →</p>
-                  </div>
+                  Voir la sélection →
                 </a>
-              );
-            })}
+              </BlueprintCard>
+            ))}
           </div>
         </section>
       </Reveal>
 
-      <Reveal>
-        <section className="border-t border-border bg-secondary/40 py-14">
-          <div className="mx-auto max-w-xl px-4 text-center md:px-6">
-            <h2 className="text-2xl font-bold text-foreground md:text-3xl">
-              Ne manquez aucune offre
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Inscrivez-vous pour recevoir nos nouveautés et promotions par e-mail.
-            </p>
-            <div className="mt-6 text-left">
-              <Newsletter />
-            </div>
+      <hr className="rule-hr mx-[13.6px]" />
+
+      {/* Newsletter inline */}
+      <section className="flex flex-wrap items-center justify-between gap-[13.6px] px-[13.6px] py-[20.4px]">
+        <div>
+          <div className="font-display text-[16px] font-semibold uppercase tracking-[0.02em]">
+            Ne manquez aucune offre
           </div>
-        </section>
-      </Reveal>
-    </>
+          <div className="mt-[3.4px] text-[13px] text-[color:var(--muted-foreground)]">
+            Recevez nos nouveautés et promotions par e-mail.
+          </div>
+        </div>
+        <Newsletter compact />
+      </section>
+    </div>
   );
 }

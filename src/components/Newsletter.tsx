@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 const schema = z.string().trim().email({ message: "Adresse e-mail invalide" }).max(255);
 
-export function Newsletter({ variant = "light" }: { variant?: "light" | "dark" }) {
+/**
+ * Newsletter form — blueprint aesthetic (sharp borders, Barlow Condensed
+ * submit). `compact` renders the inline single-row variant used at the
+ * bottom of the home page; default is the block form used in the footer /
+ * sidebar sections.
+ */
+export function Newsletter({
+  compact = false,
+  variant: _variant,
+}: {
+  compact?: boolean;
+  variant?: "light" | "dark";
+}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const dark = variant === "dark";
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,23 +34,22 @@ export function Newsletter({ variant = "light" }: { variant?: "light" | "dark" }
   };
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-2">
-      <label
-        htmlFor="newsletter-email"
-        className={`block text-sm font-semibold ${dark ? "text-primary-foreground" : "text-foreground"}`}
-      >
-        Newsletter
-      </label>
-      <p className={`text-xs ${dark ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-        Recevez nos offres et nouveautés.
-      </p>
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Input
+    <form onSubmit={onSubmit} noValidate className={compact ? "" : "space-y-2"}>
+      {!compact && (
+        <label
+          htmlFor="newsletter-email"
+          className="block font-display text-[14px] font-semibold uppercase tracking-[0.04em]"
+        >
+          Newsletter
+        </label>
+      )}
+      <div className="flex gap-[6.8px]">
+        <input
           id="newsletter-email"
           type="email"
           required
           maxLength={255}
-          placeholder="votre@email.com"
+          placeholder="Votre e-mail"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -49,32 +57,24 @@ export function Newsletter({ variant = "light" }: { variant?: "light" | "dark" }
           }}
           aria-invalid={status === "error"}
           aria-describedby="newsletter-msg"
-          className={
-            dark
-              ? "bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/50"
-              : ""
-          }
+          className="w-full min-w-[200px] flex-1 border border-border bg-secondary px-[10px] py-[6px] text-[14px] text-foreground caret-primary outline-none focus:border-primary sm:w-[240px] sm:flex-none"
         />
-        <Button
+        <button
           type="submit"
-          className={`sm:w-auto ${dark ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}`}
+          className="inline-flex items-center border border-primary bg-primary px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold text-primary-foreground hover:bg-[color:var(--color-steel-600)]"
         >
           S'inscrire
-        </Button>
+        </button>
       </div>
       <p
         id="newsletter-msg"
         role={status === "error" ? "alert" : "status"}
-        className={`min-h-[1.25rem] text-xs ${
+        className={`min-h-[1rem] text-[12px] ${
           status === "error"
             ? "text-destructive"
             : status === "success"
-              ? dark
-                ? "text-accent"
-                : "text-primary"
-              : dark
-                ? "text-primary-foreground/60"
-                : "text-muted-foreground"
+              ? "text-primary"
+              : "text-[color:var(--muted-foreground)]"
         }`}
       >
         {message}

@@ -11,27 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
 
-function Logo() {
-  return (
-    <Link to="/" className="flex items-center gap-2" aria-label="Techno Office Sarl - Accueil">
-      <div
-        role="img"
-        aria-label="Logo Techno Office Sarl"
-        className="flex h-10 w-10 items-center justify-center rounded-md bg-primary font-display font-bold text-primary-foreground"
-      >
-        TO
-      </div>
-      <div className="hidden flex-col leading-tight sm:flex">
-        <span className="font-display text-sm font-semibold text-foreground">
-          Techno Office Sarl
-        </span>
-        <span className="text-[11px] text-muted-foreground">La Qualité à moindre Coût</span>
-      </div>
-    </Link>
-  );
-}
+const linkBase =
+  "inline-flex items-center gap-1 px-3 py-2 font-display text-[14px] font-semibold uppercase tracking-[0.02em] text-foreground hover:text-primary transition-colors";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -40,135 +22,143 @@ export function Header() {
   const categories = useAllCategories();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
-        <Logo />
+    <header className="w-full border-b border-border bg-background">
+      <div className="mx-auto flex max-w-[1280px] items-center gap-[13.6px] px-[13.6px] py-[10.2px]">
+        <Link
+          to="/"
+          className="mr-auto font-display text-[18px] font-semibold tracking-[0.02em] text-foreground"
+          aria-label="Techno Office Sarl — Accueil"
+        >
+          TECHNO OFFICE
+        </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Navigation principale">
-          <Link
-            to="/"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
-          >
+        <nav className="hidden items-center gap-[13.6px] md:flex" aria-label="Navigation principale">
+          <Link to="/" className={linkBase} activeProps={{ style: { color: "var(--primary)" } }}>
             Accueil
           </Link>
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              Produits <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            <DropdownMenuTrigger className={linkBase + " focus:outline-none"}>
+              Produits <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64">
+            <DropdownMenuContent align="start" className="w-64 rounded-none border-border">
               {categories.map((c) => (
-                <DropdownMenuItem key={c.slug} asChild>
+                <DropdownMenuItem key={c.slug} asChild className="rounded-none">
                   <a href={`/produits?category=${c.slug}`}>{c.label}</a>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <a
-            href="/a-propos"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
-          >
+          <a href="/a-propos" className={linkBase}>
             À propos
           </a>
-          <a
-            href="/contact"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
-          >
+          <a href="/contact" className={linkBase}>
             Contact
           </a>
         </nav>
 
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            asChild
-            aria-label={`Panier (${count} article${count === 1 ? "" : "s"})`}
-            className="relative"
+        <div className="ml-2 hidden items-center gap-[13.6px] md:flex">
+          <a
+            href="/compte"
+            className="inline-flex items-center gap-1.5 font-display text-[13px] font-semibold uppercase tracking-[0.04em] text-foreground/80 hover:text-primary"
+            aria-label="Mon compte"
           >
-            <a href="/panier">
-              <ShoppingCart className="h-5 w-5" />
-              {count > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground"
-                >
-                  {count > 99 ? "99+" : count}
-                </span>
-              )}
-            </a>
-          </Button>
-          <Button variant="ghost" size="icon" asChild aria-label="Mon compte">
-            <a href="/compte">
-              <User className="h-5 w-5" />
-            </a>
-          </Button>
-
-          <Sheet open={open} onOpenChange={setOpen}>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setOpen(true)}
-              aria-label="Ouvrir le menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-            <SheetContent side="right" className="w-[85%] max-w-sm p-0">
-              <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
-                <SheetTitle className="text-base">Menu</SheetTitle>
-                <SheetClose asChild>
-                  <Button variant="ghost" size="icon" aria-label="Fermer le menu">
-                    <X className="h-5 w-5" />
-                  </Button>
-                </SheetClose>
-              </SheetHeader>
-              <nav className="flex flex-col p-2" aria-label="Navigation mobile">
-                <a
-                  href="/"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-3 text-base font-medium hover:bg-secondary"
-                >
-                  Accueil
-                </a>
-                <Collapsible open={mobileProductsOpen} onOpenChange={setMobileProductsOpen}>
-                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-3 py-3 text-base font-medium hover:bg-secondary">
-                    Produits
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform ${mobileProductsOpen ? "rotate-180" : ""}`}
-                      aria-hidden="true"
-                    />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="ml-3 flex flex-col border-l border-border pl-3">
-                    {categories.map((c) => (
-                      <a
-                        key={c.slug}
-                        href={`/produits?category=${c.slug}`}
-                        onClick={() => setOpen(false)}
-                        className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-secondary"
-                      >
-                        {c.label}
-                      </a>
-                    ))}
-                  </CollapsibleContent>
-                </Collapsible>
-                <a
-                  href="/a-propos"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-3 text-base font-medium hover:bg-secondary"
-                >
-                  À propos
-                </a>
-                <a
-                  href="/contact"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-3 text-base font-medium hover:bg-secondary"
-                >
-                  Contact
-                </a>
-              </nav>
-            </SheetContent>
-          </Sheet>
+            <User className="h-4 w-4" aria-hidden="true" />
+            Compte
+          </a>
+          <a
+            href="/panier"
+            className="relative inline-flex items-center gap-1.5 font-display text-[13px] font-semibold uppercase tracking-[0.04em] text-foreground/80 hover:text-primary"
+            aria-label={`Panier (${count} article${count === 1 ? "" : "s"})`}
+          >
+            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+            Panier ({count})
+          </a>
         </div>
+
+        <Sheet open={open} onOpenChange={setOpen}>
+          <button
+            type="button"
+            className="ml-auto inline-flex h-9 w-9 items-center justify-center border border-border md:hidden"
+            onClick={() => setOpen(true)}
+            aria-label="Ouvrir le menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <SheetContent side="right" className="w-[85%] max-w-sm rounded-none border-l border-border bg-background p-0">
+            <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
+              <SheetTitle className="font-display text-base uppercase tracking-[0.04em]">
+                Menu
+              </SheetTitle>
+              <SheetClose asChild>
+                <button
+                  type="button"
+                  className="inline-flex h-9 w-9 items-center justify-center border border-border"
+                  aria-label="Fermer le menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </SheetClose>
+            </SheetHeader>
+            <nav className="flex flex-col divide-y divide-border" aria-label="Navigation mobile">
+              <a
+                href="/"
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]"
+              >
+                Accueil
+              </a>
+              <Collapsible open={mobileProductsOpen} onOpenChange={setMobileProductsOpen}>
+                <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]">
+                  Produits
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${mobileProductsOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                  />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="flex flex-col border-t border-border bg-secondary/40">
+                  {categories.map((c) => (
+                    <a
+                      key={c.slug}
+                      href={`/produits?category=${c.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="px-6 py-2 text-sm text-foreground/80 hover:text-primary"
+                    >
+                      {c.label}
+                    </a>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+              <a
+                href="/a-propos"
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]"
+              >
+                À propos
+              </a>
+              <a
+                href="/contact"
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]"
+              >
+                Contact
+              </a>
+              <a
+                href="/compte"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]"
+              >
+                <User className="h-4 w-4" aria-hidden="true" /> Compte
+              </a>
+              <a
+                href="/panier"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-4 py-3 font-display text-base font-semibold uppercase tracking-[0.02em]"
+              >
+                <ShoppingCart className="h-4 w-4" aria-hidden="true" /> Panier ({count})
+              </a>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

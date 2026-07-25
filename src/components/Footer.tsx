@@ -1,7 +1,6 @@
-import { MapPin, Phone, Mail, Facebook } from "lucide-react";
+import { Facebook } from "lucide-react";
 import { CONTACT } from "@/lib/categories";
 import { useAllCategories } from "@/lib/category-store";
-import { Newsletter } from "./Newsletter";
 
 function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -15,58 +14,39 @@ export function Footer() {
   const categories = useAllCategories();
 
   return (
-    <footer className="mt-16 border-t-4 border-accent bg-primary text-primary-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent font-display font-bold text-accent-foreground">
-            TO
-          </div>
-          <span className="font-display text-lg font-semibold">Techno Office Sarl</span>
-        </div>
-
-        <div className="mt-10 grid gap-10 md:grid-cols-3 md:divide-x md:divide-primary-foreground/15">
+    <footer className="mt-16 border-t border-border bg-background text-foreground">
+      <div className="mx-auto max-w-[1280px] px-[13.6px] pb-[20.4px] pt-[27.2px]">
+        <div className="grid grid-cols-1 gap-[27.2px] text-[13px] md:grid-cols-[2fr_1fr_1fr]">
           <section aria-labelledby="footer-contact">
             <h2
               id="footer-contact"
-              className="mb-4 text-sm font-bold uppercase tracking-wide text-accent"
+              className="mb-[6.8px] font-display text-[16px] font-semibold uppercase tracking-[0.02em]"
             >
-              Contactez-nous
+              Techno Office
             </h2>
-            <ul className="space-y-3 text-sm text-primary-foreground/80">
-              <li className="flex gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                <span>{CONTACT.address}</span>
-              </li>
-              <li className="flex gap-2">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                <span className="flex flex-wrap gap-x-2">
-                  {CONTACT.phones.map((p, i) => (
-                    <span key={p.tel}>
-                      <a href={`tel:${p.tel}`} className="hover:text-accent hover:underline">
-                        {p.label}
-                      </a>
-                      {i < CONTACT.phones.length - 1 && <span aria-hidden="true"> /</span>}
-                    </span>
-                  ))}
+            <div className="leading-[1.8] text-[color:var(--muted-foreground)]">
+              {CONTACT.address}
+              <br />
+              {CONTACT.phones.map((p, i) => (
+                <span key={p.tel}>
+                  <a href={`tel:${p.tel}`} className="hover:text-primary">
+                    {p.label}
+                  </a>
+                  {i < CONTACT.phones.length - 1 && " / "}
                 </span>
-              </li>
-              <li className="flex gap-2">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="break-all hover:text-accent hover:underline"
-                >
-                  {CONTACT.email}
-                </a>
-              </li>
-            </ul>
-            <div className="mt-5 flex gap-3">
+              ))}
+              <br />
+              <a href={`mailto:${CONTACT.email}`} className="hover:text-primary">
+                {CONTACT.email}
+              </a>
+            </div>
+            <div className="mt-[13.6px] flex gap-[6.8px]">
               <a
                 href={CONTACT.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Suivez-nous sur Facebook"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground ring-1 ring-primary-foreground/20 transition-colors hover:bg-accent hover:text-accent-foreground"
+                className="inline-flex h-9 w-9 items-center justify-center border border-border text-foreground hover:border-primary hover:text-primary"
               >
                 <Facebook className="h-4 w-4" />
               </a>
@@ -75,27 +55,24 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Suivez-nous sur TikTok"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground ring-1 ring-primary-foreground/20 transition-colors hover:bg-accent hover:text-accent-foreground"
+                className="inline-flex h-9 w-9 items-center justify-center border border-border text-foreground hover:border-primary hover:text-primary"
               >
                 <TikTokIcon className="h-4 w-4" />
               </a>
             </div>
           </section>
 
-          <nav aria-labelledby="footer-products" className="md:pl-10">
+          <nav aria-labelledby="footer-products">
             <h2
               id="footer-products"
-              className="mb-4 text-sm font-bold uppercase tracking-wide text-accent"
+              className="mb-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.02em]"
             >
-              Nos Produits
+              Produits
             </h2>
-            <ul className="space-y-2 text-sm">
+            <ul className="flex flex-col gap-[6px] text-[color:var(--muted-foreground)]">
               {categories.map((c) => (
                 <li key={c.slug}>
-                  <a
-                    href={`/produits?category=${c.slug}`}
-                    className="text-primary-foreground/80 hover:text-accent hover:underline"
-                  >
+                  <a href={`/produits?category=${c.slug}`} className="hover:text-primary">
                     {c.label}
                   </a>
                 </li>
@@ -103,20 +80,23 @@ export function Footer() {
             </ul>
           </nav>
 
-          <section aria-labelledby="footer-newsletter" className="md:pl-10">
+          <section aria-labelledby="footer-informed">
             <h2
-              id="footer-newsletter"
-              className="mb-4 text-sm font-bold uppercase tracking-wide text-accent"
+              id="footer-informed"
+              className="mb-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.02em]"
             >
               Restez informé
             </h2>
-            <Newsletter variant="dark" />
+            <p className="text-[color:var(--muted-foreground)]">
+              Recevez nos offres et nouveautés.
+            </p>
           </section>
         </div>
 
-        <div className="mt-10 border-t border-primary-foreground/15 pt-6 text-center text-xs text-primary-foreground/60">
-          © {new Date().getFullYear()} Techno Office Sarl — La Qualité à moindre Coût.
-        </div>
+        <hr className="rule-hr mt-[27.2px]" />
+        <p className="mt-[10.2px] text-[12px] text-[color:var(--muted-foreground)]">
+          © {new Date().getFullYear()} Techno Office — La Qualité à moindre Coût.
+        </p>
       </div>
     </footer>
   );
