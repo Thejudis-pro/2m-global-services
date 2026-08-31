@@ -10,6 +10,7 @@ export const CATEGORIES: Category[] = [
       { slug: "bureau-direction", label: "Bureau Direction" },
       { slug: "bureau-secretaire-agent", label: "Bureau Secrétaire/Agent" },
       { slug: "meubles-de-rangement", label: "Meubles de Rangement" },
+      { slug: "table-de-reunion", label: "Table de Réunion" },
     ],
   },
   {
