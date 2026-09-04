@@ -341,7 +341,7 @@ function ProductDetailPage() {
 
           <div className="mt-4 flex items-baseline gap-3">
             {product.originalPrice === 0 ? (
-              <span className="text-2xl font-black text-primary">Prix sur demande</span>
+              <span className="text-2xl font-black text-primary">Bientôt disponible</span>
             ) : (
               <>
                 {product.discountPercent > 0 && (

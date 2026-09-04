@@ -87,7 +87,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="mt-1 flex items-baseline gap-[6.8px]">
         {product.originalPrice === 0 ? (
           <span className="font-display text-[15px] font-semibold text-[color:var(--color-steel-700)]">
-            Prix sur demande
+            Bientôt disponible
           </span>
         ) : product.discountPercent > 0 ? (
           <>
