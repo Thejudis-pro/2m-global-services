@@ -340,17 +340,25 @@ function ProductDetailPage() {
           </div>
 
           <div className="mt-4 flex items-baseline gap-3">
-            {product.discountPercent > 0 && (
-              <Badge variant="destructive">-{product.discountPercent}%</Badge>
+            {product.originalPrice === 0 ? (
+              <span className="text-2xl font-black text-primary">Prix sur demande</span>
+            ) : (
+              <>
+                {product.discountPercent > 0 && (
+                  <Badge variant="destructive">-{product.discountPercent}%</Badge>
+                )}
+                {product.discountPercent > 0 && (
+                  <span className="text-sm text-muted-foreground line-through">
+                    {formatCFA(product.originalPrice)}
+                  </span>
+                )}
+                <span className="text-2xl font-black text-primary">{formatCFA(salePrice)}</span>
+              </>
             )}
-            {product.discountPercent > 0 && (
-              <span className="text-sm text-muted-foreground line-through">
-                {formatCFA(product.originalPrice)}
-              </span>
-            )}
-            <span className="text-2xl font-black text-primary">{formatCFA(salePrice)}</span>
           </div>
 
+          {product.originalPrice > 0 && (
+          <>
           <div className="mt-6">
             <span className="mb-2 block text-sm font-medium text-foreground" id="quantity-label">
               Quantité
@@ -415,6 +423,8 @@ function ProductDetailPage() {
               </>
             )}
           </Button>
+          </>
+          )}
 
           <Table className="mt-8">
             <TableBody>

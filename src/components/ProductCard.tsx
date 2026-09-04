@@ -85,7 +85,11 @@ export function ProductCard({ product }: { product: Product }) {
       </h3>
 
       <div className="mt-1 flex items-baseline gap-[6.8px]">
-        {product.discountPercent > 0 ? (
+        {product.originalPrice === 0 ? (
+          <span className="font-display text-[15px] font-semibold text-[color:var(--color-steel-700)]">
+            Prix sur demande
+          </span>
+        ) : product.discountPercent > 0 ? (
           <>
             <span className="text-[12px] text-[color:var(--muted-foreground)] line-through">
               {formatCFA(product.originalPrice)}
@@ -101,7 +105,9 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      <AddToCartButton productId={product.id} productName={product.name} />
+      {product.originalPrice > 0 && (
+        <AddToCartButton productId={product.id} productName={product.name} />
+      )}
     </BlueprintCard>
   );
 }
