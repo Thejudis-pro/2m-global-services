@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/checkout/confirmation")({
   head: () => ({
     meta: [
-      { title: "Commande confirmée | Techno Office Sarl" },
-      { name: "description", content: "Confirmation de votre commande Techno Office Sarl." },
+      { title: "Commande confirmée | 2M Global Services" },
+      { name: "description", content: "Confirmation de votre commande 2M Global Services." },
     ],
   }),
   component: ConfirmationPage,

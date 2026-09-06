@@ -26,8 +26,8 @@ export type StoredUser = {
 
 export type PublicUser = Omit<StoredUser, "password">;
 
-const USERS_KEY = "techno-office-users";
-const SESSION_KEY = "techno-office-session";
+const USERS_KEY = "2m-global-services-users";
+const SESSION_KEY = "2m-global-services-session";
 
 // Demo seed admin account for local testing only — replace with real
 // Supabase-backed admin roles (app_metadata.role = "admin") once connected.
@@ -35,7 +35,7 @@ const DEMO_ADMIN: StoredUser = {
   id: "admin-seed",
   name: "Administrateur",
   phone: "770000000",
-  email: "admin@technoofficesarl.com",
+  email: "admin@2mglobalservices.com",
   password: "admin1234",
   role: "admin",
   addresses: [],

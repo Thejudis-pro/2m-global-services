@@ -36,7 +36,7 @@ export type Order = {
   paymentMethod: "wave" | "orange-money" | "free-money" | "card";
 };
 
-const ORDERS_STORAGE_KEY = "techno-office-orders";
+const ORDERS_STORAGE_KEY = "2m-global-services-orders";
 
 function readOrders(): Order[] {
   if (typeof window === "undefined") return [];

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 export type CartLine = { productId: string; quantity: number };
 
-const STORAGE_KEY = "techno-office-cart";
+const STORAGE_KEY = "2m-global-services-cart";
 
 function loadInitialLines(): CartLine[] {
   if (typeof window === "undefined") return [];

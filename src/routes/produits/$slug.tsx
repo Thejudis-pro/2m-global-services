@@ -37,15 +37,15 @@ export const Route = createFileRoute("/produits/$slug")({
     const salePrice = getSalePrice(product);
     return {
       meta: [
-        { title: `${product.name} — ${categoryLabel} | Techno Office Sarl` },
+        { title: `${product.name} — ${categoryLabel} | 2M Global Services` },
         {
           name: "description",
-          content: `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez Techno Office Sarl à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
+          content: `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
         },
         { property: "og:title", content: product.name },
         {
           property: "og:description",
-          content: `${categoryLabel} — ${product.name} disponible chez Techno Office Sarl.`,
+          content: `${categoryLabel} — ${product.name} disponible chez 2M Global Services.`,
         },
         { property: "og:url", content: `/produits/${product.id}` },
       ],
@@ -358,72 +358,79 @@ function ProductDetailPage() {
           </div>
 
           {product.originalPrice > 0 && (
-          <>
-          <div className="mt-6">
-            <span className="mb-2 block text-sm font-medium text-foreground" id="quantity-label">
-              Quantité
-            </span>
-            <div className="flex items-center gap-2" role="group" aria-labelledby="quantity-label">
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={() => updateQuantity(quantity - 1)}
-                aria-label="Diminuer la quantité"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <Input
-                type="number"
-                inputMode="numeric"
-                min={MIN_QTY}
-                max={MAX_QTY}
-                value={quantity}
-                onChange={(e) => updateQuantity(Number(e.target.value))}
-                className="w-16 text-center"
-                aria-label="Quantité"
-                aria-invalid={quantityError !== ""}
-                aria-describedby="quantity-error"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={() => updateQuantity(quantity + 1)}
-                aria-label="Augmenter la quantité"
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-            <p
-              id="quantity-error"
-              role={quantityError ? "alert" : undefined}
-              className="mt-1 min-h-[1rem] text-xs text-destructive"
-            >
-              {quantityError}
-            </p>
-          </div>
+            <>
+              <div className="mt-6">
+                <span
+                  className="mb-2 block text-sm font-medium text-foreground"
+                  id="quantity-label"
+                >
+                  Quantité
+                </span>
+                <div
+                  className="flex items-center gap-2"
+                  role="group"
+                  aria-labelledby="quantity-label"
+                >
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => updateQuantity(quantity - 1)}
+                    aria-label="Diminuer la quantité"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    min={MIN_QTY}
+                    max={MAX_QTY}
+                    value={quantity}
+                    onChange={(e) => updateQuantity(Number(e.target.value))}
+                    className="w-16 text-center"
+                    aria-label="Quantité"
+                    aria-invalid={quantityError !== ""}
+                    aria-describedby="quantity-error"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => updateQuantity(quantity + 1)}
+                    aria-label="Augmenter la quantité"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                <p
+                  id="quantity-error"
+                  role={quantityError ? "alert" : undefined}
+                  className="mt-1 min-h-[1rem] text-xs text-destructive"
+                >
+                  {quantityError}
+                </p>
+              </div>
 
-          <Button
-            type="button"
-            size="lg"
-            className="mt-4 w-full sm:w-auto"
-            disabled={!details.inStock || adding}
-            onClick={handleAddToCart}
-          >
-            {adding ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                Ajout...
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-                Ajouter au panier
-              </>
-            )}
-          </Button>
-          </>
+              <Button
+                type="button"
+                size="lg"
+                className="mt-4 w-full sm:w-auto"
+                disabled={!details.inStock || adding}
+                onClick={handleAddToCart}
+              >
+                {adding ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                    Ajout...
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+                    Ajouter au panier
+                  </>
+                )}
+              </Button>
+            </>
           )}
 
           <Table className="mt-8">

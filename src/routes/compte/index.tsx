@@ -15,10 +15,10 @@ import {
 export const Route = createFileRoute("/compte/")({
   head: () => ({
     meta: [
-      { title: "Mon compte | Techno Office Sarl" },
+      { title: "Mon compte | 2M Global Services" },
       {
         name: "description",
-        content: "Consultez vos commandes et gérez votre compte Techno Office Sarl.",
+        content: "Consultez vos commandes et gérez votre compte 2M Global Services.",
       },
     ],
   }),

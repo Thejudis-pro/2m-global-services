@@ -53,14 +53,14 @@ export const Route = createFileRoute("/produits/")({
   head: () => ({
     meta: [
       {
-        title: "Nos Produits — Meubles de bureau, fauteuils, armoires et plus | Techno Office Sarl",
+        title: "Nos Produits — Meubles de bureau, fauteuils, armoires et plus | 2M Global Services",
       },
       {
         name: "description",
         content:
-          "Parcourez le catalogue Techno Office Sarl : meubles de bureau, fauteuils, salon et chambre, armoires, électroniques et coffres-forts. Filtrez par catégorie, prix et réduction.",
+          "Parcourez le catalogue 2M Global Services : meubles de bureau, fauteuils, salon et chambre, armoires, électroniques et coffres-forts. Filtrez par catégorie, prix et réduction.",
       },
-      { property: "og:title", content: "Nos Produits | Techno Office Sarl" },
+      { property: "og:title", content: "Nos Produits | 2M Global Services" },
       {
         property: "og:description",
         content: "Catalogue complet de mobilier de bureau et de maison à Dakar.",

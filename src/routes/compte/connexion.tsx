@@ -17,8 +17,8 @@ const loginSchema = z.object({
 export const Route = createFileRoute("/compte/connexion")({
   head: () => ({
     meta: [
-      { title: "Connexion | Techno Office Sarl" },
-      { name: "description", content: "Connectez-vous à votre compte Techno Office Sarl." },
+      { title: "Connexion | 2M Global Services" },
+      { name: "description", content: "Connectez-vous à votre compte 2M Global Services." },
     ],
   }),
   validateSearch: (search: Record<string, unknown>) => searchSchema.parse(search),

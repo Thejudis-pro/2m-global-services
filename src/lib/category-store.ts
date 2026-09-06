@@ -6,7 +6,7 @@ import { slugify } from "@/lib/slugify";
 // add/rename/reorder/delete categories without a backend. Replace with real
 // Supabase queries once the backend is connected.
 
-const STORAGE_KEY = "techno-office-admin-categories";
+const STORAGE_KEY = "2m-global-services-admin-categories";
 
 function loadTree(): Category[] {
   if (typeof window === "undefined") return SEED_CATEGORIES;

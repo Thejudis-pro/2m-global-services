@@ -8,7 +8,7 @@ export type ContactSubmission = {
   submittedAt: string;
 };
 
-const CONTACT_STORAGE_KEY = "techno-office-contact-messages";
+const CONTACT_STORAGE_KEY = "2m-global-services-contact-messages";
 
 // Mock submission handler placeholder — replace with a real API call once the
 // backend is connected. Simulates network latency and persists locally so the

@@ -46,7 +46,7 @@ const addressSchema = z.object({
 export const Route = createFileRoute("/compte/profil")({
   head: () => ({
     meta: [
-      { title: "Mon profil | Techno Office Sarl" },
+      { title: "Mon profil | 2M Global Services" },
       {
         name: "description",
         content: "Gérez vos informations personnelles et vos adresses de livraison.",

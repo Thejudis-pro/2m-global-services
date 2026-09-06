@@ -25,11 +25,11 @@ const contactSchema = z.object({
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact | Techno Office Sarl" },
+      { title: "Contact | 2M Global Services" },
       {
         name: "description",
         content:
-          "Contactez Techno Office Sarl à Dakar : adresse, téléphone, e-mail et formulaire de contact.",
+          "Contactez 2M Global Services à Dakar : adresse, téléphone, e-mail et formulaire de contact.",
       },
     ],
   }),
@@ -113,7 +113,7 @@ function ContactPage() {
 
           <div
             role="img"
-            aria-label={`Emplacement Techno Office Sarl : ${CONTACT.address}`}
+            aria-label={`Emplacement 2M Global Services : ${CONTACT.address}`}
             className="mt-6 flex h-56 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-secondary/30 text-center"
           >
             <MapPin className="h-8 w-8 text-muted-foreground" aria-hidden="true" />

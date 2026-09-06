@@ -89,7 +89,7 @@ const checkoutSchema = z.object({
 export const Route = createFileRoute("/checkout/")({
   head: () => ({
     meta: [
-      { title: "Finaliser ma commande | Techno Office Sarl" },
+      { title: "Finaliser ma commande | 2M Global Services" },
       {
         name: "description",
         content:

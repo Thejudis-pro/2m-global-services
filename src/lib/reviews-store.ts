@@ -86,7 +86,7 @@ const SEED_REVIEWS: Review[] = [
   },
 ];
 
-const STORAGE_KEY = "techno-office-submitted-reviews";
+const STORAGE_KEY = "2m-global-services-submitted-reviews";
 
 function loadSubmitted(): Review[] {
   if (typeof window === "undefined") return [];

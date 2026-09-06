@@ -22,10 +22,10 @@ const registerSchema = z.object({
 export const Route = createFileRoute("/compte/inscription")({
   head: () => ({
     meta: [
-      { title: "Créer un compte | Techno Office Sarl" },
+      { title: "Créer un compte | 2M Global Services" },
       {
         name: "description",
-        content: "Créez votre compte Techno Office Sarl pour suivre vos commandes.",
+        content: "Créez votre compte 2M Global Services pour suivre vos commandes.",
       },
     ],
   }),

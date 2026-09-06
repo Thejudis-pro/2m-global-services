@@ -22,7 +22,7 @@ export function Footer() {
               id="footer-contact"
               className="mb-[6.8px] font-display text-[16px] font-semibold uppercase tracking-[0.02em]"
             >
-              Techno Office
+              2M Global Services
             </h2>
             <div className="leading-[1.8] text-[color:var(--muted-foreground)]">
               {CONTACT.address}
@@ -95,7 +95,7 @@ export function Footer() {
 
         <hr className="rule-hr mt-[27.2px]" />
         <p className="mt-[10.2px] text-[12px] text-[color:var(--muted-foreground)]">
-          © {new Date().getFullYear()} Techno Office — La Qualité à moindre Coût.
+          © {new Date().getFullYear()} 2M Global Services — La Qualité à moindre Coût.
         </p>
       </div>
     </footer>

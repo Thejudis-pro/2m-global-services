@@ -8,10 +8,10 @@ import { Label } from "@/components/ui/label";
 export const Route = createFileRoute("/compte/mot-de-passe-oublie")({
   head: () => ({
     meta: [
-      { title: "Mot de passe oublié | Techno Office Sarl" },
+      { title: "Mot de passe oublié | 2M Global Services" },
       {
         name: "description",
-        content: "Réinitialisez le mot de passe de votre compte Techno Office Sarl.",
+        content: "Réinitialisez le mot de passe de votre compte 2M Global Services.",
       },
     ],
   }),

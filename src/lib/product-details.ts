@@ -104,7 +104,7 @@ export function getProductDetails(product: Product): ProductDetails {
       product.description ??
       `${product.name} est ${spec.descriptionIntro}. Fabriqué avec des matériaux durables et un ` +
         `souci du détail, ce produit de la catégorie ${categoryLabel} s'intègre facilement dans votre ` +
-        `espace de travail ou votre intérieur. Techno Office Sarl sélectionne chaque référence pour son ` +
+        `espace de travail ou votre intérieur. 2M Global Services sélectionne chaque référence pour son ` +
         `rapport qualité-prix et sa robustesse à l'usage quotidien, avec un service après-vente disponible ` +
         `à Dakar et partout au Sénégal.`,
     inStock: product.stockQuantity > 0,

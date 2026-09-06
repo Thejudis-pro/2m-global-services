@@ -10,17 +10,20 @@ import { useAllProducts } from "@/lib/product-store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Accueil — Techno Office | Mobilier de bureau à Dakar" },
+      { title: "Accueil — 2M Global Services | Mobilier de bureau à Dakar" },
       {
         name: "description",
         content:
-          "Techno Office à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
-      { property: "og:title", content: "Accueil — Techno Office | Mobilier de bureau à Dakar" },
+      {
+        property: "og:title",
+        content: "Accueil — 2M Global Services | Mobilier de bureau à Dakar",
+      },
       {
         property: "og:description",
         content:
-          "Techno Office à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:url", content: "/" },
     ],
@@ -69,7 +72,7 @@ function Index() {
         <BlueprintCard className="p-0">
           <div className="flex items-center border-b border-[color:var(--divider)]">
             <span className="flex-1 px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em]">
-              Techno Office — Fiche d'exploitation
+              2M Global Services — Fiche d'exploitation
             </span>
             <span className="border-l border-[color:var(--divider)] px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em] opacity-70 whitespace-nowrap">
               Feuille 01

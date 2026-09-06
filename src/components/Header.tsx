@@ -27,12 +27,15 @@ export function Header() {
         <Link
           to="/"
           className="mr-auto font-display text-[18px] font-semibold tracking-[0.02em] text-foreground"
-          aria-label="Techno Office Sarl — Accueil"
+          aria-label="2M Global Services — Accueil"
         >
-          TECHNO OFFICE
+          2M GLOBAL SERVICES
         </Link>
 
-        <nav className="hidden items-center gap-[13.6px] md:flex" aria-label="Navigation principale">
+        <nav
+          className="hidden items-center gap-[13.6px] md:flex"
+          aria-label="Navigation principale"
+        >
           <Link to="/" className={linkBase} activeProps={{ style: { color: "var(--primary)" } }}>
             Accueil
           </Link>
@@ -99,7 +102,10 @@ export function Header() {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <SheetContent side="right" className="w-[85%] max-w-sm rounded-none border-l border-border bg-background p-0">
+          <SheetContent
+            side="right"
+            className="w-[85%] max-w-sm rounded-none border-l border-border bg-background p-0"
+          >
             <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
               <SheetTitle className="font-display text-base uppercase tracking-[0.04em]">
                 Menu

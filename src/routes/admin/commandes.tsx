@@ -43,7 +43,7 @@ const PAGE_SIZE = 10;
 
 export const Route = createFileRoute("/admin/commandes")({
   head: () => ({
-    meta: [{ title: "Administration — Commandes | Techno Office Sarl" }],
+    meta: [{ title: "Administration — Commandes | 2M Global Services" }],
   }),
   component: AdminOrdersPage,
 });

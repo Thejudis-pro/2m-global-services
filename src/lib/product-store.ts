@@ -6,7 +6,7 @@ import { slugify } from "@/lib/slugify";
 // edit/add/delete products without a backend. Replace with real Supabase
 // queries once the backend is connected.
 
-const STORAGE_KEY = "techno-office-admin-products";
+const STORAGE_KEY = "2m-global-services-admin-products";
 
 type AdminProductsData = {
   overrides: Record<string, Partial<Product>>;

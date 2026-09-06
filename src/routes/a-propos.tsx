@@ -4,11 +4,11 @@ import { User } from "lucide-react";
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
     meta: [
-      { title: "À propos | Techno Office Sarl" },
+      { title: "À propos | 2M Global Services" },
       {
         name: "description",
         content:
-          "Découvrez Techno Office Sarl : notre histoire, notre mission et notre équipe à Dakar, Sénégal.",
+          "Découvrez 2M Global Services : notre histoire, notre mission et notre équipe à Dakar, Sénégal.",
       },
     ],
   }),
@@ -22,7 +22,7 @@ function AboutPage() {
     <div className="mx-auto max-w-4xl px-4 py-8 md:px-6">
       <h1 className="text-2xl font-bold text-foreground md:text-3xl">À propos</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Techno Office Sarl — distributeur de mobilier de bureau et de maison à Dakar, Sénégal.
+        2M Global Services — distributeur de mobilier de bureau et de maison à Dakar, Sénégal.
       </p>
 
       <section className="mt-10">
@@ -30,7 +30,7 @@ function AboutPage() {
         <div className="mt-3 rounded-lg border border-dashed border-border bg-secondary/30 p-4">
           <p className="text-sm italic text-muted-foreground">
             [Insérer l'histoire réelle de l'entreprise ici — année de création, fondateurs, et
-            évolution de Techno Office Sarl à Dakar.]
+            évolution de 2M Global Services à Dakar.]
           </p>
         </div>
       </section>
@@ -39,7 +39,7 @@ function AboutPage() {
         <h2 className="text-lg font-bold text-foreground">Notre mission</h2>
         <div className="mt-3 rounded-lg border border-dashed border-border bg-secondary/30 p-4">
           <p className="text-sm italic text-muted-foreground">
-            [Insérer l'énoncé de mission réel de Techno Office Sarl ici.]
+            [Insérer l'énoncé de mission réel de 2M Global Services ici.]
           </p>
         </div>
       </section>

@@ -43,7 +43,7 @@ export const CONTACT = {
     { label: "78 157 98 38", tel: "+221781579838" },
     { label: "76 462 77 77", tel: "+221764627777" },
   ],
-  email: "commercial@technoofficesarl.com",
+  email: "commercial@2mglobalservices.com",
   whatsapp: "https://wa.me/c/221764627777",
   facebook: "https://facebook.com",
   tiktok: "https://tiktok.com",

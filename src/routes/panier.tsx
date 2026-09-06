@@ -24,7 +24,7 @@ const DELIVERY_ESTIMATE = 2000;
 export const Route = createFileRoute("/panier")({
   head: () => ({
     meta: [
-      { title: "Mon Panier | Techno Office Sarl" },
+      { title: "Mon Panier | 2M Global Services" },
       {
         name: "description",
         content: "Consultez et modifiez les articles de votre panier avant de passer commande.",

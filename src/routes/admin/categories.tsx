@@ -23,7 +23,7 @@ import {
 
 export const Route = createFileRoute("/admin/categories")({
   head: () => ({
-    meta: [{ title: "Administration — Catégories | Techno Office Sarl" }],
+    meta: [{ title: "Administration — Catégories | 2M Global Services" }],
   }),
   component: AdminCategoriesPage,
 });
