@@ -36,18 +36,33 @@ export function Header() {
           <Link to="/" className={linkBase} activeProps={{ style: { color: "var(--primary)" } }}>
             Accueil
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger className={linkBase + " focus:outline-none"}>
-              Produits <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64 rounded-none border-border">
-              {categories.map((c) => (
-                <DropdownMenuItem key={c.slug} asChild className="rounded-none">
-                  <a href={`/produits?category=${c.slug}`}>{c.label}</a>
+          <div className="flex items-center">
+            <Link
+              to="/produits"
+              className={linkBase}
+              activeProps={{ style: { color: "var(--primary)" } }}
+            >
+              Produits
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className="inline-flex h-8 w-8 items-center justify-center text-foreground hover:text-primary focus:outline-none"
+                aria-label="Voir les catégories de produits"
+              >
+                <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-64 rounded-none border-border">
+                <DropdownMenuItem asChild className="rounded-none font-semibold">
+                  <a href="/produits">Tous les produits</a>
                 </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                {categories.map((c) => (
+                  <DropdownMenuItem key={c.slug} asChild className="rounded-none">
+                    <a href={`/produits?category=${c.slug}`}>{c.label}</a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <a href="/a-propos" className={linkBase}>
             À propos
           </a>
@@ -116,6 +131,13 @@ export function Header() {
                   />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="flex flex-col border-t border-border bg-secondary/40">
+                  <a
+                    href="/produits"
+                    onClick={() => setOpen(false)}
+                    className="px-6 py-2 text-sm font-semibold text-foreground hover:text-primary"
+                  >
+                    Tous les produits
+                  </a>
                   {categories.map((c) => (
                     <a
                       key={c.slug}
