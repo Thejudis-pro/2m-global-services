@@ -33,7 +33,8 @@ export type Order = {
   city: string;
   region: string;
   deliveryMethod: "pickup" | "delivery";
-  paymentMethod: "wave" | "orange-money" | "free-money" | "card";
+  deliverySlot?: string;
+  paymentMethod: "cod" | "wave" | "bank-transfer" | "installments";
 };
 
 const ORDERS_STORAGE_KEY = "2m-global-services-orders";
