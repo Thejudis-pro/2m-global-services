@@ -4,14 +4,13 @@ import { z } from "zod";
 const schema = z.string().trim().email({ message: "Adresse e-mail invalide" }).max(255);
 
 /**
- * Newsletter form — blueprint aesthetic (sharp borders, Barlow Condensed
- * submit). `compact` renders the inline single-row variant used at the
- * bottom of the home page; default is the block form used in the footer /
- * sidebar sections.
+ * Newsletter signup — pill input + pill button, matching the Fusion design.
+ * `variant="dark"` is tuned for the dark-green/near-black footer and CTA
+ * band; `variant="light"` (default) is for cream card backgrounds.
  */
 export function Newsletter({
   compact = false,
-  variant: _variant,
+  variant = "light",
 }: {
   compact?: boolean;
   variant?: "light" | "dark";
@@ -33,23 +32,24 @@ export function Newsletter({
     setEmail("");
   };
 
+  const inputClass =
+    variant === "dark"
+      ? "border-0 bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/50"
+      : "border border-input bg-[var(--color-cream-light)] text-foreground placeholder:text-muted-foreground";
+  const buttonClass =
+    variant === "dark"
+      ? "bg-[var(--color-gold-light)] text-[var(--color-ink)] hover:bg-primary-foreground"
+      : "bg-foreground text-background hover:bg-primary";
+
   return (
     <form onSubmit={onSubmit} noValidate className={compact ? "" : "space-y-2"}>
-      {!compact && (
-        <label
-          htmlFor="newsletter-email"
-          className="block font-display text-[14px] font-semibold uppercase tracking-[0.04em]"
-        >
-          Newsletter
-        </label>
-      )}
-      <div className="flex gap-[6.8px]">
+      <div className={`flex gap-2 ${compact ? "flex-wrap" : ""}`}>
         <input
           id="newsletter-email"
           type="email"
           required
           maxLength={255}
-          placeholder="Votre e-mail"
+          placeholder="votre@email.com"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -57,24 +57,26 @@ export function Newsletter({
           }}
           aria-invalid={status === "error"}
           aria-describedby="newsletter-msg"
-          className="w-full min-w-[200px] flex-1 border border-border bg-secondary px-[10px] py-[6px] text-[14px] text-foreground caret-primary outline-none focus:border-primary sm:w-[240px] sm:flex-none"
+          className={`min-w-[170px] flex-1 rounded-full px-[18px] py-[12px] text-[14px] outline-none ${inputClass}`}
         />
         <button
           type="submit"
-          className="inline-flex items-center border border-primary bg-primary px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold text-primary-foreground hover:bg-[color:var(--color-steel-600)]"
+          className={`inline-flex shrink-0 items-center rounded-full px-[20px] py-[12px] font-display text-[12px] font-bold uppercase tracking-[0.1em] transition-colors ${buttonClass}`}
         >
-          S'inscrire
+          {compact ? "OK" : "S'inscrire"}
         </button>
       </div>
       <p
         id="newsletter-msg"
         role={status === "error" ? "alert" : "status"}
-        className={`min-h-[1rem] text-[12px] ${
+        className={`min-h-[1rem] px-2 text-[12px] ${
           status === "error"
             ? "text-destructive"
             : status === "success"
-              ? "text-primary"
-              : "text-[color:var(--muted-foreground)]"
+              ? variant === "dark"
+                ? "text-[var(--color-gold-light)]"
+                : "text-primary"
+              : "text-muted-foreground"
         }`}
       >
         {message}

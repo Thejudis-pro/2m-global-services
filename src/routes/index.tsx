@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAllCategories } from "@/lib/category-store";
-import { getCategoryIcon } from "@/lib/category-icons";
-import { BlueprintCard } from "@/components/BlueprintCard";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
-import { Reveal } from "@/components/Reveal";
 import { useAllProducts } from "@/lib/product-store";
+import { getSalePrice } from "@/lib/products";
+import { formatCFA } from "@/lib/format";
+import { CONTACT } from "@/lib/categories";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,160 +32,237 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const STATS = [
-  { value: "15", label: "Années d'expérience" },
-  { value: "228", label: "Produits en catalogue" },
-  { value: "3 200+", label: "Clients satisfaits" },
-  { value: "6", label: "Catégories de produits" },
+const FEATURES = [
+  { title: "Livraison 24h", detail: "Partout dans Dakar" },
+  { title: "Payez à la réception", detail: "Wave, Orange Money, espèces" },
+  { title: "Échange 7 jours", detail: "Sans justification" },
+  { title: "Montage inclus", detail: "Par nos équipes" },
 ];
 
 function Index() {
-  const featuredProducts = useAllProducts()
-    .filter((p) => p.featured)
-    .slice(0, 4);
-  const categories = useAllCategories();
+  const allProducts = useAllProducts();
+  const categories = useAllCategories().filter((c) => c.slug !== "coffre-fort");
+  const featuredProducts = allProducts.filter((p) => p.featured);
+
+  const total = allProducts.length;
+  const maxDiscount = Math.max(0, ...allProducts.map((p) => p.discountPercent));
+
+  const deals = allProducts
+    .filter((p) => p.discountPercent > 0 && p.originalPrice > 0)
+    .sort((a, b) => b.discountPercent - a.discountPercent)
+    .slice(0, 8);
+
+  const heroProduct = featuredProducts[3] ?? featuredProducts[0] ?? allProducts[0];
+
+  const armoires = allProducts.filter((p) => p.categorySlug === "armoires" && p.originalPrice > 0);
+  const minArmoirePrice = armoires.length
+    ? Math.min(...armoires.map((p) => getSalePrice(p)))
+    : undefined;
 
   return (
-    <div className="mx-auto max-w-[1280px]">
+    <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[22px] md:px-[28px]">
       {/* Hero */}
-      <section className="px-[13.6px] pb-[20.4px] pt-[27.2px]">
-        <span className="kicker mb-[6.8px]">Mobilier de bureau &amp; maison — Dakar</span>
-        <hr className="rule-hr mb-[13.6px]" />
-        <h1 className="max-w-[760px]">L'exigence du mobilier fait catalogue</h1>
-        <p className="mt-[10.2px] max-w-[560px] text-[16px] leading-[1.6] text-[color:var(--muted-foreground)]">
-          Quinze années à équiper les bureaux et foyers de Dakar — bureaux de direction, sièges,
-          rangements, électroniques et coffres-forts, choisis pour leur tenue dans le temps.
-        </p>
-        <a
-          href="/produits"
-          className="group mt-[13.6px] inline-flex items-center gap-2 border border-primary bg-primary px-[13.6px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.04em] text-primary-foreground transition-colors hover:bg-[color:var(--color-steel-600)]"
-        >
-          Explorer le catalogue
-          <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-            →
-          </span>
-        </a>
-      </section>
-
-      {/* Stats — blueprint fiche */}
-      <section className="px-[13.6px] pb-[27.2px]">
-        <BlueprintCard className="p-0">
-          <div className="flex items-center border-b border-[color:var(--divider)]">
-            <span className="flex-1 px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em]">
-              2M Global Services — Fiche d'exploitation
-            </span>
-            <span className="border-l border-[color:var(--divider)] px-[13.6px] py-[10.2px] font-sans text-[13px] font-semibold uppercase tracking-[0.08em] opacity-70 whitespace-nowrap">
-              Feuille 01
-            </span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4">
-            {STATS.map((s, i) => (
-              <div
-                key={s.label}
-                className={`p-[13.6px] ${i > 0 ? "md:border-l md:border-[color:var(--divider)]" : ""} ${
-                  i % 2 === 1 ? "border-l border-[color:var(--divider)] md:border-l" : ""
-                } ${i >= 2 ? "border-t border-[color:var(--divider)] md:border-t-0" : ""}`}
+      <section className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="relative min-h-[400px] overflow-hidden rounded-[20px] bg-[var(--color-ink)] lg:col-span-2">
+          {heroProduct && (
+            <img
+              src={heroProduct.image}
+              alt={heroProduct.alt}
+              className="absolute inset-0 h-full w-full object-cover opacity-55"
+            />
+          )}
+          <div className="relative max-w-[580px] p-[26px] text-primary-foreground md:p-[48px]">
+            <div className="mb-[22px] inline-flex items-center whitespace-nowrap rounded-full border border-[var(--color-gold-light)] px-[15px] py-2 font-display text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-gold-light)]">
+              Déstockage showroom
+            </div>
+            <h1 className="mb-[18px] text-[34px] leading-[0.96] md:text-[64px]">
+              Jusqu&apos;à <span className="text-[var(--color-gold-light)]">−{maxDiscount}%</span>
+              <br />
+              sur le mobilier
+            </h1>
+            <p className="mb-[28px] max-w-[42ch] text-[17px] leading-[1.7] text-primary-foreground/90">
+              {total} références en stock à Dakar — bureaux, sièges, armoires, électroniques et
+              coffres-forts. Livrées et montées chez vous en 24h.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="/produits"
+                className="whitespace-nowrap rounded-full bg-background px-[28px] py-[16px] font-display text-[13px] font-extrabold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-gold-light)]"
               >
-                <div className="font-display text-[32px] font-semibold leading-none tracking-[0.02em] normal-case">
-                  {s.value}
-                </div>
-                <div className="mt-[3.4px] text-[12px] uppercase tracking-[0.04em] text-[color:var(--muted-foreground)]">
-                  {s.label}
-                </div>
-              </div>
-            ))}
+                Voir les offres
+              </a>
+              <a
+                href={CONTACT.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whitespace-nowrap rounded-full border border-primary-foreground/55 px-[28px] py-[16px] font-display text-[13px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary-foreground/14"
+              >
+                Commander sur WhatsApp
+              </a>
+            </div>
           </div>
-        </BlueprintCard>
+        </div>
+
+        <div className="grid gap-4">
+          <a
+            href="/produits?category=electroniques"
+            className="flex min-h-[190px] flex-col justify-between rounded-[20px] bg-primary p-[26px] text-primary-foreground"
+          >
+            <div>
+              <div className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]">
+                Nouvel arrivage
+              </div>
+              <div className="font-display text-[26px] font-black leading-[1.05]">
+                Électroniques
+                <br />
+                &amp; smartphones
+              </div>
+            </div>
+            <div className="mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-[var(--color-gold-light)]">
+              Découvrir →
+            </div>
+          </a>
+          <a
+            href="/produits?category=armoires"
+            className="flex min-h-[190px] flex-col justify-between rounded-[20px] border border-border bg-[var(--color-cream-alt)] p-[26px]"
+          >
+            <div>
+              <div className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
+                Armoires &amp; rangement
+              </div>
+              <div className="font-display text-[26px] font-black leading-[1.05]">
+                {minArmoirePrice !== undefined ? (
+                  <>
+                    À partir de
+                    <br />
+                    {formatCFA(minArmoirePrice)}
+                  </>
+                ) : (
+                  "Voir la sélection"
+                )}
+              </div>
+            </div>
+            <div className="mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-primary">
+              Voir les modèles →
+            </div>
+          </a>
+        </div>
       </section>
 
-      {/* Latest offers */}
-      <Reveal>
-        <section className="px-[13.6px] pb-[27.2px]">
-          <span className="kicker">02 · En ce moment</span>
-          <hr className="rule-hr my-[13.6px]" />
-          <h2 className="m-0">Nos dernières offres</h2>
-          <div className="mt-[20.4px] grid grid-cols-1 gap-[17px] sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map((product) => (
+      {/* Feature strip */}
+      <section className="mb-11 grid grid-cols-2 gap-3 md:grid-cols-4">
+        {FEATURES.map((f) => (
+          <div
+            key={f.title}
+            className="rounded-2xl border border-border bg-[var(--color-cream-light)] p-[18px]"
+          >
+            <div className="mb-1 font-display text-[14px] font-extrabold uppercase tracking-[0.04em]">
+              {f.title}
+            </div>
+            <div className="text-[14px] text-muted-foreground">{f.detail}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* Deals */}
+      {deals.length > 0 && (
+        <section className="mb-[52px]">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-5 border-b border-border pb-4">
+            <h2 className="m-0 text-[24px] md:text-[38px]">Les affaires du moment</h2>
+            <a
+              href="/produits"
+              className="border-b border-foreground pb-[3px] font-display text-[12px] font-bold uppercase tracking-[0.14em]"
+            >
+              Les {total} produits
+            </a>
+          </div>
+          <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+            {deals.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>
-      </Reveal>
-
-      {/* Promo band */}
-      <Reveal>
-        <section className="mx-[13.6px] mb-[27.2px] flex flex-wrap items-center justify-between gap-[20.4px] bg-[color:var(--color-steel-800)] px-[27.2px] py-[27.2px] text-primary-foreground">
-          <div>
-            <h2 className="m-0 text-[28px]">Économisez jusqu'à 70%</h2>
-            <p className="mt-[6.8px] max-w-[520px] text-[14px] opacity-90">
-              Profitez de nos remises sur le mobilier de bureau, les électroniques et plus, tant que
-              les stocks durent.
-            </p>
-          </div>
-          <a
-            href="/produits"
-            className="group inline-flex items-center gap-2 border border-primary-foreground/30 px-[13.6px] py-[6.8px] font-display text-[14px] font-semibold uppercase tracking-[0.04em] text-primary-foreground transition-colors hover:bg-primary-foreground/10"
-          >
-            Voir les promotions
-            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-              →
-            </span>
-          </a>
-        </section>
-      </Reveal>
+      )}
 
       {/* Categories */}
-      <Reveal>
-        <section className="px-[13.6px] pb-[27.2px]">
-          <span className="kicker">03 · Le catalogue</span>
-          <hr className="rule-hr my-[13.6px]" />
-          <h2 className="m-0">Nos catégories</h2>
-          <div className="mt-[20.4px] grid grid-cols-1 gap-[17px] sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((c) => {
-              const Icon = getCategoryIcon(c.slug);
-              return (
-                <BlueprintCard key={c.slug} className="flex flex-col p-[13.6px]">
-                  <a
-                    href={`/produits?category=${c.slug}`}
-                    className="stripe-placeholder relative -mx-[13.6px] -mt-[13.6px] mb-[10.2px] flex aspect-[2.4/1] items-center justify-center"
-                    aria-label={c.label}
-                  >
-                    <Icon
-                      className="h-10 w-10 text-[color:var(--color-steel-700)]"
-                      strokeWidth={1.25}
-                      aria-hidden="true"
-                    />
-                  </a>
-                  <div className="font-display text-[17px] font-semibold leading-tight normal-case tracking-normal">
-                    {c.label}
-                  </div>
-                  <a
-                    href={`/produits?category=${c.slug}`}
-                    className="mt-[3.4px] inline-flex font-display text-[14px] font-semibold text-primary hover:underline"
-                  >
-                    Voir la sélection →
-                  </a>
-                </BlueprintCard>
-              );
-            })}
-          </div>
-        </section>
-      </Reveal>
-
-      <hr className="rule-hr mx-[13.6px]" />
-
-      {/* Newsletter inline */}
-      <section className="flex flex-wrap items-center justify-between gap-[13.6px] px-[13.6px] py-[20.4px]">
-        <div>
-          <div className="font-display text-[16px] font-semibold uppercase tracking-[0.02em]">
-            Ne manquez aucune offre
-          </div>
-          <div className="mt-[3.4px] text-[13px] text-[color:var(--muted-foreground)]">
-            Recevez nos nouveautés et promotions par e-mail.
-          </div>
+      <section className="mb-[52px]">
+        <h2 className="m-0 mb-6 border-b border-border pb-4 text-[22px] md:text-[32px]">
+          Nos univers
+        </h2>
+        <div className="grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
+          {categories.map((c) => {
+            const productsInCategory = allProducts.filter((p) => p.categorySlug === c.slug);
+            const cover = productsInCategory[0];
+            return (
+              <a
+                key={c.slug}
+                href={`/produits?category=${c.slug}`}
+                className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-4 transition-all hover:-translate-y-[3px] hover:border-accent"
+              >
+                <div className="mb-[14px] h-[110px] w-full overflow-hidden rounded-xl bg-[var(--color-placeholder)]">
+                  {cover && (
+                    <img src={cover.image} alt={c.label} className="h-full w-full object-cover" />
+                  )}
+                </div>
+                <div className="font-display text-[14px] font-extrabold uppercase leading-[1.25] tracking-[0.02em]">
+                  {c.label}
+                </div>
+                <div className="mt-[5px] text-[13px] text-muted-foreground">
+                  {productsInCategory.length} produits
+                </div>
+              </a>
+            );
+          })}
         </div>
-        <Newsletter compact />
       </section>
-    </div>
+
+      {/* Dark CTA banner */}
+      <section className="mb-[52px] grid grid-cols-1 items-center gap-8 rounded-[24px] bg-primary p-[28px] text-primary-foreground md:grid-cols-2 md:p-[52px]">
+        <div>
+          <div className="mb-4 font-display text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]">
+            Équipez votre bureau
+          </div>
+          <h3 className="mb-4 text-[26px] leading-[1.02] md:text-[44px]">
+            Devis gratuit dès 5 postes
+          </h3>
+          <p className="mb-[26px] max-w-[44ch] text-[16px] leading-[1.75] text-primary-foreground/86">
+            Bureaux, sièges, armoires et coffres : nous chiffrons tout sous 24 heures et nous
+            installons.
+          </p>
+          <a
+            href="/contact"
+            className="inline-block rounded-full bg-[var(--color-gold-light)] px-[28px] py-[16px] font-display text-[12px] font-extrabold uppercase tracking-[0.14em] text-[var(--color-ink)] transition-colors hover:bg-background"
+          >
+            Demander un devis
+          </a>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { value: "15", label: "Années à Dakar" },
+            { value: String(total), label: "Références" },
+            { value: "3 200+", label: "Clients" },
+            { value: "48h", label: "Livraison" },
+          ].map((s) => (
+            <div key={s.label} className="rounded-2xl bg-primary-foreground/10 p-5">
+              <div className="font-display text-[28px] font-black text-[var(--color-gold-light)]">
+                {s.value}
+              </div>
+              <div className="text-[13px] text-primary-foreground/80">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="grid grid-cols-1 items-center gap-6 rounded-[24px] border border-border bg-[var(--color-cream-alt)] p-[24px] md:grid-cols-2 md:p-[40px]">
+        <div>
+          <h3 className="m-0 mb-2 text-[26px]">Ne manquez aucune offre</h3>
+          <p className="m-0 text-[16px] text-[var(--color-muted-4)]">
+            Nouveautés et promotions, une fois par semaine.
+          </p>
+        </div>
+        <Newsletter />
+      </section>
+    </main>
   );
 }

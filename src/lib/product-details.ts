@@ -70,12 +70,9 @@ const CATEGORY_SPECS: Record<string, CategorySpec> = {
 
 const skuMap: Record<string, string> = {};
 {
-  const counters: Record<string, number> = {};
-  for (const product of PRODUCTS) {
-    const prefix = CATEGORY_SPECS[product.categorySlug]?.skuPrefix ?? "TOS";
-    counters[prefix] = (counters[prefix] ?? 0) + 1;
-    skuMap[product.id] = `TOS-${prefix}-${String(counters[prefix]).padStart(3, "0")}`;
-  }
+  PRODUCTS.forEach((product, index) => {
+    skuMap[product.id] = `2M-${String(index + 1).padStart(3, "0")}`;
+  });
 }
 
 function buildGallery(product: Product): GalleryImage[] {
@@ -97,7 +94,7 @@ export function getProductDetails(product: Product): ProductDetails {
   const categoryLabel = CATEGORIES.find((c) => c.slug === product.categorySlug)?.label ?? "";
 
   return {
-    sku: product.sku ?? skuMap[product.id] ?? `TOS-GEN-${product.id.slice(0, 3).toUpperCase()}`,
+    sku: product.sku ?? skuMap[product.id] ?? `2M-${product.id.slice(0, 3).toUpperCase()}`,
     weightKg: product.weightKg ?? spec.weightKg,
     dimensions: product.dimensions ?? spec.dimensions,
     description:

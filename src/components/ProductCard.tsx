@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { BlueprintCard } from "@/components/BlueprintCard";
+import { FusionCard } from "@/components/FusionCard";
 import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 import { formatCFA } from "@/lib/format";
 import { cartStore } from "@/lib/cart-store";
+import { useAllCategories } from "@/lib/category-store";
 import { getSalePrice, PLACEHOLDER_IMAGE, type Product } from "@/lib/products";
 
 function AddToCartButton({ productId, productName }: { productId: string; productName: string }) {
@@ -25,7 +26,7 @@ function AddToCartButton({ productId, productName }: { productId: string; produc
       onClick={handleClick}
       disabled={status === "loading"}
       aria-label={`Ajouter ${productName} au panier`}
-      className="mt-[10.2px] inline-flex w-full items-center justify-center gap-1.5 border border-border bg-transparent px-[12.24px] py-[6.8px] font-display text-[14px] font-semibold text-foreground transition-colors hover:bg-[color-mix(in_srgb,var(--foreground)_7%,transparent)] disabled:opacity-45"
+      className="mt-1.5 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-ink)] px-[12px] py-[12px] font-display text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary disabled:opacity-45"
     >
       {status === "loading" ? (
         <>
@@ -44,12 +45,17 @@ function AddToCartButton({ productId, productName }: { productId: string; produc
 export function ProductCard({ product }: { product: Product }) {
   const salePrice = getSalePrice(product);
   const hasRealPhoto = product.image && product.image !== PLACEHOLDER_IMAGE;
+  const categories = useAllCategories();
+  const categoryLabel = categories.find((c) => c.slug === product.categorySlug)?.label ?? "";
 
   return (
-    <BlueprintCard className="flex flex-col p-[13.6px]">
+    <FusionCard
+      className="flex flex-col overflow-hidden transition-all hover:border-accent hover:shadow-[0_14px_32px_rgba(20,21,15,0.10)]"
+      style={{ borderRadius: "20px" }}
+    >
       <a
         href={`/produits/${product.id}`}
-        className="relative -mx-[13.6px] -mt-[13.6px] block aspect-square overflow-hidden"
+        className="relative block aspect-square overflow-hidden bg-[var(--color-placeholder)]"
       >
         {hasRealPhoto ? (
           <img
@@ -78,36 +84,39 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </a>
 
-      <h3 className="mt-[10.2px] font-display text-[17px] font-semibold leading-tight normal-case tracking-normal text-foreground">
-        <a href={`/produits/${product.id}`} className="hover:text-primary">
-          {product.name}
-        </a>
-      </h3>
+      <div className="flex flex-1 flex-col gap-2 p-[15px]">
+        <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          {categoryLabel}
+        </div>
+        <h3 className="font-display text-[15px] font-bold leading-tight normal-case tracking-normal text-foreground">
+          <a href={`/produits/${product.id}`} className="hover:text-accent">
+            {product.name}
+          </a>
+        </h3>
 
-      <div className="mt-1 flex items-baseline gap-[6.8px]">
-        {product.originalPrice === 0 ? (
-          <span className="font-display text-[15px] font-semibold text-[color:var(--color-steel-700)]">
-            Bientôt disponible
-          </span>
-        ) : product.discountPercent > 0 ? (
-          <>
-            <span className="text-[12px] text-[color:var(--muted-foreground)] line-through">
-              {formatCFA(product.originalPrice)}
+        <div className="flex flex-1 items-end">
+          {product.originalPrice === 0 ? (
+            <span className="font-display text-[16px] font-bold text-primary">
+              Bientôt disponible
             </span>
-            <span className="font-display text-[15px] font-semibold text-[color:var(--color-steel-700)]">
-              {formatCFA(salePrice)}
-            </span>
-          </>
-        ) : (
-          <span className="font-display text-[15px] font-semibold text-[color:var(--color-steel-700)]">
-            {formatCFA(product.originalPrice)}
-          </span>
+          ) : (
+            <div className="flex items-baseline gap-2">
+              <span className="font-display text-[17px] font-black text-primary">
+                {formatCFA(salePrice)}
+              </span>
+              {product.discountPercent > 0 && (
+                <span className="text-[12px] text-muted-foreground line-through">
+                  {formatCFA(product.originalPrice)}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {product.originalPrice > 0 && (
+          <AddToCartButton productId={product.id} productName={product.name} />
         )}
       </div>
-
-      {product.originalPrice > 0 && (
-        <AddToCartButton productId={product.id} productName={product.name} />
-      )}
-    </BlueprintCard>
+    </FusionCard>
   );
 }

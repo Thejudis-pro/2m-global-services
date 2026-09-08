@@ -13,10 +13,10 @@ import {
 import { useAllProducts } from "@/lib/product-store";
 import { useAllCategories } from "@/lib/category-store";
 import { formatCFA } from "@/lib/format";
+import { CONTACT } from "@/lib/categories";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import {
   Select,
@@ -129,12 +129,18 @@ function ProduitsPage() {
   );
 
   const total = filtered.length;
+  const withDiscount = filtered.filter((p) => p.discountPercent > 0).length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const startIdx = (currentPage - 1) * PAGE_SIZE;
   const pageItems = filtered.slice(startIdx, startIdx + PAGE_SIZE);
-  const rangeStart = total === 0 ? 0 : startIdx + 1;
-  const rangeEnd = Math.min(startIdx + PAGE_SIZE, total);
+
+  const pageNumbers = useMemo(() => {
+    const nums = new Set<number>([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
+    return Array.from(nums)
+      .filter((n) => n >= 1 && n <= totalPages)
+      .sort((a, b) => a - b);
+  }, [currentPage, totalPages]);
 
   const hasActiveFilters =
     selectedCategories.length > 0 ||
@@ -147,13 +153,6 @@ function ProduitsPage() {
   function applyFilterChange(patch: Partial<ProduitsSearch>) {
     navigate({
       search: (prev: ProduitsSearch) => ({ ...prev, ...patch, page: undefined }),
-      replace: true,
-    });
-  }
-
-  function goToPage(nextPage: number) {
-    navigate({
-      search: (prev: ProduitsSearch) => ({ ...prev, page: nextPage === 1 ? undefined : nextPage }),
       replace: true,
     });
   }
@@ -190,28 +189,33 @@ function ProduitsPage() {
     navigate({ search: {}, replace: true });
   }
 
+  const pillLabel = "font-display text-[12px] font-bold uppercase tracking-[0.1em]";
+
   const filterPanel = (
-    <div className="space-y-6">
-      <div>
-        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-foreground">
-          Catégories
-        </h3>
-        <div className="space-y-4">
+    <div className="flex flex-col gap-[14px]">
+      <div className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-5">
+        <div className={pillLabel + " mb-4 tracking-[0.14em]"}>Catégories</div>
+        <div className="flex flex-col gap-[11px] text-[15px]">
           {categories.map((c) => (
             <div key={c.slug}>
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <Checkbox
-                  checked={selectedCategories.includes(c.slug)}
-                  onCheckedChange={() => toggleCategory(c.slug)}
-                />
-                {c.label}
+              <label className="flex cursor-pointer items-center justify-between gap-2 text-[var(--color-muted-4)] hover:text-accent">
+                <span className="flex items-center gap-2">
+                  <Checkbox
+                    checked={selectedCategories.includes(c.slug)}
+                    onCheckedChange={() => toggleCategory(c.slug)}
+                  />
+                  {c.label}
+                </span>
+                <span className="text-muted-foreground">
+                  {allProducts.filter((p) => p.categorySlug === c.slug).length}
+                </span>
               </label>
               {c.subcategories && c.subcategories.length > 0 && (
                 <div className="ml-6 mt-2 space-y-2 border-l border-border pl-3">
                   {c.subcategories.map((s) => (
                     <label
                       key={s.slug}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-accent"
                     >
                       <Checkbox
                         checked={selectedSubcategories.includes(s.slug)}
@@ -224,21 +228,18 @@ function ProduitsPage() {
               )}
             </div>
           ))}
+          <label className="mt-1 flex items-center gap-2 border-t border-border pt-3 font-semibold text-foreground">
+            <Checkbox
+              checked={newArrivalOnly}
+              onCheckedChange={(checked) => setNewArrival(checked === true)}
+            />
+            Nouvel Arrivage
+          </label>
         </div>
       </div>
 
-      <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
-          <Checkbox
-            checked={newArrivalOnly}
-            onCheckedChange={(checked) => setNewArrival(checked === true)}
-          />
-          Nouvel Arrivage
-        </label>
-      </div>
-
-      <div>
-        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-foreground">Prix</h3>
+      <div className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-5">
+        <div className={pillLabel + " mb-[18px] tracking-[0.14em]"}>Budget</div>
         <Slider
           min={PRICE_BOUNDS.min}
           max={PRICE_BOUNDS.max}
@@ -247,28 +248,51 @@ function ProduitsPage() {
           onValueChange={setPriceRange}
           aria-label="Fourchette de prix"
         />
-        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+        <div className="mt-3 flex justify-between text-[13px] text-muted-foreground">
           <span>{formatCFA(priceMin)}</span>
           <span>{formatCFA(priceMax)}</span>
         </div>
       </div>
 
-      <div>
-        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-foreground">
-          Réduction
-        </h3>
-        <RadioGroup value={String(minDiscount)} onValueChange={(v) => setDiscount(Number(v))}>
+      <div className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-5">
+        <div className={pillLabel + " mb-4 tracking-[0.14em]"}>Réduction</div>
+        <div className="flex flex-wrap gap-2">
           {DISCOUNT_OPTIONS.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 text-sm text-foreground">
-              <RadioGroupItem value={String(opt.value)} />
-              {opt.label}
-            </label>
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setDiscount(minDiscount === opt.value ? 0 : opt.value)}
+              className={`rounded-full px-[14px] py-2 font-display text-[12px] font-bold ${
+                minDiscount === opt.value
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-input text-foreground hover:border-accent hover:text-accent"
+              }`}
+            >
+              {opt.value === 0 ? "Toutes" : `${opt.value}%+`}
+            </button>
           ))}
-        </RadioGroup>
+        </div>
+      </div>
+
+      <div className="rounded-[18px] bg-primary p-5 text-primary-foreground">
+        <div className="mb-2 font-display text-[15px] font-black uppercase">
+          Besoin d&apos;aide ?
+        </div>
+        <p className="mb-4 text-[14px] leading-[1.6] text-primary-foreground/82">
+          On vous conseille sur WhatsApp en moins de 10 minutes.
+        </p>
+        <a
+          href={CONTACT.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block rounded-full bg-[var(--color-gold-light)] px-3 py-3 text-center font-display text-[12px] font-extrabold uppercase tracking-[0.12em] text-[var(--color-ink)]"
+        >
+          Écrire maintenant
+        </a>
       </div>
 
       {hasActiveFilters && (
-        <Button variant="outline" size="sm" className="w-full" onClick={clearFilters}>
+        <Button variant="outline" size="sm" className="rounded-full" onClick={clearFilters}>
           Réinitialiser les filtres
         </Button>
       )}
@@ -276,79 +300,68 @@ function ProduitsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
-      <nav aria-label="Fil d'Ariane" className="mb-4 text-sm text-muted-foreground">
-        <ol className="flex flex-wrap items-center gap-1">
-          <li>
-            <a href="/" className="hover:text-primary hover:underline">
-              Accueil
-            </a>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li aria-current="page" className="font-medium text-foreground">
-            Nos Produits
-          </li>
-        </ol>
+    <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[30px] md:px-[28px]">
+      <nav
+        aria-label="Fil d'Ariane"
+        className="mb-[18px] text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+      >
+        <a href="/" className="hover:text-accent">
+          Accueil
+        </a>{" "}
+        — Catalogue
       </nav>
 
-      <h1 className="text-2xl font-bold text-foreground md:text-3xl">Nos Produits</h1>
+      <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
+        <h1 className="m-0 text-[30px] md:text-[54px]">Tout le catalogue</h1>
+        <div className="flex flex-wrap items-center gap-3 text-[14px] text-muted-foreground">
+          <span>
+            {total} résultat{total === 1 ? "" : "s"} · {withDiscount} en promotion
+          </span>
+          <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
+            <SelectTrigger className="rounded-full border-border bg-[var(--color-cream-light)] font-display text-[12px] font-bold uppercase tracking-[0.1em] text-foreground">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[240px_1fr]">
+      <div className="grid gap-7 lg:grid-cols-[250px_1fr]">
         <aside className="hidden lg:block">{filterPanel}</aside>
 
-        <div>
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <Sheet>
-              <SheetTrigger asChild className="lg:hidden">
-                <Button variant="outline" size="sm">
-                  <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-                  Filtrer
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[85%] max-w-sm overflow-y-auto">
-                <SheetHeader className="mb-4">
-                  <SheetTitle>Filtrer</SheetTitle>
-                </SheetHeader>
-                {filterPanel}
-                <SheetClose asChild>
-                  <Button className="mt-6 w-full">Voir les résultats</Button>
-                </SheetClose>
-              </SheetContent>
-            </Sheet>
-
-            <p className="text-sm text-muted-foreground">
-              {total > 0
-                ? `Affichage de ${rangeStart}–${rangeEnd} sur ${total} résultat${total === 1 ? "" : "s"}`
-                : "Affichage de 0 sur 0 résultat"}
-            </p>
-
-            <div className="flex items-center gap-2">
-              <label htmlFor="sort-select" className="text-sm text-muted-foreground">
-                Trier par
-              </label>
-              <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-                <SelectTrigger id="sort-select" className="w-[200px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {SORT_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+        <div className="min-w-0">
+          <Sheet>
+            <SheetTrigger asChild className="mb-4 lg:hidden">
+              <Button variant="outline" size="sm" className="rounded-full">
+                <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+                Filtrer
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[85%] max-w-sm overflow-y-auto">
+              <SheetHeader className="mb-4">
+                <SheetTitle>Filtrer</SheetTitle>
+              </SheetHeader>
+              {filterPanel}
+              <SheetClose asChild>
+                <Button className="mt-6 w-full rounded-full">Voir les résultats</Button>
+              </SheetClose>
+            </SheetContent>
+          </Sheet>
 
           {pageItems.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {pageItems.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border py-16 text-center">
+            <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-border py-16 text-center">
               <p className="text-base font-semibold text-foreground">
                 Aucun produit ne correspond à vos filtres.
               </p>
@@ -357,7 +370,7 @@ function ProduitsPage() {
                 catalogue.
               </p>
               {hasActiveFilters && (
-                <Button variant="outline" onClick={clearFilters}>
+                <Button variant="outline" className="rounded-full" onClick={clearFilters}>
                   Réinitialiser les filtres
                 </Button>
               )}
@@ -365,7 +378,10 @@ function ProduitsPage() {
           )}
 
           {totalPages > 1 && (
-            <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-2">
+            <nav
+              aria-label="Pagination"
+              className="mt-9 flex flex-wrap items-center justify-center gap-[10px] font-display text-[13px] font-bold"
+            >
               {currentPage > 1 ? (
                 <Link
                   to="/produits"
@@ -374,36 +390,56 @@ function ProduitsPage() {
                     page: currentPage - 1 === 1 ? undefined : currentPage - 1,
                   })}
                   aria-label="Page précédente"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium hover:bg-accent"
+                  className="rounded-full border border-border px-4 py-[10px] hover:border-accent hover:text-accent"
                 >
                   Précédent
                 </Link>
               ) : (
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-9 cursor-not-allowed items-center justify-center rounded-md border border-input px-4 text-sm font-medium text-muted-foreground opacity-50"
+                  className="cursor-not-allowed rounded-full border border-border px-4 py-[10px] text-muted-foreground opacity-50"
                 >
                   Précédent
                 </span>
               )}
 
-              <span className="px-2 text-sm text-muted-foreground">
-                Page {currentPage} sur {totalPages}
-              </span>
+              {pageNumbers.map((n, i) => (
+                <span key={n} className="flex items-center gap-[10px]">
+                  {i > 0 && n - pageNumbers[i - 1] > 1 && (
+                    <span className="text-muted-foreground">…</span>
+                  )}
+                  {n === currentPage ? (
+                    <span className="rounded-full bg-[var(--color-ink)] px-4 py-[10px] text-primary-foreground">
+                      {n}
+                    </span>
+                  ) : (
+                    <Link
+                      to="/produits"
+                      search={(prev: ProduitsSearch) => ({
+                        ...prev,
+                        page: n === 1 ? undefined : n,
+                      })}
+                      className="rounded-full border border-border px-4 py-[10px] hover:border-accent hover:text-accent"
+                    >
+                      {n}
+                    </Link>
+                  )}
+                </span>
+              ))}
 
               {currentPage < totalPages ? (
                 <Link
                   to="/produits"
                   search={(prev: ProduitsSearch) => ({ ...prev, page: currentPage + 1 })}
                   aria-label="Page suivante"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium hover:bg-accent"
+                  className="rounded-full border border-[var(--color-ink)] px-4 py-[10px] hover:bg-[var(--color-ink)] hover:text-primary-foreground"
                 >
                   Suivant
                 </Link>
               ) : (
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-9 cursor-not-allowed items-center justify-center rounded-md border border-input px-4 text-sm font-medium text-muted-foreground opacity-50"
+                  className="cursor-not-allowed rounded-full border border-border px-4 py-[10px] text-muted-foreground opacity-50"
                 >
                   Suivant
                 </span>
@@ -412,6 +448,6 @@ function ProduitsPage() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

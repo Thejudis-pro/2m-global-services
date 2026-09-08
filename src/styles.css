@@ -5,21 +5,20 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Blueprint design system — matches the attached mockup exactly.
- * Neutral paper background, sharp corners (radius 0 everywhere),
- * Barlow Condensed for headings/buttons, Barlow for body,
- * accent steel-blue #5980a6, blueprint cards with corner ticks,
- * uppercase kickers with letter-spacing, thin HR dividers.
+ * Fusion design system — matches "Direction D - Fusion" mockup exactly.
+ * Warm cream paper background, soft rounded corners, pill-shaped buttons,
+ * Archivo for headings/labels (heavy, uppercase, tight tracking),
+ * Jost for body text, dark green primary, gold/tan accents.
  */
 
 @theme inline {
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-4xl: 0px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
+  --radius-4xl: 32px;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -55,93 +54,96 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Exact palette tokens from the mockup — expose as Tailwind color utilities. */
-  --color-paper: #f2f2f3;
-  --color-surface: #e9e9ea;
-  --color-ink: #1d1f20;
-  --color-steel: #5980a6;
-  --color-steel-100: #eef6ff;
-  --color-steel-200: #d6ebff;
-  --color-steel-600: #597ea3;
-  --color-steel-700: #416180;
-  --color-steel-800: #2c455d;
-  --color-neutral-100: #f5f5f8;
-  --color-neutral-200: #e7e7ea;
-  --color-neutral-300: #d4d4d7;
+  /* Exact palette tokens from the "Fusion" mockup — Tailwind color utilities. */
+  --color-cream: #f4f1ea;
+  --color-cream-light: #fbf9f4;
+  --color-cream-alt: #ede9df;
+  --color-placeholder: #e8e3d7;
+  --color-ink: #14150f;
+  --color-forest: #1e3229;
+  --color-gold: #a8813c;
+  --color-gold-light: #d3b77e;
+  --color-taupe-100: #dad4c6;
+  --color-taupe-200: #c9c2b1;
+  --color-muted-1: #7b7566;
+  --color-muted-2: #9b9483;
+  --color-muted-3: #6e6a5c;
+  --color-muted-4: #4a4739;
 
-  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0px;
+  --radius: 20px;
 
-  --background: #f2f2f3;
-  --foreground: #1d1f20;
-  --card: #f2f2f3;
-  --card-foreground: #1d1f20;
-  --popover: #f2f2f3;
-  --popover-foreground: #1d1f20;
+  --background: #f4f1ea;
+  --foreground: #14150f;
+  --card: #fbf9f4;
+  --card-foreground: #14150f;
+  --popover: #fbf9f4;
+  --popover-foreground: #14150f;
 
-  /* Primary = the steel-blue accent used for CTAs and links. */
-  --primary: #5980a6;
-  --primary-foreground: #f2f2f3;
+  /* Primary = deep forest green used for CTAs, badges and dark panels. */
+  --primary: #1e3229;
+  --primary-foreground: #f4f1ea;
 
-  --secondary: #e9e9ea;
-  --secondary-foreground: #1d1f20;
+  --secondary: #ede9df;
+  --secondary-foreground: #14150f;
 
-  --muted: #e9e9ea;
-  --muted-foreground: color-mix(in srgb, #1d1f20 55%, transparent);
+  --muted: #ede9df;
+  --muted-foreground: #7b7566;
 
-  --accent: #5980a6;
-  --accent-foreground: #f2f2f3;
+  /* Accent = warm gold used for links, hovers and highlighted numbers. */
+  --accent: #a8813c;
+  --accent-foreground: #f4f1ea;
 
   --destructive: #b0413e;
-  --destructive-foreground: #f2f2f3;
+  --destructive-foreground: #f4f1ea;
 
-  --border: color-mix(in srgb, #1d1f20 16%, transparent);
-  --input: color-mix(in srgb, #1d1f20 16%, transparent);
-  --ring: #5980a6;
+  --border: #dad4c6;
+  --input: #c9c2b1;
+  --ring: #a8813c;
 
-  --chart-1: #5980a6;
-  --chart-2: #728fab;
-  --chart-3: #416180;
-  --chart-4: #94bce3;
-  --chart-5: #2c455d;
+  --chart-1: #1e3229;
+  --chart-2: #a8813c;
+  --chart-3: #d3b77e;
+  --chart-4: #7b7566;
+  --chart-5: #4a4739;
 
-  --sidebar: #f2f2f3;
-  --sidebar-foreground: #1d1f20;
-  --sidebar-primary: #5980a6;
-  --sidebar-primary-foreground: #f2f2f3;
-  --sidebar-accent: #e9e9ea;
-  --sidebar-accent-foreground: #1d1f20;
-  --sidebar-border: color-mix(in srgb, #1d1f20 16%, transparent);
-  --sidebar-ring: #5980a6;
+  --sidebar: #fbf9f4;
+  --sidebar-foreground: #14150f;
+  --sidebar-primary: #1e3229;
+  --sidebar-primary-foreground: #f4f1ea;
+  --sidebar-accent: #ede9df;
+  --sidebar-accent-foreground: #14150f;
+  --sidebar-border: #dad4c6;
+  --sidebar-ring: #a8813c;
 
-  --divider: color-mix(in srgb, #1d1f20 16%, transparent);
+  --divider: #dad4c6;
 }
 
 .dark {
-  --background: #1d1f20;
-  --foreground: #f2f2f3;
-  --card: #1d1f20;
-  --card-foreground: #f2f2f3;
-  --popover: #1d1f20;
-  --popover-foreground: #f2f2f3;
-  --primary: #94bce3;
-  --primary-foreground: #1d1f20;
-  --secondary: #2b2b2d;
-  --secondary-foreground: #f2f2f3;
-  --muted: #2b2b2d;
-  --muted-foreground: color-mix(in srgb, #f2f2f3 55%, transparent);
-  --accent: #94bce3;
-  --accent-foreground: #1d1f20;
+  --background: #14150f;
+  --foreground: #f4f1ea;
+  --card: #1e3229;
+  --card-foreground: #f4f1ea;
+  --popover: #1e3229;
+  --popover-foreground: #f4f1ea;
+  --primary: #d3b77e;
+  --primary-foreground: #14150f;
+  --secondary: #22261d;
+  --secondary-foreground: #f4f1ea;
+  --muted: #22261d;
+  --muted-foreground: color-mix(in srgb, #f4f1ea 55%, transparent);
+  --accent: #d3b77e;
+  --accent-foreground: #14150f;
   --destructive: #d05a56;
-  --destructive-foreground: #1d1f20;
-  --border: color-mix(in srgb, #f2f2f3 16%, transparent);
-  --input: color-mix(in srgb, #f2f2f3 16%, transparent);
-  --ring: #94bce3;
-  --divider: color-mix(in srgb, #f2f2f3 16%, transparent);
+  --destructive-foreground: #14150f;
+  --border: color-mix(in srgb, #f4f1ea 16%, transparent);
+  --input: color-mix(in srgb, #f4f1ea 16%, transparent);
+  --ring: #d3b77e;
+  --divider: color-mix(in srgb, #f4f1ea 16%, transparent);
 }
 
 @layer base {
@@ -153,55 +155,35 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-weight: 300;
     font-size: 15px;
     line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    font-weight: 900;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
-    line-height: 1.12;
+    line-height: 1.05;
   }
-  h1 { font-size: 42px; letter-spacing: 0.01em; }
-  h2 { font-size: 32px; letter-spacing: -0.005em; }
-  h3 { font-size: 22px; letter-spacing: 0.01em; }
+  h1 { font-size: 42px; letter-spacing: -0.03em; }
+  h2 { font-size: 32px; letter-spacing: -0.02em; }
+  h3 { font-size: 22px; letter-spacing: -0.01em; }
   h4 { font-size: 17px; }
 }
 
-/* -------- Blueprint utility classes (mirror the mockup 1:1) -------- */
-
-@utility blueprint-frame {
-  position: relative;
-  border: 1px solid var(--divider);
-  border-radius: 0;
-}
-
-@utility corner-tick {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  color: color-mix(in srgb, var(--foreground) 55%, transparent);
-  pointer-events: none;
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    background: currentColor;
-  }
-  &::before { left: 5px; top: 0; width: 1px; height: 100%; }
-  &::after  { top: 5px; left: 0; width: 100%; height: 1px; }
-}
+/* -------- Fusion utility classes (mirror the mockup 1:1) -------- */
 
 @utility kicker {
   display: block;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-weight: 600;
-  color: var(--color-steel-700);
+  color: var(--color-gold);
 }
 
 @utility rule-hr {
@@ -210,23 +192,20 @@
   background: var(--divider);
 }
 
-@utility stripe-placeholder {
-  background: repeating-linear-gradient(
-    45deg,
-    var(--color-neutral-200),
-    var(--color-neutral-200) 10px,
-    var(--color-neutral-300) 10px,
-    var(--color-neutral-300) 20px
-  );
-}
-
 @utility tag-accent {
   display: inline-flex;
   align-items: center;
+  font-family: var(--font-display);
   font-size: 11px;
-  letter-spacing: 0.02em;
-  padding: 3px 10px;
-  background: var(--color-steel-100);
-  color: var(--color-steel-800);
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }

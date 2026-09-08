@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { User } from "lucide-react";
+import { useAllProducts } from "@/lib/product-store";
+import { useAllCategories } from "@/lib/category-store";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
@@ -15,57 +16,78 @@ export const Route = createFileRoute("/a-propos")({
   component: AboutPage,
 });
 
-const TEAM_SLOTS = [1, 2, 3];
+const VALUES = [
+  {
+    title: "Import direct",
+    text: "Nous achetons à l'usine et stockons dans notre dépôt de Front de Terre. Aucun intermédiaire à payer.",
+  },
+  {
+    title: "Tout est en stock",
+    text: "Ce que vous voyez est disponible aujourd'hui, livré et monté sous 24 à 48 heures dans Dakar.",
+  },
+  {
+    title: "On reste joignables",
+    text: "Échange sous 7 jours, garantie 2 ans, et un WhatsApp qui répond en moins de 10 minutes.",
+  },
+];
 
 function AboutPage() {
+  const products = useAllProducts();
+  const categories = useAllCategories();
+  const heroProduct = products.find((p) => p.featured) ?? products[0];
+
+  const stats = [
+    { value: "15", label: "Années d'expérience" },
+    { value: String(products.length), label: "Références en stock" },
+    { value: "3 200+", label: "Clients satisfaits" },
+    { value: String(categories.length), label: "Catégories" },
+  ];
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 md:px-6">
-      <h1 className="text-2xl font-bold text-foreground md:text-3xl">À propos</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        2M Global Services — distributeur de mobilier de bureau et de maison à Dakar, Sénégal.
+    <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[56px] md:px-[28px]">
+      <div className="mb-[22px] font-display text-[11px] font-bold uppercase tracking-[0.26em] text-accent">
+        Qui sommes-nous
+      </div>
+      <h1 className="mb-6 max-w-[24ch] text-[32px] leading-[1] md:text-[64px]">
+        La qualité à moindre coût, depuis 2011
+      </h1>
+      <p className="mb-11 max-w-[58ch] text-[19px] leading-[1.75] text-[var(--color-muted-4)]">
+        2M Global Services équipe les foyers et les bureaux de Dakar. Nous importons en direct, nous
+        stockons sur place et nous montons nous-mêmes — c&apos;est tout le secret de nos prix.
       </p>
 
-      <section className="mt-10">
-        <h2 className="text-lg font-bold text-foreground">Notre histoire</h2>
-        <div className="mt-3 rounded-lg border border-dashed border-border bg-secondary/30 p-4">
-          <p className="text-sm italic text-muted-foreground">
-            [Insérer l'histoire réelle de l'entreprise ici — année de création, fondateurs, et
-            évolution de 2M Global Services à Dakar.]
-          </p>
+      {heroProduct && (
+        <div className="mb-12 overflow-hidden rounded-[24px] bg-[var(--color-placeholder)]">
+          <img
+            src={heroProduct.image}
+            alt="Showroom 2M Global Services"
+            className="h-[min(52vh,460px)] w-full object-cover"
+          />
         </div>
-      </section>
+      )}
 
-      <section className="mt-10">
-        <h2 className="text-lg font-bold text-foreground">Notre mission</h2>
-        <div className="mt-3 rounded-lg border border-dashed border-border bg-secondary/30 p-4">
-          <p className="text-sm italic text-muted-foreground">
-            [Insérer l'énoncé de mission réel de 2M Global Services ici.]
-          </p>
-        </div>
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-lg font-bold text-foreground">Notre équipe</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          {TEAM_SLOTS.map((slot) => (
-            <div
-              key={slot}
-              className="flex flex-col items-center rounded-lg border border-dashed border-border bg-secondary/30 p-4 text-center"
-            >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                <User className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
-              </div>
-              <p className="mt-3 text-sm italic text-muted-foreground">
-                [Nom du membre de l'équipe]
-              </p>
-              <p className="text-xs italic text-muted-foreground">[Poste à renseigner]</p>
+      <div className="mb-14 grid grid-cols-2 gap-[14px] md:grid-cols-4">
+        {stats.map((s) => (
+          <div
+            key={s.label}
+            className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-6"
+          >
+            <div className="font-display text-[38px] font-black leading-none tracking-[-0.03em] text-primary">
+              {s.value}
             </div>
-          ))}
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          Photos et biographies de l'équipe à ajouter.
-        </p>
-      </section>
-    </div>
+            <div className="mt-2 text-[14px] text-muted-foreground">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+        {VALUES.map((v) => (
+          <div key={v.title}>
+            <h3 className="mb-3 text-[19px] tracking-[0.02em]">{v.title}</h3>
+            <p className="m-0 text-[15px] leading-[1.8] text-[var(--color-muted-4)]">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }

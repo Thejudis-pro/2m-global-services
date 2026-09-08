@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Loader2, Minus, Plus, ShoppingCart, Star } from "lucide-react";
-import { CATEGORIES } from "@/lib/categories";
+import { Loader2, Star } from "lucide-react";
+import { CATEGORIES, CONTACT } from "@/lib/categories";
 import { getSalePrice } from "@/lib/products";
 import { productStore, useAllProducts } from "@/lib/product-store";
 import { getProductDetails } from "@/lib/product-details";
@@ -13,12 +13,9 @@ import { cartStore } from "@/lib/cart-store";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const MIN_QTY = 1;
@@ -77,9 +74,11 @@ function StarRating({ value, outOf = 5 }: { value: number; outOf?: number }) {
 function Gallery({
   images,
   categorySlug,
+  discountPercent,
 }: {
   images: { src: string | null; alt: string }[];
   categorySlug: string;
+  discountPercent: number;
 }) {
   const [selected, setSelected] = useState(0);
   const current = images[selected];
@@ -91,22 +90,25 @@ function Gallery({
           <button
             type="button"
             aria-label={`Agrandir l'image : ${current.alt}`}
-            className="block w-full overflow-hidden rounded-xl border border-border bg-muted"
+            className="relative block w-full overflow-hidden rounded-[22px] bg-[var(--color-placeholder)]"
             style={{ touchAction: "pinch-zoom" }}
           >
             {current.src ? (
               <img
                 src={current.src}
                 alt={current.alt}
-                className="aspect-square w-full object-cover"
+                className="h-[min(62vh,500px)] w-full object-cover"
               />
             ) : (
               <ProductImagePlaceholder
                 categorySlug={categorySlug}
                 alt={current.alt}
                 variant={selected}
-                className="aspect-square w-full"
+                className="h-[min(62vh,500px)] w-full"
               />
+            )}
+            {discountPercent > 0 && (
+              <span className="tag-accent absolute left-4 top-4">-{discountPercent}%</span>
             )}
           </button>
         </DialogTrigger>
@@ -128,7 +130,7 @@ function Gallery({
           )}
         </DialogContent>
       </Dialog>
-      <div className="mt-3 grid grid-cols-3 gap-3">
+      <div className="mt-3 grid grid-cols-4 gap-[10px]">
         {images.map((img, i) => (
           <button
             key={i}
@@ -136,18 +138,18 @@ function Gallery({
             onClick={() => setSelected(i)}
             aria-label={`Voir : ${img.alt}`}
             aria-current={i === selected}
-            className={`overflow-hidden rounded-lg border-2 ${
-              i === selected ? "border-primary" : "border-transparent"
+            className={`overflow-hidden rounded-xl border bg-[var(--color-placeholder)] ${
+              i === selected ? "border-accent" : "border-border"
             }`}
           >
             {img.src ? (
-              <img src={img.src} alt={img.alt} className="aspect-square w-full object-cover" />
+              <img src={img.src} alt={img.alt} className="h-[84px] w-full object-cover" />
             ) : (
               <ProductImagePlaceholder
                 categorySlug={categorySlug}
                 alt={img.alt}
                 variant={i}
-                className="aspect-square w-full"
+                className="h-[84px] w-full"
               />
             )}
           </button>
@@ -278,58 +280,78 @@ function ProductDetailPage() {
       : {}),
   };
 
+  const savings = product.originalPrice - salePrice;
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 md:px-6">
+    <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[30px] md:px-[28px]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav aria-label="Fil d'Ariane" className="mb-4 text-sm text-muted-foreground">
-        <ol className="flex flex-wrap items-center gap-1">
-          <li>
-            <a href="/" className="hover:text-primary hover:underline">
-              Accueil
-            </a>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li>
-            <a href="/produits" className="hover:text-primary hover:underline">
-              Nos Produits
-            </a>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li>
-            <a
-              href={`/produits?category=${product.categorySlug}`}
-              className="hover:text-primary hover:underline"
-            >
-              {categoryLabel}
-            </a>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li aria-current="page" className="font-medium text-foreground">
-            {product.name}
-          </li>
-        </ol>
+      <nav
+        aria-label="Fil d'Ariane"
+        className="mb-[22px] text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+      >
+        <a href="/" className="hover:text-accent">
+          Accueil
+        </a>{" "}
+        —{" "}
+        <a href="/produits" className="hover:text-accent">
+          Catalogue
+        </a>{" "}
+        — {categoryLabel}
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-2">
-        <Gallery images={details.images} categorySlug={product.categorySlug} />
+      <div className="grid items-start gap-11 lg:grid-cols-2">
+        <Gallery
+          images={details.images}
+          categorySlug={product.categorySlug}
+          discountPercent={product.discountPercent}
+        />
 
-        <div>
-          <div className="mb-2 flex flex-wrap gap-2">
-            <Badge variant="secondary">{categoryLabel}</Badge>
-            {subcategoryLabel && <Badge variant="outline">{subcategoryLabel}</Badge>}
+        <div className="lg:sticky lg:top-[120px]">
+          <div className="mb-[14px] text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+            {categoryLabel}
+            {subcategoryLabel ? ` · ${subcategoryLabel}` : ""} · Réf. {details.sku}
           </div>
 
-          <h1 className="text-2xl font-bold text-foreground md:text-3xl">{product.name}</h1>
+          <h1 className="mb-5 text-[26px] leading-[1.03] md:text-[42px]">{product.name}</h1>
 
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mb-3 flex flex-wrap items-baseline gap-[14px]">
+            {product.originalPrice === 0 ? (
+              <span className="font-display text-[28px] font-black text-primary">
+                Bientôt disponible
+              </span>
+            ) : (
+              <>
+                <span className="font-display text-[34px] font-black text-primary">
+                  {formatCFA(salePrice)}
+                </span>
+                {product.discountPercent > 0 && (
+                  <span className="text-[17px] text-muted-foreground line-through">
+                    {formatCFA(product.originalPrice)}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+
+          {product.discountPercent > 0 && (
+            <div className="mb-6 inline-block rounded-full border border-accent px-[13px] py-[6px] font-display text-[11px] font-bold uppercase tracking-[0.14em] text-accent">
+              Vous économisez {formatCFA(savings)}
+            </div>
+          )}
+
+          <p className="mb-7 max-w-[48ch] text-[16px] leading-[1.8] text-[var(--color-muted-4)]">
+            {details.description}
+          </p>
+
+          <div className="mb-3 flex items-center gap-2">
             {details.inStock ? (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                En stock
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+                En stock — showroom Dakar
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-destructive">
@@ -339,273 +361,230 @@ function ProductDetailPage() {
             )}
           </div>
 
-          <div className="mt-4 flex items-baseline gap-3">
-            {product.originalPrice === 0 ? (
-              <span className="text-2xl font-black text-primary">Bientôt disponible</span>
-            ) : (
-              <>
-                {product.discountPercent > 0 && (
-                  <Badge variant="destructive">-{product.discountPercent}%</Badge>
-                )}
-                {product.discountPercent > 0 && (
-                  <span className="text-sm text-muted-foreground line-through">
-                    {formatCFA(product.originalPrice)}
-                  </span>
-                )}
-                <span className="text-2xl font-black text-primary">{formatCFA(salePrice)}</span>
-              </>
-            )}
-          </div>
-
           {product.originalPrice > 0 && (
             <>
-              <div className="mt-6">
-                <span
-                  className="mb-2 block text-sm font-medium text-foreground"
-                  id="quantity-label"
-                >
-                  Quantité
-                </span>
+              <div className="mb-3 flex flex-wrap gap-3">
                 <div
-                  className="flex items-center gap-2"
+                  className="flex items-center rounded-full border-[1.5px] border-[var(--color-ink)]"
                   role="group"
                   aria-labelledby="quantity-label"
                 >
-                  <Button
+                  <span id="quantity-label" className="sr-only">
+                    Quantité
+                  </span>
+                  <button
                     type="button"
-                    variant="outline"
-                    size="icon"
                     onClick={() => updateQuantity(quantity - 1)}
                     aria-label="Diminuer la quantité"
+                    className="px-[19px] py-[14px] text-[17px] font-medium"
                   >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <Input
-                    type="number"
-                    inputMode="numeric"
-                    min={MIN_QTY}
-                    max={MAX_QTY}
-                    value={quantity}
-                    onChange={(e) => updateQuantity(Number(e.target.value))}
-                    className="w-16 text-center"
-                    aria-label="Quantité"
-                    aria-invalid={quantityError !== ""}
-                    aria-describedby="quantity-error"
-                  />
-                  <Button
+                    −
+                  </button>
+                  <span className="min-w-[34px] px-1 py-[14px] text-center font-display font-extrabold">
+                    {quantity}
+                  </span>
+                  <button
                     type="button"
-                    variant="outline"
-                    size="icon"
                     onClick={() => updateQuantity(quantity + 1)}
                     aria-label="Augmenter la quantité"
+                    className="px-[19px] py-[14px] text-[17px] font-medium"
                   >
-                    <Plus className="h-4 w-4" />
-                  </Button>
+                    +
+                  </button>
                 </div>
-                <p
-                  id="quantity-error"
-                  role={quantityError ? "alert" : undefined}
-                  className="mt-1 min-h-[1rem] text-xs text-destructive"
+                <button
+                  type="button"
+                  disabled={!details.inStock || adding}
+                  onClick={handleAddToCart}
+                  className="flex-1 min-w-[210px] rounded-full bg-[var(--color-ink)] px-[26px] py-[17px] text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary disabled:opacity-45"
                 >
-                  {quantityError}
-                </p>
+                  {adding ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                      Ajout...
+                    </span>
+                  ) : (
+                    "Ajouter au panier"
+                  )}
+                </button>
               </div>
-
-              <Button
-                type="button"
-                size="lg"
-                className="mt-4 w-full sm:w-auto"
-                disabled={!details.inStock || adding}
-                onClick={handleAddToCart}
+              <p
+                id="quantity-error"
+                role={quantityError ? "alert" : undefined}
+                className="mb-2 min-h-[1rem] text-xs text-destructive"
               >
-                {adding ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                    Ajout...
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-                    Ajouter au panier
-                  </>
-                )}
-              </Button>
+                {quantityError}
+              </p>
             </>
           )}
 
-          <Table className="mt-8">
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium text-foreground">Référence (SKU)</TableCell>
-                <TableCell>{details.sku}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium text-foreground">Poids</TableCell>
-                <TableCell>{details.weightKg} kg</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium text-foreground">
-                  Dimensions (H × L × P)
-                </TableCell>
-                <TableCell>
-                  {details.dimensions.height} × {details.dimensions.width} ×{" "}
-                  {details.dimensions.depth} cm
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <a
+            href={CONTACT.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-8 block rounded-full border-[1.5px] border-primary py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            Commander sur WhatsApp
+          </a>
+
+          <div className="border-t border-border text-[15px]">
+            <div className="flex justify-between border-b border-border py-[15px]">
+              <span className="text-muted-foreground">Dimensions</span>
+              <span className="font-medium">
+                {details.dimensions.height} × {details.dimensions.width} ×{" "}
+                {details.dimensions.depth} cm
+              </span>
+            </div>
+            <div className="flex justify-between border-b border-border py-[15px]">
+              <span className="text-muted-foreground">Poids</span>
+              <span className="font-medium">{details.weightKg} kg</span>
+            </div>
+            <div className="flex justify-between border-b border-border py-[15px]">
+              <span className="text-muted-foreground">Disponibilité</span>
+              <span className="font-medium text-primary">
+                {details.inStock ? "En stock — showroom Dakar" : "Rupture de stock"}
+              </span>
+            </div>
+            <div className="flex justify-between py-[15px]">
+              <span className="text-muted-foreground">Livraison</span>
+              <span className="font-medium">24–48h · montage offert</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <Tabs defaultValue="description" className="mt-12">
-        <TabsList>
-          <TabsTrigger value="description">Description</TabsTrigger>
-          <TabsTrigger value="avis">Avis ({count})</TabsTrigger>
-          <TabsTrigger value="similaires">Produits similaires</TabsTrigger>
-        </TabsList>
+      {similarProducts.length > 0 && (
+        <section className="mt-16">
+          <h2 className="m-0 mb-[22px] border-b border-border pb-4 text-[26px]">
+            Souvent achetés ensemble
+          </h2>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {similarProducts.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
 
-        <TabsContent
-          value="description"
-          className="max-w-3xl py-4 text-sm leading-relaxed text-foreground"
-        >
-          <p>{details.description}</p>
-        </TabsContent>
-
-        <TabsContent value="avis" className="max-w-2xl py-4">
-          {count > 0 ? (
-            <div className="mb-6 flex items-center gap-3">
-              <StarRating value={average} />
-              <p className="text-sm text-muted-foreground">
-                {average.toFixed(1)} / 5 — {count} avis
-              </p>
-            </div>
-          ) : (
-            <p className="mb-6 text-sm text-muted-foreground">
-              Aucun avis pour le moment — soyez le premier à donner votre avis.
-            </p>
-          )}
-
-          {reviews.length > 0 && (
-            <ul className="mb-8 space-y-4">
-              {reviews.map((review) => (
-                <li key={review.id} className="rounded-lg border border-border p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-foreground">{review.name}</p>
-                    <p className="text-xs text-muted-foreground">{review.date}</p>
-                  </div>
-                  <StarRating value={review.rating} />
-                  <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <form
-            onSubmit={handleReviewSubmit}
-            noValidate
-            className="space-y-4 rounded-lg border border-border p-4"
-          >
-            <h3 className="text-sm font-bold text-foreground">Laisser un avis</h3>
-            {reviewSubmitted && (
-              <p role="status" className="text-sm text-primary">
-                Merci ! Votre avis a été soumis et sera visible après validation.
-              </p>
-            )}
-            <div>
-              <Label htmlFor="review-name">Nom</Label>
-              <Input
-                id="review-name"
-                value={reviewName}
-                onChange={(e) => setReviewName(e.target.value)}
-                aria-invalid={Boolean(reviewErrors.name)}
-                aria-describedby="review-name-error"
-              />
-              <p
-                id="review-name-error"
-                role="alert"
-                className="mt-1 min-h-[1rem] text-xs text-destructive"
-              >
-                {reviewErrors.name}
-              </p>
-            </div>
-            <div>
-              <Label htmlFor="review-email">E-mail</Label>
-              <Input
-                id="review-email"
-                type="email"
-                value={reviewEmail}
-                onChange={(e) => setReviewEmail(e.target.value)}
-                aria-invalid={Boolean(reviewErrors.email)}
-                aria-describedby="review-email-error"
-              />
-              <p
-                id="review-email-error"
-                role="alert"
-                className="mt-1 min-h-[1rem] text-xs text-destructive"
-              >
-                {reviewErrors.email}
-              </p>
-            </div>
-            <div>
-              <span className="mb-1 block text-sm font-medium text-foreground">Note</span>
-              <div className="flex gap-1" role="radiogroup" aria-label="Note">
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    role="radio"
-                    aria-checked={reviewRating === value}
-                    aria-label={`${value} étoile${value > 1 ? "s" : ""}`}
-                    onClick={() => setReviewRating(value)}
-                  >
-                    <Star
-                      className={`h-5 w-5 ${
-                        value <= reviewRating
-                          ? "fill-primary text-primary"
-                          : "text-muted-foreground"
-                      }`}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="review-comment">Commentaire</Label>
-              <Textarea
-                id="review-comment"
-                value={reviewComment}
-                onChange={(e) => setReviewComment(e.target.value)}
-                aria-invalid={Boolean(reviewErrors.comment)}
-                aria-describedby="review-comment-error"
-              />
-              <p
-                id="review-comment-error"
-                role="alert"
-                className="mt-1 min-h-[1rem] text-xs text-destructive"
-              >
-                {reviewErrors.comment}
-              </p>
-            </div>
-            <Button type="submit">Envoyer mon avis</Button>
-          </form>
-        </TabsContent>
-
-        <TabsContent value="similaires" className="py-4">
-          {similarProducts.length > 0 ? (
-            <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
-              {similarProducts.map((p) => (
-                <div key={p.id} className="w-48 shrink-0 snap-start sm:w-56">
-                  <ProductCard product={p} />
-                </div>
-              ))}
-            </div>
-          ) : (
+      <section className="mt-16 max-w-2xl">
+        <h2 className="m-0 mb-[22px] border-b border-border pb-4 text-[22px]">Avis ({count})</h2>
+        {count > 0 ? (
+          <div className="mb-6 flex items-center gap-3">
+            <StarRating value={average} />
             <p className="text-sm text-muted-foreground">
-              Aucun produit similaire disponible pour le moment.
+              {average.toFixed(1)} / 5 — {count} avis
+            </p>
+          </div>
+        ) : (
+          <p className="mb-6 text-sm text-muted-foreground">
+            Aucun avis pour le moment — soyez le premier à donner votre avis.
+          </p>
+        )}
+
+        {reviews.length > 0 && (
+          <ul className="mb-8 space-y-4">
+            {reviews.map((review) => (
+              <li key={review.id} className="rounded-2xl border border-border p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-foreground">{review.name}</p>
+                  <p className="text-xs text-muted-foreground">{review.date}</p>
+                </div>
+                <StarRating value={review.rating} />
+                <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <form
+          onSubmit={handleReviewSubmit}
+          noValidate
+          className="space-y-4 rounded-2xl border border-border bg-[var(--color-cream-light)] p-5"
+        >
+          <h3 className="text-sm font-bold text-foreground">Laisser un avis</h3>
+          {reviewSubmitted && (
+            <p role="status" className="text-sm text-primary">
+              Merci ! Votre avis a été soumis et sera visible après validation.
             </p>
           )}
-        </TabsContent>
-      </Tabs>
-    </div>
+          <div>
+            <Label htmlFor="review-name">Nom</Label>
+            <Input
+              id="review-name"
+              value={reviewName}
+              onChange={(e) => setReviewName(e.target.value)}
+              aria-invalid={Boolean(reviewErrors.name)}
+              aria-describedby="review-name-error"
+            />
+            <p
+              id="review-name-error"
+              role="alert"
+              className="mt-1 min-h-[1rem] text-xs text-destructive"
+            >
+              {reviewErrors.name}
+            </p>
+          </div>
+          <div>
+            <Label htmlFor="review-email">E-mail</Label>
+            <Input
+              id="review-email"
+              type="email"
+              value={reviewEmail}
+              onChange={(e) => setReviewEmail(e.target.value)}
+              aria-invalid={Boolean(reviewErrors.email)}
+              aria-describedby="review-email-error"
+            />
+            <p
+              id="review-email-error"
+              role="alert"
+              className="mt-1 min-h-[1rem] text-xs text-destructive"
+            >
+              {reviewErrors.email}
+            </p>
+          </div>
+          <div>
+            <span className="mb-1 block text-sm font-medium text-foreground">Note</span>
+            <div className="flex gap-1" role="radiogroup" aria-label="Note">
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="radio"
+                  aria-checked={reviewRating === value}
+                  aria-label={`${value} étoile${value > 1 ? "s" : ""}`}
+                  onClick={() => setReviewRating(value)}
+                >
+                  <Star
+                    className={`h-5 w-5 ${
+                      value <= reviewRating ? "fill-primary text-primary" : "text-muted-foreground"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="review-comment">Commentaire</Label>
+            <Textarea
+              id="review-comment"
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              aria-invalid={Boolean(reviewErrors.comment)}
+              aria-describedby="review-comment-error"
+            />
+            <p
+              id="review-comment-error"
+              role="alert"
+              className="mt-1 min-h-[1rem] text-xs text-destructive"
+            >
+              {reviewErrors.comment}
+            </p>
+          </div>
+          <Button type="submit" className="rounded-full">
+            Envoyer mon avis
+          </Button>
+        </form>
+      </section>
+    </main>
   );
 }

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F4F1EA; color: #14150F; font-family: "Jost", system-ui, sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; }
+  a { color: #1E3229; text-decoration: none; }
+  a:hover { color: #A8813C; }
+  img { display: block; }
+  @keyframes slideD { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#F4F1EA">
+
+  <div style="background:#1E3229;color:#F4F1EA;overflow:hidden;height:38px;display:flex;align-items:center">
+    <div style="display:flex;gap:52px;white-space:nowrap;animation:slideD 28s linear infinite;font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding-left:28px">
+      <span>Livraison 24h dans Dakar</span><span>Paiement à la livraison</span><span>Montage offert dès 200.000 CFA</span><span>Déstockage showroom en cours</span>
+      <span>Livraison 24h dans Dakar</span><span>Paiement à la livraison</span><span>Montage offert dès 200.000 CFA</span><span>Déstockage showroom en cours</span>
+    </div>
+  </div>
+
+  <header style="position:sticky;top:0;z-index:40;background:rgba(244,241,234,.95);backdrop-filter:blur(10px);border-bottom:1px solid #DAD4C6">
+    <div style="max-width:1320px;margin:0 auto;padding:18px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;align-items:center">
+      <nav style="display:flex;align-items:center;gap:24px;font-family:'Archivo',sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;flex-wrap:wrap">
+        <span onClick="{{ nav.produits }}" style="cursor:pointer" style-hover="color:#A8813C">Catalogue</span>
+        <span onClick="{{ nav.apropos }}" style="cursor:pointer" style-hover="color:#A8813C">Maison</span>
+        <span onClick="{{ nav.contact }}" style="cursor:pointer" style-hover="color:#A8813C">Contact</span>
+      </nav>
+      <div onClick="{{ nav.home }}" style="cursor:pointer;text-align:center">
+        <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.01em;line-height:1;text-transform:uppercase">2M Global Services</div>
+        <div style="font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:#7B7566;margin-top:4px">Dakar · depuis 2011</div>
+      </div>
+      <div style="display:flex;gap:20px;justify-content:flex-end;align-items:center;font-family:'Archivo',sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;flex-wrap:wrap">
+        <span style="cursor:pointer" style-hover="color:#A8813C">Recherche</span>
+        <span onClick="{{ nav.panier }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:#1E3229;color:#F4F1EA;padding:11px 18px;border-radius:999px" style-hover="background:#A8813C"><span>Panier</span><span>({{ cartCount }})</span></span>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{ is.home }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:22px 28px 72px">
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-bottom:16px">
+        <div style="grid-column:span 2;min-width:0;position:relative;background:#14150F;border-radius:20px;overflow:hidden;min-height:400px">
+          <img src="{{ hero.img }}" alt="{{ hero.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.52" />
+          <div style="position:relative;padding:clamp(26px,4vw,48px);color:#F4F1EA;max-width:580px">
+            <div style="display:inline-flex;align-items:center;white-space:nowrap;border:1px solid #D3B77E;color:#D3B77E;font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:8px 15px;border-radius:999px;margin-bottom:22px">Déstockage showroom</div>
+            <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(34px,5.6vw,64px);line-height:.96;letter-spacing:-.03em;margin:0 0 18px;text-transform:uppercase;text-wrap:balance">Jusqu'à <span style="color:#D3B77E">−70%</span><br />sur le mobilier</h1>
+            <p style="font-size:17px;line-height:1.7;color:rgba(244,241,234,.9);max-width:42ch;margin:0 0 28px">104 références en stock à Dakar — bureaux, sièges, armoires, électroniques et coffres-forts. Livrées et montées chez vous en 24h.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <span onClick="{{ nav.produits }}" style="cursor:pointer;background:#F4F1EA;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:16px 28px;border-radius:999px;white-space:nowrap" style-hover="background:#D3B77E">Voir les offres</span>
+              <span style="cursor:pointer;border:1px solid rgba(244,241,234,.55);color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:16px 28px;border-radius:999px;white-space:nowrap" style-hover="background:rgba(244,241,234,.14)">Commander sur WhatsApp</span>
+            </div>
+          </div>
+        </div>
+        <div style="min-width:0;display:grid;gap:16px">
+          <div style="background:#1E3229;color:#F4F1EA;border-radius:20px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;min-height:190px">
+            <div>
+              <div style="font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:12px">Nouvel arrivage</div>
+              <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-.02em;text-transform:uppercase">Électroniques<br />& smartphones</div>
+            </div>
+            <div onClick="{{ nav.produits }}" style="cursor:pointer;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#D3B77E;margin-top:18px">Découvrir →</div>
+          </div>
+          <div style="background:#EDE9DF;border:1px solid #DAD4C6;border-radius:20px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;min-height:190px">
+            <div>
+              <div style="font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#A8813C;margin-bottom:12px">Coffres-forts</div>
+              <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:26px;line-height:1.05;letter-spacing:-.02em;text-transform:uppercase">À partir de<br />95.000 CFA</div>
+            </div>
+            <div onClick="{{ nav.produits }}" style="cursor:pointer;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#1E3229;margin-top:18px">Voir les modèles →</div>
+          </div>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:44px">
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:16px;padding:18px"><div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px">Livraison 24h</div><div style="font-size:14px;color:#6E6A5C">Partout dans Dakar</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:16px;padding:18px"><div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px">Payez à la réception</div><div style="font-size:14px;color:#6E6A5C">Wave, Orange Money, espèces</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:16px;padding:18px"><div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px">Échange 7 jours</div><div style="font-size:14px;color:#6E6A5C">Sans justification</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:16px;padding:18px"><div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px">Montage inclus</div><div style="font-size:14px;color:#6E6A5C">Par nos équipes</div></div>
+      </section>
+
+      <section style="margin-bottom:52px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid #DAD4C6;padding-bottom:16px;margin-bottom:24px">
+          <h2 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.02em;text-transform:uppercase;margin:0">Les affaires du moment</h2>
+          <span onClick="{{ nav.produits }}" style="cursor:pointer;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid #14150F;padding-bottom:3px">Les 104 produits</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px">
+          <sc-for list="{{ deals }}" as="p" hint-placeholder-count="8">
+            <div onClick="{{ nav.fiche }}" style="cursor:pointer;background:#FBF9F4;border:1px solid #DAD4C6;border-radius:20px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#A8813C;box-shadow:0 14px 32px rgba(20,21,15,.10)">
+              <div style="position:relative;background:#E8E3D7">
+                <img src="{{ p.img }}" alt="{{ p.alt }}" style="width:100%;height:210px;object-fit:cover" />
+                <div style="position:absolute;top:12px;left:12px;background:#1E3229;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.08em;padding:5px 11px;border-radius:999px">{{ p.off }}</div>
+              </div>
+              <div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
+                <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7B7566;font-weight:500">{{ p.cat }}</div>
+                <div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;line-height:1.3;flex:1">{{ p.name }}</div>
+                <div style="display:flex;gap:9px;align-items:baseline"><span style="font-family:'Archivo',sans-serif;font-weight:900;font-size:20px;color:#1E3229">{{ p.price }} CFA</span><span style="color:#9B9483;text-decoration:line-through;font-size:13px">{{ p.old }}</span></div>
+                <div style="background:#14150F;color:#F4F1EA;text-align:center;padding:12px;border-radius:999px;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase" style-hover="background:#1E3229">Ajouter au panier</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="margin-bottom:52px">
+        <h2 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(22px,3vw,32px);letter-spacing:-.02em;text-transform:uppercase;margin:0 0 24px;border-bottom:1px solid #DAD4C6;padding-bottom:16px">Nos six univers</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+            <div onClick="{{ nav.produits }}" style="cursor:pointer;background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:16px" style-hover="border-color:#A8813C;transform:translateY(-3px)">
+              <img src="{{ c.img }}" alt="{{ c.name }}" style="width:100%;height:110px;object-fit:cover;border-radius:12px;margin-bottom:14px;background:#E8E3D7" />
+              <div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:14px;line-height:1.25;text-transform:uppercase;letter-spacing:.02em">{{ c.name }}</div>
+              <div style="font-size:13px;color:#7B7566;margin-top:5px">{{ c.count }} produits</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="background:#1E3229;border-radius:24px;padding:clamp(28px,5vw,52px);color:#F4F1EA;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px;align-items:center;margin-bottom:52px">
+        <div>
+          <div style="font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:16px">Équipez votre bureau</div>
+          <h3 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(26px,3.8vw,44px);letter-spacing:-.02em;text-transform:uppercase;line-height:1.02;margin:0 0 16px">Devis gratuit dès 5 postes</h3>
+          <p style="margin:0 0 26px;color:rgba(244,241,234,.86);font-size:16px;line-height:1.75;max-width:44ch">Bureaux, sièges, armoires et coffres : nous chiffrons tout sous 24 heures et nous installons.</p>
+          <span onClick="{{ nav.contact }}" style="cursor:pointer;display:inline-block;background:#D3B77E;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:16px 28px;border-radius:999px" style-hover="background:#F4F1EA">Demander un devis</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px">
+          <div style="background:rgba(244,241,234,.10);border-radius:16px;padding:20px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;color:#D3B77E">15</div><div style="font-size:13px;color:rgba(244,241,234,.8)">Années à Dakar</div></div>
+          <div style="background:rgba(244,241,234,.10);border-radius:16px;padding:20px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;color:#D3B77E">104</div><div style="font-size:13px;color:rgba(244,241,234,.8)">Références</div></div>
+          <div style="background:rgba(244,241,234,.10);border-radius:16px;padding:20px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;color:#D3B77E">3 200</div><div style="font-size:13px;color:rgba(244,241,234,.8)">Clients</div></div>
+          <div style="background:rgba(244,241,234,.10);border-radius:16px;padding:20px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;color:#D3B77E">48h</div><div style="font-size:13px;color:rgba(244,241,234,.8)">Livraison</div></div>
+        </div>
+      </section>
+
+      <section style="background:#EDE9DF;border:1px solid #DAD4C6;border-radius:24px;padding:clamp(24px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;align-items:center">
+        <div>
+          <h3 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:26px;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 8px">Ne manquez aucune offre</h3>
+          <p style="margin:0;color:#4A4739;font-size:16px">Nouveautés et promotions, une fois par semaine.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:190px;background:#FBF9F4;border:1px solid #C9C2B1;border-radius:999px;padding:15px 20px;color:#9B9483;font-size:15px">votre@email.com</div>
+          <div style="background:#14150F;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:16px 26px;border-radius:999px;cursor:pointer" style-hover="background:#1E3229">S'inscrire</div>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ is.produits }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:30px 28px 72px">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7B7566;margin-bottom:18px"><span onClick="{{ nav.home }}" style="cursor:pointer">Accueil</span> — Catalogue</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:28px">
+        <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(30px,5vw,54px);letter-spacing:-.03em;text-transform:uppercase;margin:0">Tout le catalogue</h1>
+        <div style="display:flex;gap:12px;align-items:center;font-size:14px;color:#7B7566;flex-wrap:wrap"><span>104 résultats · 38 en promotion</span><div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:999px;padding:11px 18px;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#14150F;cursor:pointer">Trier : promos d'abord</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr);gap:28px">
+        <aside style="min-width:0;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:20px">
+            <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px">Catégories</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+                <div style="display:flex;justify-content:space-between;cursor:pointer;color:#4A4739" style-hover="color:#A8813C"><span>{{ c.name }}</span><span style="color:#9B9483">{{ c.count }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:20px">
+            <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px">Budget</div>
+            <div style="height:4px;background:#E4DED0;border-radius:999px;position:relative;margin:18px 0 14px"><div style="position:absolute;left:0;right:38%;top:0;bottom:0;background:#1E3229;border-radius:999px"></div><div style="position:absolute;left:62%;top:-6px;width:16px;height:16px;background:#14150F;border-radius:999px"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#7B7566"><span>0 CFA</span><span>750.000 CFA</span></div>
+          </div>
+          <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:20px">
+            <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px">Réduction</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:12px">
+              <span style="border:1px solid #C9C2B1;border-radius:999px;padding:8px 14px;cursor:pointer" style-hover="border-color:#A8813C;color:#A8813C">10%+</span>
+              <span style="background:#1E3229;color:#F4F1EA;border-radius:999px;padding:8px 14px;cursor:pointer">20%+</span>
+              <span style="border:1px solid #C9C2B1;border-radius:999px;padding:8px 14px;cursor:pointer" style-hover="border-color:#A8813C;color:#A8813C">30%+</span>
+              <span style="border:1px solid #C9C2B1;border-radius:999px;padding:8px 14px;cursor:pointer" style-hover="border-color:#A8813C;color:#A8813C">50%+</span>
+            </div>
+          </div>
+          <div style="background:#1E3229;color:#F4F1EA;border-radius:18px;padding:20px">
+            <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:15px;text-transform:uppercase;margin-bottom:8px">Besoin d'aide ?</div>
+            <div style="font-size:14px;color:rgba(244,241,234,.82);margin-bottom:16px;line-height:1.6">On vous conseille sur WhatsApp en moins de 10 minutes.</div>
+            <div style="background:#D3B77E;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-align:center;padding:12px;border-radius:999px;cursor:pointer">Écrire maintenant</div>
+          </div>
+        </aside>
+        <div style="min-width:0">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px">
+            <sc-for list="{{ grid }}" as="p" hint-placeholder-count="12">
+              <div onClick="{{ nav.fiche }}" style="cursor:pointer;background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#A8813C;box-shadow:0 12px 28px rgba(20,21,15,.10)">
+                <div style="position:relative;background:#E8E3D7">
+                  <img src="{{ p.img }}" alt="{{ p.alt }}" style="width:100%;height:180px;object-fit:cover" />
+                  <div style="position:absolute;top:10px;left:10px;background:#1E3229;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;padding:4px 10px;border-radius:999px">{{ p.off }}</div>
+                </div>
+                <div style="padding:15px;display:flex;flex-direction:column;gap:9px;flex:1">
+                  <div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;line-height:1.3;flex:1">{{ p.name }}</div>
+                  <div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:'Archivo',sans-serif;font-weight:900;font-size:18px;color:#1E3229">{{ p.price }} CFA</span><span style="color:#9B9483;text-decoration:line-through;font-size:12px">{{ p.old }}</span></div>
+                  <div style="border:1.5px solid #14150F;text-align:center;padding:10px;border-radius:999px;font-family:'Archivo',sans-serif;font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase" style-hover="background:#14150F;color:#F4F1EA">Ajouter</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:center;gap:10px;margin-top:36px;align-items:center;font-family:'Archivo',sans-serif;font-weight:700;font-size:13px">
+            <span style="border:1px solid #DAD4C6;border-radius:999px;padding:10px 16px;color:#9B9483">Précédent</span>
+            <span style="background:#14150F;color:#F4F1EA;border-radius:999px;padding:10px 16px">1</span>
+            <span style="border:1px solid #DAD4C6;border-radius:999px;padding:10px 16px;cursor:pointer">2</span>
+            <span style="border:1px solid #DAD4C6;border-radius:999px;padding:10px 16px;cursor:pointer">3</span>
+            <span style="color:#9B9483">…</span>
+            <span style="border:1px solid #DAD4C6;border-radius:999px;padding:10px 16px;cursor:pointer">9</span>
+            <span style="border:1px solid #14150F;border-radius:999px;padding:10px 16px;cursor:pointer" style-hover="background:#14150F;color:#F4F1EA">Suivant</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ is.fiche }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:30px 28px 72px">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7B7566;margin-bottom:22px"><span onClick="{{ nav.home }}" style="cursor:pointer">Accueil</span> — <span onClick="{{ nav.produits }}" style="cursor:pointer">Catalogue</span> — {{ item.cat }}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:44px;align-items:start">
+        <div>
+          <div style="border-radius:22px;overflow:hidden;background:#E8E3D7;position:relative">
+            <img src="{{ item.img }}" alt="{{ item.alt }}" style="width:100%;height:min(62vh,500px);object-fit:cover" />
+            <div style="position:absolute;top:16px;left:16px;background:#1E3229;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.08em;padding:6px 13px;border-radius:999px">{{ item.off }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px">
+            <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="4">
+              <img src="{{ t }}" alt="Vue du produit" style="width:100%;height:84px;object-fit:cover;border-radius:12px;background:#E8E3D7;border:1px solid #DAD4C6;cursor:pointer" style-hover="border-color:#A8813C" />
+            </sc-for>
+          </div>
+        </div>
+        <div style="position:sticky;top:120px">
+          <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#7B7566;margin-bottom:14px">{{ item.cat }} · Réf. 2M-014</div>
+          <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(26px,4vw,42px);line-height:1.03;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 20px">{{ item.name }}</h1>
+          <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:12px">
+            <span style="font-family:'Archivo',sans-serif;font-weight:900;font-size:34px;color:#1E3229">{{ item.price }} CFA</span>
+            <span style="color:#9B9483;text-decoration:line-through;font-size:17px">{{ item.old }}</span>
+          </div>
+          <div style="display:inline-block;border:1px solid #A8813C;color:#A8813C;font-family:'Archivo',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 13px;border-radius:999px;margin-bottom:24px">Vous économisez 90.000 CFA</div>
+          <p style="font-size:16px;line-height:1.8;color:#4A4739;margin:0 0 28px;max-width:48ch;text-wrap:pretty">Plateau en acajou verni sur structure massive, deux caissons latéraux verrouillables, passe-câbles intégré. Pensé pour un usage intensif — garantie deux ans, pièces disponibles à Dakar.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+            <div style="display:flex;align-items:center;border:1.5px solid #14150F;border-radius:999px"><span onClick="{{ dec }}" style="cursor:pointer;padding:14px 19px;font-weight:600;font-size:17px">−</span><span style="padding:14px 4px;min-width:34px;text-align:center;font-family:'Archivo',sans-serif;font-weight:800">{{ qty }}</span><span onClick="{{ inc }}" style="cursor:pointer;padding:14px 19px;font-weight:600;font-size:17px">+</span></div>
+            <span onClick="{{ nav.panier }}" style="cursor:pointer;flex:1;min-width:210px;text-align:center;background:#14150F;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:17px 26px;border-radius:999px" style-hover="background:#1E3229">Ajouter au panier</span>
+          </div>
+          <span style="display:block;text-align:center;border:1.5px solid #1E3229;color:#1E3229;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:16px;border-radius:999px;cursor:pointer;margin-bottom:32px" style-hover="background:#1E3229;color:#F4F1EA">Commander sur WhatsApp</span>
+          <div style="border-top:1px solid #DAD4C6">
+            <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #DAD4C6;font-size:15px"><span style="color:#7B7566">Dimensions</span><span style="font-weight:500">180 × 90 × 76 cm</span></div>
+            <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #DAD4C6;font-size:15px"><span style="color:#7B7566">Matériau</span><span style="font-weight:500">Acajou verni</span></div>
+            <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #DAD4C6;font-size:15px"><span style="color:#7B7566">Disponibilité</span><span style="font-weight:500;color:#1E3229">En stock — showroom Dakar</span></div>
+            <div style="display:flex;justify-content:space-between;padding:15px 0;font-size:15px"><span style="color:#7B7566">Livraison</span><span style="font-weight:500">24–48h · montage offert</span></div>
+          </div>
+        </div>
+      </div>
+      <section style="margin-top:64px">
+        <h2 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:26px;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 22px;border-bottom:1px solid #DAD4C6;padding-bottom:16px">Souvent achetés ensemble</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px">
+          <sc-for list="{{ related }}" as="p" hint-placeholder-count="4">
+            <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;overflow:hidden;cursor:pointer" style-hover="border-color:#A8813C">
+              <img src="{{ p.img }}" alt="{{ p.alt }}" style="width:100%;height:165px;object-fit:cover;background:#E8E3D7" />
+              <div style="padding:15px"><div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;line-height:1.3;margin-bottom:8px">{{ p.name }}</div><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:17px;color:#1E3229">{{ p.price }} CFA</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ is.apropos }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:56px 28px 72px">
+      <div style="font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#A8813C;margin-bottom:22px">Qui sommes-nous</div>
+      <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(32px,5.6vw,64px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;margin:0 0 24px;max-width:24ch;text-wrap:balance">La qualité à moindre coût, depuis 2011</h1>
+      <p style="font-size:19px;line-height:1.75;color:#4A4739;max-width:58ch;margin:0 0 44px;text-wrap:pretty">2M Global Services équipe les foyers et les bureaux de Dakar. Nous importons en direct, nous stockons sur place et nous montons nous-mêmes — c'est tout le secret de nos prix.</p>
+      <div style="border-radius:24px;overflow:hidden;margin-bottom:48px;background:#E8E3D7"><img src="{{ hero.img }}" alt="Showroom 2M Global Services" style="width:100%;height:min(52vh,460px);object-fit:cover" /></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:56px">
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:24px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:38px;color:#1E3229;letter-spacing:-.03em">15</div><div style="font-size:14px;color:#7B7566">Années d'expérience</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:24px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:38px;color:#1E3229;letter-spacing:-.03em">104</div><div style="font-size:14px;color:#7B7566">Références en stock</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:24px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:38px;color:#1E3229;letter-spacing:-.03em">3 200+</div><div style="font-size:14px;color:#7B7566">Clients satisfaits</div></div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:24px"><div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:38px;color:#1E3229;letter-spacing:-.03em">6</div><div style="font-size:14px;color:#7B7566">Catégories</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px">
+        <div><h3 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;margin:0 0 12px">Import direct</h3><p style="margin:0;color:#4A4739;line-height:1.8;font-size:15px">Nous achetons à l'usine et stockons dans notre dépôt de Front de Terre. Aucun intermédiaire à payer.</p></div>
+        <div><h3 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;margin:0 0 12px">Tout est en stock</h3><p style="margin:0;color:#4A4739;line-height:1.8;font-size:15px">Ce que vous voyez est disponible aujourd'hui, livré et monté sous 24 à 48 heures dans Dakar.</p></div>
+        <div><h3 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;margin:0 0 12px">On reste joignables</h3><p style="margin:0;color:#4A4739;line-height:1.8;font-size:15px">Échange sous 7 jours, garantie 2 ans, et un WhatsApp qui répond en moins de 10 minutes.</p></div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ is.contact }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:56px 28px 72px">
+      <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(30px,5vw,52px);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 14px">Contact & devis</h1>
+      <p style="font-size:18px;color:#4A4739;margin:0 0 44px;max-width:52ch;line-height:1.7">Showroom ouvert du lundi au samedi, 9h–19h. Devis pour aménagement complet sous 24 heures.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#1E3229;color:#F4F1EA;border-radius:20px;padding:26px">
+            <div style="font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#D3B77E;margin-bottom:14px">Appelez directement</div>
+            <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:24px;line-height:1.4">33 833 33 64<br />78 157 98 38<br />76 462 77 77</div>
+            <div style="background:#D3B77E;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:13px;border-radius:999px;margin-top:20px;cursor:pointer">Ouvrir WhatsApp</div>
+          </div>
+          <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:20px;padding:24px"><div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#7B7566;margin-bottom:10px">Showroom</div><div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;line-height:1.55">68, Route de Front de Terre<br />Dakar, Sénégal</div><div style="font-size:14px;color:#7B7566;margin-top:10px">Lundi – Samedi · 9h – 19h</div></div>
+          <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:20px;padding:24px"><div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#7B7566;margin-bottom:10px">E-mail</div><div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:16px">commercial@2mglobalservices.com</div></div>
+        </div>
+        <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:22px;padding:28px">
+          <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;margin-bottom:20px">Demander un devis</div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div><div style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#7B7566;margin-bottom:7px">Nom complet</div><div style="border:1px solid #C9C2B1;border-radius:12px;padding:13px 16px;color:#9B9483;font-size:15px">Aïssatou Diop</div></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
+              <div><div style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#7B7566;margin-bottom:7px">Téléphone</div><div style="border:1px solid #C9C2B1;border-radius:12px;padding:13px 16px;color:#9B9483;font-size:15px">77 000 00 00</div></div>
+              <div><div style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#7B7566;margin-bottom:7px">Nombre de postes</div><div style="border:1px solid #C9C2B1;border-radius:12px;padding:13px 16px;color:#9B9483;font-size:15px">6</div></div>
+            </div>
+            <div><div style="font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#7B7566;margin-bottom:7px">Votre besoin</div><div style="border:1px solid #C9C2B1;border-radius:12px;padding:13px 16px;color:#9B9483;font-size:15px;min-height:110px">Bureaux + fauteuils + une armoire…</div></div>
+            <div style="background:#14150F;color:#F4F1EA;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:16px;border-radius:999px;cursor:pointer" style-hover="background:#1E3229">Envoyer la demande</div>
+            <div style="font-size:13px;color:#7B7566;text-align:center">Réponse sous 24h ouvrées.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ is.panier }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1320px;margin:0 auto;padding:44px 28px 72px">
+      <h1 style="font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(28px,4.4vw,46px);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 6px">Votre panier</h1>
+      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#7B7566;margin-bottom:32px">{{ cartCount }} articles · réservés 24 h</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ cart }}" as="l" hint-placeholder-count="3">
+            <div style="background:#FBF9F4;border:1px solid #DAD4C6;border-radius:18px;padding:15px;display:flex;gap:15px;align-items:center;flex-wrap:wrap">
+              <img src="{{ l.img }}" alt="{{ l.name }}" style="width:90px;height:90px;object-fit:cover;border-radius:12px;background:#E8E3D7" />
+              <div style="flex:1;min-width:150px">
+                <div style="font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;line-height:1.3">{{ l.name }}</div>
+                <div style="font-size:13px;color:#7B7566;margin-top:5px">{{ l.note }}</div>
+                <div style="font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#A8813C;margin-top:9px;cursor:pointer">Retirer</div>
+              </div>
+              <div style="display:flex;align-items:center;border:1px solid #C9C2B1;border-radius:999px"><span style="padding:9px 14px;cursor:pointer">−</span><span style="padding:9px 4px;min-width:26px;text-align:center;font-family:'Archivo',sans-serif;font-weight:800">{{ l.qty }}</span><span style="padding:9px 14px;cursor:pointer">+</span></div>
+              <div style="min-width:115px;text-align:right;font-family:'Archivo',sans-serif;font-weight:900;font-size:18px">{{ l.line }} CFA</div>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+            <div style="flex:1;min-width:180px;background:#FBF9F4;border:1px dashed #C9C2B1;border-radius:999px;padding:14px 20px;color:#9B9483;font-size:15px">Code promo</div>
+            <div style="border:1.5px solid #14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;border-radius:999px;cursor:pointer" style-hover="background:#14150F;color:#F4F1EA">Appliquer</div>
+          </div>
+        </div>
+        <div style="background:#1E3229;color:#F4F1EA;border-radius:22px;padding:26px">
+          <div style="font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:20px">Récapitulatif</div>
+          <div style="display:flex;flex-direction:column;gap:13px;font-size:15px">
+            <div style="display:flex;justify-content:space-between"><span style="color:rgba(244,241,234,.8)">Sous-total</span><span style="font-weight:500">{{ totals.sub }} CFA</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:rgba(244,241,234,.8)">Vos économies</span><span style="font-weight:500;color:#D3B77E">−{{ totals.saved }} CFA</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:rgba(244,241,234,.8)">Livraison & montage</span><span style="font-weight:500">{{ totals.ship }}</span></div>
+            <div style="border-top:1px solid rgba(244,241,234,.2);padding-top:16px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase">Total</span><span style="font-family:'Archivo',sans-serif;font-weight:900;font-size:28px;color:#D3B77E">{{ totals.total }} CFA</span></div>
+          </div>
+          <div style="background:#F4F1EA;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:17px;border-radius:999px;margin-top:22px;cursor:pointer" style-hover="background:#D3B77E">Commander</div>
+          <div style="border:1px solid rgba(244,241,234,.5);font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:16px;border-radius:999px;margin-top:10px;cursor:pointer" style-hover="background:rgba(244,241,234,.14)">Finaliser sur WhatsApp</div>
+          <div style="font-size:13px;color:rgba(244,241,234,.72);margin-top:16px;line-height:1.6">Paiement à la livraison : Wave, Orange Money ou espèces.</div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <footer style="background:#14150F;color:#F4F1EA">
+    <div style="max-width:1320px;margin:0 auto;padding:60px 28px 26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:34px">
+      <div>
+        <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:20px;text-transform:uppercase;margin-bottom:14px">2M Global Services</div>
+        <div style="font-size:14px;line-height:1.9;color:rgba(244,241,234,.72)">68, Route de Front de Terre<br />Dakar, Sénégal<br />33 833 33 64 · 78 157 98 38<br />commercial@2mglobalservices.com</div>
+      </div>
+      <div>
+        <div style="font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:16px">Catalogue</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:rgba(244,241,234,.78)">
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6"><span onClick="{{ nav.produits }}" style="cursor:pointer" style-hover="color:#D3B77E">{{ c.name }}</span></sc-for>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:16px">Maison</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:rgba(244,241,234,.78)">
+          <span onClick="{{ nav.apropos }}" style="cursor:pointer">À propos</span>
+          <span onClick="{{ nav.contact }}" style="cursor:pointer">Contact & devis</span>
+          <span onClick="{{ nav.produits }}" style="cursor:pointer">Déstockage</span>
+          <span style="cursor:pointer">Livraison & montage</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D3B77E;margin-bottom:16px">Restez informé</div>
+        <div style="font-size:14px;color:rgba(244,241,234,.72);margin-bottom:12px">Offres et nouveautés par e-mail.</div>
+        <div style="display:flex;gap:8px"><div style="flex:1;background:rgba(244,241,234,.12);border-radius:999px;padding:12px 16px;font-size:14px;color:rgba(244,241,234,.6)">votre@email.com</div><div style="background:#D3B77E;color:#14150F;font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;padding:12px 18px;border-radius:999px;cursor:pointer">OK</div></div>
+      </div>
+    </div>
+    <div style="max-width:1320px;margin:0 auto;padding:22px 28px 40px;border-top:1px solid rgba(244,241,234,.14);font-size:13px;color:rgba(244,241,234,.5)">© 2026 2M Global Services — La Qualité à moindre Coût.</div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { page: "home", products: [{"slug":"bureau-direction-prestige-acajou","name":"Bureau de Direction Prestige Acajou","cat":"Meubles de Bureau","price":"360.000","old":"450.000","off":"-20%","img":"https://2m-global-services.vercel.app/assets/bureau-direction-acajou-studio-D8a_kgFR.jpg","alt":"Bureau de direction en acajou verni avec caissons latéraux"},{"slug":"fauteuil-direction-confort-plus","name":"Fauteuil de Direction Confort Plus","cat":"Fauteuils / Chaises","price":"105.000","old":"150.000","off":"-30%","img":"https://2m-global-services.vercel.app/assets/fauteuil-direction-confort-plus-BbFLA2Q5.jpg","alt":"Fauteuil de direction en cuir noir avec accoudoirs réglables"},{"slug":"armoire-metallique-4-portes","name":"Armoire Métallique 4 Portes","cat":"Armoires","price":"117.000","old":"180.000","off":"-35%","img":"https://2m-global-services.vercel.app/assets/armoire-vestiaire-4casiers-DHhA27ff.jpg","alt":"Armoire vestiaire métallique à quatre casiers"},{"slug":"bureau-direction-prestige-led","name":"Bureau de Direction Prestige LED","cat":"Meubles de Bureau","price":"442.000","old":"520.000","off":"-15%","img":"https://2m-global-services.vercel.app/assets/bureau-direction-premium-led-showroom-CmrXFh-b.jpg","alt":"Bureau de direction avec éclairage LED intégré"},{"slug":"bureau-direction-manager-xl","name":"Bureau de Direction Manager XL","cat":"Meubles de Bureau","price":"380.000","old":"","off":"Nouveau","img":"https://2m-global-services.vercel.app/assets/bureau-direction-gris-render-YCEaSeCF.jpg","alt":"Grand bureau de direction gris anthracite"},{"slug":"bureau-secretaire-compact-chene","name":"Bureau Secrétaire Compact Chêne","cat":"Meubles de Bureau","price":"123.250","old":"145.000","off":"-15%","img":"https://2m-global-services.vercel.app/assets/bureau-agent-chene-noir-studio-B-xJ1_aJ.jpg","alt":"Bureau secrétaire compact en chêne clair"},{"slug":"bureau-agent-simple-ligne","name":"Bureau Agent Simple Ligne","cat":"Meubles de Bureau","price":"95.000","old":"","off":"","img":"https://2m-global-services.vercel.app/assets/bureau-agent-noyer-3tiroirs-BpJ4APiU.jpg","alt":"Bureau agent en bois avec caisson trois tiroirs"},{"slug":"caisson-rangement-3-tiroirs","name":"Caisson de Rangement 3 Tiroirs","cat":"Meubles de Bureau","price":"76.500","old":"85.000","off":"-10%","img":"https://2m-global-services.vercel.app/assets/caisson-mobile-3tiroirs-blanc-BWqpKdMQ.jpg","alt":"Caisson de rangement gris à trois tiroirs sur roulettes"},{"slug":"chaise-direction-ergonomique-noire","name":"Chaise de Direction Ergonomique","cat":"Fauteuils / Chaises","price":"73.500","old":"98.000","off":"-25%","img":"https://2m-global-services.vercel.app/assets/chaise-direction-ergonomique-noire-DMS2MVJi.jpg","alt":"Chaise de direction noire ergonomique"},{"slug":"chaise-direction-cuir-marron","name":"Chaise de Direction Cuir Marron","cat":"Fauteuils / Chaises","price":"135.000","old":"","off":"","img":"https://2m-global-services.vercel.app/assets/chaise-direction-cuir-marron-BR_HsHx8.jpg","alt":"Chaise de direction en cuir marron"},{"slug":"chaise-visiteur-accoudoirs-chrome","name":"Chaise Visiteur Accoudoirs Chrome","cat":"Fauteuils / Chaises","price":"55.000","old":"","off":"","img":"https://2m-global-services.vercel.app/assets/chaise-visiteur-accoudoirs-chrome-Cja2sE2T.jpg","alt":"Chaise visiteur grise avec accoudoirs chromés"},{"slug":"armoire-bureau-bois-2-portes","name":"Armoire de Bureau Bois 2 Portes","cat":"Armoires","price":"130.000","old":"","off":"","img":"https://2m-global-services.vercel.app/assets/armoire-metallique-bronze-blanc-C1S84AFX.jpg","alt":"Armoire de bureau finition bronze deux portes"},{"slug":"smartphone-samsung-galaxy-s24-ultra","name":"Samsung Galaxy S24 Ultra","cat":"Électroniques","price":"Bientôt","old":"","off":"Nouveau","img":"https://2m-global-services.vercel.app/assets/electro-samsung-galaxy-s24-ultra-xLvtHJvX.jpg","alt":"Smartphones Samsung Galaxy S24 Ultra"}], cats: [{"name":"Meubles de Bureau","count":38,"img":"https://2m-global-services.vercel.app/assets/bureau-direction-acajou-studio-D8a_kgFR.jpg"},{"name":"Fauteuils / Chaises","count":26,"img":"https://2m-global-services.vercel.app/assets/fauteuil-direction-confort-plus-BbFLA2Q5.jpg"},{"name":"Salon & Chambre","count":14,"img":"https://2m-global-services.vercel.app/assets/bureau-agent-noyer-3tiroirs-BpJ4APiU.jpg"},{"name":"Armoires Métal & Bois","count":12,"img":"https://2m-global-services.vercel.app/assets/armoire-vestiaire-4casiers-DHhA27ff.jpg"},{"name":"Électroniques","count":9,"img":"https://2m-global-services.vercel.app/assets/electro-samsung-galaxy-s24-ultra-xLvtHJvX.jpg"},{"name":"Coffres-Forts","count":5,"img":"https://2m-global-services.vercel.app/assets/armoire-metallique-bronze-blanc-C1S84AFX.jpg"}], cart: [{"slug":"fauteuil-direction-confort-plus","name":"Fauteuil de Direction Confort Plus","img":"https://2m-global-services.vercel.app/assets/fauteuil-direction-confort-plus-BbFLA2Q5.jpg","unit":"105.000","qty":2,"line":"210.000","note":"Cuir noir · Livraison 48h"},{"slug":"caisson-rangement-3-tiroirs","name":"Caisson de Rangement 3 Tiroirs","img":"https://2m-global-services.vercel.app/assets/caisson-mobile-3tiroirs-blanc-BWqpKdMQ.jpg","unit":"76.500","qty":1,"line":"76.500","note":"Gris · En stock Dakar"},{"slug":"armoire-metallique-4-portes","name":"Armoire Métallique 4 Portes","img":"https://2m-global-services.vercel.app/assets/armoire-vestiaire-4casiers-DHhA27ff.jpg","unit":"117.000","qty":1,"line":"117.000","note":"4 casiers · Montage inclus"}], totals: {"sub":"403.500","saved":"153.500","ship":"Offerte à Dakar","total":"403.500"}, qty: 1 };
+
+  componentDidMount() {
+  }
+
+  go(p) {
+    return () => {
+      this.setState({ page: p });
+      if (typeof window !== "undefined") window.scrollTo(0, 0);
+    };
+  }
+
+  renderVals() {
+    const PH = "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23E8E3D7'/%3E%3C/svg%3E";
+    const blank = { img: PH, alt: "", name: "", price: "", old: "", off: "", cat: "", count: "", qty: "", line: "", note: "" };
+    const fill = (n) => Array.from({ length: n }, () => blank);
+    const p = this.state.products.length ? this.state.products : fill(12);
+    const page = this.state.page;
+    const item = p[0];
+    return {
+      is: { home: page === "home", produits: page === "produits", fiche: page === "fiche", apropos: page === "apropos", contact: page === "contact", panier: page === "panier" },
+      nav: { home: this.go("home"), produits: this.go("produits"), fiche: this.go("fiche"), apropos: this.go("apropos"), contact: this.go("contact"), panier: this.go("panier") },
+      cats: this.state.cats.length ? this.state.cats : fill(6),
+      cart: this.state.cart.length ? this.state.cart : fill(3),
+      totals: this.state.totals.sub ? this.state.totals : { sub: "", saved: "", ship: "", total: "" },
+      grid: p,
+      deals: p.slice(0, 8),
+      related: p.slice(4, 8),
+      hero: p[3],
+      item: item,
+      thumbs: [item.img, p[4].img, p[5].img, p[7].img],
+      qty: this.state.qty,
+      cartCount: 4,
+      inc: () => this.setState((s) => ({ qty: s.qty + 1 })),
+      dec: () => this.setState((s) => ({ qty: Math.max(1, s.qty - 1) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
