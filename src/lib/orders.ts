@@ -65,7 +65,7 @@ function persistAndNotify(next: Order[]) {
 
 export function generateOrderNumber() {
   const random = Math.floor(1000 + Math.random() * 9000);
-  return `TOS-${Date.now().toString().slice(-6)}${random}`;
+  return `2M-${Date.now().toString().slice(-6)}${random}`;
 }
 
 export function loadOrders(): Order[] {
