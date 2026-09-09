@@ -29,6 +29,14 @@ export function Header() {
           <a href="/contact" className={navLinkClass}>
             Contact
           </a>
+          <a
+            href="https://2mparfumeriedk.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={navLinkClass}
+          >
+            Parfumerie
+          </a>
         </nav>
 
         <Link to="/" className="text-center" aria-label="2M Global Services — Accueil">
@@ -120,6 +128,15 @@ export function Header() {
                 className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
               >
                 Contact
+              </a>
+              <a
+                href="https://2mparfumeriedk.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+              >
+                Parfumerie
               </a>
               <a
                 href="/compte"

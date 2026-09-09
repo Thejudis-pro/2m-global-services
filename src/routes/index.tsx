@@ -216,6 +216,27 @@ function Index() {
         </div>
       </section>
 
+      {/* Perfume sibling brand */}
+      <section className="mb-[52px] grid grid-cols-1 items-center gap-6 rounded-[24px] border border-[var(--color-gold-light)] bg-[var(--color-cream-light)] p-[26px] md:grid-cols-[1fr_auto] md:p-[40px]">
+        <div>
+          <div className="mb-3 font-display text-[11px] font-bold uppercase tracking-[0.24em] text-accent">
+            Autre boutique du groupe
+          </div>
+          <h3 className="m-0 mb-2 text-[24px] md:text-[32px]">Découvrez 2M Parfumerie</h3>
+          <p className="m-0 max-w-[52ch] text-[15px] text-muted-foreground">
+            Parfums et cosmétiques, notre autre boutique à Dakar — sur 2mparfumeriedk.com.
+          </p>
+        </div>
+        <a
+          href="https://2mparfumeriedk.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block whitespace-nowrap justify-self-start rounded-full bg-primary px-[28px] py-[16px] font-display text-[12px] font-extrabold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-accent md:justify-self-end"
+        >
+          Visiter le site →
+        </a>
+      </section>
+
       {/* Dark CTA banner */}
       <section className="mb-[52px] grid grid-cols-1 items-center gap-8 rounded-[24px] bg-primary p-[28px] text-primary-foreground md:grid-cols-2 md:p-[52px]">
         <div>
