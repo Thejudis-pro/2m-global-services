@@ -20,7 +20,6 @@ export type Order = {
   orderNumber: string;
   createdAt: string;
   status: OrderStatus;
-  customerId?: string;
   items: OrderItem[];
   subtotal: number;
   discountTotal: number;
@@ -79,10 +78,6 @@ export function saveOrder(order: Order) {
 
 export function loadLastOrder(): Order | null {
   return cache[0] ?? null;
-}
-
-export function loadOrdersForCustomer(customerId: string): Order[] {
-  return cache.filter((o) => o.customerId === customerId);
 }
 
 // Notification integration placeholder — hook a real WhatsApp/SMS/email sender

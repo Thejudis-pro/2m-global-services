@@ -2110,6 +2110,7 @@ export function getSalePrice(product: Product) {
 }
 
 export type ProductFilters = {
+  query?: string;
   categories: string[];
   subcategories: string[];
   priceMin?: number;
@@ -2120,7 +2121,12 @@ export type ProductFilters = {
 };
 
 export function filterAndSortProducts(products: Product[], filters: ProductFilters) {
+  const normalizedQuery = filters.query?.trim().toLowerCase();
+
   const filtered = products.filter((p) => {
+    if (normalizedQuery && !p.name.toLowerCase().includes(normalizedQuery)) {
+      return false;
+    }
     if (filters.categories.length > 0 && !filters.categories.includes(p.categorySlug)) {
       return false;
     }

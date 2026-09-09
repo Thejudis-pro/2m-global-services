@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { authStore } from "@/lib/auth-store";
 
 const ADMIN_LINKS = [
   { to: "/admin", label: "Tableau de bord" },
@@ -9,22 +10,36 @@ const ADMIN_LINKS = [
 ];
 
 export function AdminNav() {
+  const navigate = useNavigate();
+
   return (
     <nav
       aria-label="Navigation admin"
-      className="mb-8 flex flex-wrap gap-2 border-b border-border pb-5"
+      className="mb-8 flex flex-wrap items-center justify-between gap-2 border-b border-border pb-5"
     >
-      {ADMIN_LINKS.map((link) => (
-        <Link
-          key={link.to}
-          to={link.to}
-          activeOptions={{ exact: link.to === "/admin" }}
-          className="rounded-full px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.08em] text-muted-foreground hover:bg-[var(--color-cream-alt)] hover:text-foreground"
-          activeProps={{ className: "!bg-[var(--color-ink)] !text-primary-foreground" }}
-        >
-          {link.label}
-        </Link>
-      ))}
+      <div className="flex flex-wrap gap-2">
+        {ADMIN_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            activeOptions={{ exact: link.to === "/admin" }}
+            className="rounded-full px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.08em] text-muted-foreground hover:bg-[var(--color-cream-alt)] hover:text-foreground"
+            activeProps={{ className: "!bg-[var(--color-ink)] !text-primary-foreground" }}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          authStore.logout();
+          navigate({ to: "/admin/connexion" });
+        }}
+        className="rounded-full px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.08em] text-muted-foreground hover:bg-[var(--color-cream-alt)] hover:text-foreground"
+      >
+        Se déconnecter
+      </button>
     </nav>
   );
 }

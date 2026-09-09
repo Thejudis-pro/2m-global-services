@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { getSalePrice, type Product } from "@/lib/products";
@@ -7,7 +7,6 @@ import { formatCFA } from "@/lib/format";
 import { cartStore, useCartLines } from "@/lib/cart-store";
 import { isValidSenegalPhone } from "@/lib/senegal";
 import { generateOrderNumber, saveOrder, type Order } from "@/lib/orders";
-import { useCurrentUser } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -106,7 +105,6 @@ function StepPill({ index, label, active }: { index: number; label: string; acti
 function CheckoutPage() {
   const lines = useCartLines();
   const navigate = useNavigate();
-  const currentUser = useCurrentUser();
   const allProducts = useAllProducts();
 
   const items = lines
@@ -139,16 +137,6 @@ function CheckoutPage() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (!currentUser) return;
-    const [first, ...rest] = currentUser.name.split(" ");
-    setFirstName((v) => v || first || "");
-    setLastName((v) => v || rest.join(" "));
-    setPhone((v) => v || currentUser.phone);
-    const primary = currentUser.addresses[0];
-    if (primary) setQuartier((v) => v || primary.city);
-  }, [currentUser]);
 
   const selectedSlot = DELIVERY_SLOTS.find((s) => s.value === slot) ?? DELIVERY_SLOTS[0];
   const deliveryFee = selectedSlot.fee;
@@ -195,7 +183,6 @@ function CheckoutPage() {
         orderNumber: generateOrderNumber(),
         createdAt: new Date().toISOString(),
         status: "nouvelle",
-        customerId: currentUser?.id,
         items: items.map(({ product, quantity }) => ({
           productId: product.id,
           name: product.name,
@@ -208,7 +195,7 @@ function CheckoutPage() {
         total: grandTotal,
         customerName: `${firstName} ${lastName}`.trim(),
         phone,
-        email: currentUser?.email ?? "",
+        email: "",
         address: landmark ? `${quartier} — ${landmark}` : quartier,
         city: "Dakar",
         region: "Dakar",

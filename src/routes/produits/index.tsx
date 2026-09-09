@@ -37,6 +37,7 @@ import {
 const SORT_VALUES = SORT_OPTIONS.map((o) => o.value) as [SortOption, ...SortOption[]];
 
 const searchSchema = z.object({
+  q: z.string().optional(),
   category: z.string().optional(),
   subcategory: z.string().optional(),
   priceMin: z.coerce.number().min(0).optional(),
@@ -108,6 +109,7 @@ function ProduitsPage() {
   const filtered = useMemo(
     () =>
       filterAndSortProducts(allProducts, {
+        query: search.q,
         categories: selectedCategories,
         subcategories: selectedSubcategories,
         priceMin: search.priceMin,
@@ -118,6 +120,7 @@ function ProduitsPage() {
       }),
     [
       allProducts,
+      search.q,
       selectedCategories,
       selectedSubcategories,
       search.priceMin,
@@ -143,6 +146,7 @@ function ProduitsPage() {
   }, [currentPage, totalPages]);
 
   const hasActiveFilters =
+    Boolean(search.q) ||
     selectedCategories.length > 0 ||
     selectedSubcategories.length > 0 ||
     minDiscount > 0 ||
@@ -312,7 +316,20 @@ function ProduitsPage() {
       </nav>
 
       <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
-        <h1 className="m-0 text-[30px] md:text-[54px]">Tout le catalogue</h1>
+        <div>
+          <h1 className="m-0 text-[30px] md:text-[54px]">
+            {search.q ? `Résultats pour « ${search.q} »` : "Tout le catalogue"}
+          </h1>
+          {search.q && (
+            <button
+              type="button"
+              onClick={() => applyFilterChange({ q: undefined })}
+              className="mt-2 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-accent hover:underline"
+            >
+              Réinitialiser la recherche
+            </button>
+          )}
+        </div>
         <div className="flex flex-wrap items-center gap-3 text-[14px] text-muted-foreground">
           <span>
             {total} résultat{total === 1 ? "" : "s"} · {withDiscount} en promotion

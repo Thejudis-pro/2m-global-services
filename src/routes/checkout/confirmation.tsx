@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { formatCFA } from "@/lib/format";
 import { loadLastOrder, type Order } from "@/lib/orders";
+import { CONTACT } from "@/lib/categories";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/checkout/confirmation")({
@@ -115,7 +116,9 @@ function ConfirmationPage() {
               asChild
               className="rounded-full bg-background text-[var(--color-ink)] hover:bg-[var(--color-gold-light)]"
             >
-              <a href="/compte">Suivre ma commande</a>
+              <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
+                Suivre ma commande sur WhatsApp
+              </a>
             </Button>
             <Button
               asChild

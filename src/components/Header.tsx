@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Menu, X, ShoppingCart, User } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { useAllCategories } from "@/lib/category-store";
 import { useCartCount } from "@/lib/cart-store";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
@@ -10,8 +10,20 @@ const navLinkClass =
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [mobileSearchValue, setMobileSearchValue] = useState("");
   const count = useCartCount();
   const categories = useAllCategories();
+  const navigate = useNavigate();
+
+  function submitSearch(value: string, closeMobile = false) {
+    const query = value.trim();
+    if (!query) return;
+    navigate({ to: "/produits", search: { q: query } });
+    setSearchOpen(false);
+    if (closeMobile) setOpen(false);
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
@@ -48,11 +60,41 @@ export function Header() {
           </div>
         </Link>
 
-        <div className="hidden items-center justify-end gap-5 md:flex">
-          <span className={navLinkClass + " cursor-default"}>Recherche</span>
-          <a href="/compte" className={navLinkClass} aria-label="Mon compte">
-            <User className="inline h-4 w-4" aria-hidden="true" />
-          </a>
+        <div className="hidden items-center justify-end gap-4 md:flex">
+          {searchOpen ? (
+            <form
+              className="flex items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitSearch(searchValue);
+              }}
+            >
+              <input
+                autoFocus
+                type="search"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onBlur={() => {
+                  if (!searchValue.trim()) setSearchOpen(false);
+                }}
+                placeholder="Rechercher un produit…"
+                aria-label="Rechercher un produit"
+                className="w-[200px] rounded-full border border-border bg-[var(--color-cream-light)] px-4 py-2 text-[13px] text-foreground outline-none focus:border-accent"
+              />
+              <button type="submit" className={navLinkClass} aria-label="Lancer la recherche">
+                <Search className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </form>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className={navLinkClass}
+              aria-label="Ouvrir la recherche"
+            >
+              <Search className="inline h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
           <a
             href="/panier"
             className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-[18px] py-[11px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-accent"
@@ -90,6 +132,29 @@ export function Header() {
                 </button>
               </SheetClose>
             </SheetHeader>
+            <form
+              className="flex items-center gap-2 border-b border-border px-4 py-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitSearch(mobileSearchValue, true);
+              }}
+            >
+              <input
+                type="search"
+                value={mobileSearchValue}
+                onChange={(e) => setMobileSearchValue(e.target.value)}
+                placeholder="Rechercher un produit…"
+                aria-label="Rechercher un produit"
+                className="w-full rounded-full border border-border bg-[var(--color-cream-light)] px-4 py-2 text-sm text-foreground outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border"
+                aria-label="Lancer la recherche"
+              >
+                <Search className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </form>
             <nav className="flex flex-col divide-y divide-border" aria-label="Navigation mobile">
               <a
                 href="/"
@@ -137,13 +202,6 @@ export function Header() {
                 className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
               >
                 Parfumerie
-              </a>
-              <a
-                href="/compte"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                <User className="h-4 w-4" aria-hidden="true" /> Compte
               </a>
               <a
                 href="/panier"

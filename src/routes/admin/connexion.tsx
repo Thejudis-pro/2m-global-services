@@ -7,26 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const searchSchema = z.object({ redirect: z.string().optional() });
-
 const loginSchema = z.object({
   identifier: z.string().trim().min(1, "L'e-mail ou le téléphone est requis."),
   password: z.string().min(1, "Le mot de passe est requis."),
 });
 
-export const Route = createFileRoute("/compte/connexion")({
+export const Route = createFileRoute("/admin/connexion")({
   head: () => ({
-    meta: [
-      { title: "Connexion | 2M Global Services" },
-      { name: "description", content: "Connectez-vous à votre compte 2M Global Services." },
-    ],
+    meta: [{ title: "Connexion administrateur | 2M Global Services" }],
   }),
-  validateSearch: (search: Record<string, unknown>) => searchSchema.parse(search),
-  component: LoginPage,
+  component: AdminLoginPage,
 });
 
-function LoginPage() {
-  const search = Route.useSearch();
+function AdminLoginPage() {
   const navigate = useNavigate();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -47,24 +40,29 @@ function LoginPage() {
     }
     setErrors({});
     try {
-      authStore.login(parsed.data.identifier, parsed.data.password);
-      navigate({ to: search.redirect ?? "/compte" });
+      const user = authStore.login(parsed.data.identifier, parsed.data.password);
+      if (user.role !== "admin") {
+        setFormError("Ce compte n'a pas accès à l'espace gestion.");
+        return;
+      }
+      navigate({ to: "/admin" });
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Une erreur est survenue.");
     }
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 py-16 md:px-6">
-      <h1 className="text-2xl font-bold text-foreground md:text-3xl">Connexion</h1>
+    <main className="mx-auto max-w-md px-[18px] py-16 md:px-[28px]">
+      <div className="mb-3 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+        Espace gestion
+      </div>
+      <h1 className="mb-6 text-[30px]">Connexion administrateur</h1>
 
-      {search.redirect && (
-        <p className="mt-3 rounded-md bg-secondary p-3 text-sm text-secondary-foreground">
-          Veuillez vous connecter pour accéder à cette page.
-        </p>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        className="space-y-4 rounded-[22px] border border-border bg-[var(--color-cream-light)] p-6"
+      >
         <div>
           <Label htmlFor="identifier">E-mail ou téléphone</Label>
           <Input
@@ -117,19 +115,10 @@ function LoginPage() {
           {formError}
         </p>
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full rounded-full">
           Se connecter
         </Button>
       </form>
-
-      <div className="mt-4 flex justify-between text-sm">
-        <a href="/compte/mot-de-passe-oublie" className="text-primary hover:underline">
-          Mot de passe oublié ?
-        </a>
-        <a href="/compte/inscription" className="text-primary hover:underline">
-          Créer un compte
-        </a>
-      </div>
-    </div>
+    </main>
   );
 }

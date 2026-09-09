@@ -17,14 +17,10 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAvisRouteImport } from './routes/admin/avis'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminCommandesRouteImport } from './routes/admin/commandes'
+import { Route as AdminConnexionRouteImport } from './routes/admin/connexion'
 import { Route as AdminProduitsRouteImport } from './routes/admin/produits'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as CheckoutConfirmationRouteImport } from './routes/checkout/confirmation'
-import { Route as CompteIndexRouteImport } from './routes/compte/index'
-import { Route as CompteConnexionRouteImport } from './routes/compte/connexion'
-import { Route as CompteInscriptionRouteImport } from './routes/compte/inscription'
-import { Route as CompteMotDePasseOublieRouteImport } from './routes/compte/mot-de-passe-oublie'
-import { Route as CompteProfilRouteImport } from './routes/compte/profil'
 import { Route as ProduitsIndexRouteImport } from './routes/produits/index'
 import { Route as ProduitsSlugRouteImport } from './routes/produits/$slug'
 
@@ -68,6 +64,11 @@ const AdminCommandesRoute = AdminCommandesRouteImport.update({
   path: '/admin/commandes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminConnexionRoute = AdminConnexionRouteImport.update({
+  id: '/admin/connexion',
+  path: '/admin/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminProduitsRoute = AdminProduitsRouteImport.update({
   id: '/admin/produits',
   path: '/admin/produits',
@@ -81,31 +82,6 @@ const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
 const CheckoutConfirmationRoute = CheckoutConfirmationRouteImport.update({
   id: '/checkout/confirmation',
   path: '/checkout/confirmation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompteIndexRoute = CompteIndexRouteImport.update({
-  id: '/compte/',
-  path: '/compte/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompteConnexionRoute = CompteConnexionRouteImport.update({
-  id: '/compte/connexion',
-  path: '/compte/connexion',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompteInscriptionRoute = CompteInscriptionRouteImport.update({
-  id: '/compte/inscription',
-  path: '/compte/inscription',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompteMotDePasseOublieRoute = CompteMotDePasseOublieRouteImport.update({
-  id: '/compte/mot-de-passe-oublie',
-  path: '/compte/mot-de-passe-oublie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompteProfilRoute = CompteProfilRouteImport.update({
-  id: '/compte/profil',
-  path: '/compte/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProduitsIndexRoute = ProduitsIndexRouteImport.update({
@@ -127,16 +103,12 @@ export interface FileRoutesByFullPath {
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
+  '/admin/connexion': typeof AdminConnexionRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
-  '/compte/connexion': typeof CompteConnexionRoute
-  '/compte/inscription': typeof CompteInscriptionRoute
-  '/compte/mot-de-passe-oublie': typeof CompteMotDePasseOublieRoute
-  '/compte/profil': typeof CompteProfilRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/checkout/': typeof CheckoutIndexRoute
-  '/compte/': typeof CompteIndexRoute
   '/produits/': typeof ProduitsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -147,16 +119,12 @@ export interface FileRoutesByTo {
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
+  '/admin/connexion': typeof AdminConnexionRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
-  '/compte/connexion': typeof CompteConnexionRoute
-  '/compte/inscription': typeof CompteInscriptionRoute
-  '/compte/mot-de-passe-oublie': typeof CompteMotDePasseOublieRoute
-  '/compte/profil': typeof CompteProfilRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/admin': typeof AdminIndexRoute
   '/checkout': typeof CheckoutIndexRoute
-  '/compte': typeof CompteIndexRoute
   '/produits': typeof ProduitsIndexRoute
 }
 export interface FileRoutesById {
@@ -168,16 +136,12 @@ export interface FileRoutesById {
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
+  '/admin/connexion': typeof AdminConnexionRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
-  '/compte/connexion': typeof CompteConnexionRoute
-  '/compte/inscription': typeof CompteInscriptionRoute
-  '/compte/mot-de-passe-oublie': typeof CompteMotDePasseOublieRoute
-  '/compte/profil': typeof CompteProfilRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/checkout/': typeof CheckoutIndexRoute
-  '/compte/': typeof CompteIndexRoute
   '/produits/': typeof ProduitsIndexRoute
 }
 export interface FileRouteTypes {
@@ -190,16 +154,12 @@ export interface FileRouteTypes {
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
+    | '/admin/connexion'
     | '/admin/produits'
     | '/checkout/confirmation'
-    | '/compte/connexion'
-    | '/compte/inscription'
-    | '/compte/mot-de-passe-oublie'
-    | '/compte/profil'
     | '/produits/$slug'
     | '/admin/'
     | '/checkout/'
-    | '/compte/'
     | '/produits/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -210,16 +170,12 @@ export interface FileRouteTypes {
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
+    | '/admin/connexion'
     | '/admin/produits'
     | '/checkout/confirmation'
-    | '/compte/connexion'
-    | '/compte/inscription'
-    | '/compte/mot-de-passe-oublie'
-    | '/compte/profil'
     | '/produits/$slug'
     | '/admin'
     | '/checkout'
-    | '/compte'
     | '/produits'
   id:
     | '__root__'
@@ -230,16 +186,12 @@ export interface FileRouteTypes {
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
+    | '/admin/connexion'
     | '/admin/produits'
     | '/checkout/confirmation'
-    | '/compte/connexion'
-    | '/compte/inscription'
-    | '/compte/mot-de-passe-oublie'
-    | '/compte/profil'
     | '/produits/$slug'
     | '/admin/'
     | '/checkout/'
-    | '/compte/'
     | '/produits/'
   fileRoutesById: FileRoutesById
 }
@@ -251,16 +203,12 @@ export interface RootRouteChildren {
   AdminAvisRoute: typeof AdminAvisRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCommandesRoute: typeof AdminCommandesRoute
+  AdminConnexionRoute: typeof AdminConnexionRoute
   AdminProduitsRoute: typeof AdminProduitsRoute
   CheckoutConfirmationRoute: typeof CheckoutConfirmationRoute
-  CompteConnexionRoute: typeof CompteConnexionRoute
-  CompteInscriptionRoute: typeof CompteInscriptionRoute
-  CompteMotDePasseOublieRoute: typeof CompteMotDePasseOublieRoute
-  CompteProfilRoute: typeof CompteProfilRoute
   ProduitsSlugRoute: typeof ProduitsSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
   CheckoutIndexRoute: typeof CheckoutIndexRoute
-  CompteIndexRoute: typeof CompteIndexRoute
   ProduitsIndexRoute: typeof ProduitsIndexRoute
 }
 
@@ -322,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCommandesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/connexion': {
+      id: '/admin/connexion'
+      path: '/admin/connexion'
+      fullPath: '/admin/connexion'
+      preLoaderRoute: typeof AdminConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/produits': {
       id: '/admin/produits'
       path: '/admin/produits'
@@ -341,41 +296,6 @@ declare module '@tanstack/react-router' {
       path: '/checkout/confirmation'
       fullPath: '/checkout/confirmation'
       preLoaderRoute: typeof CheckoutConfirmationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compte/': {
-      id: '/compte/'
-      path: '/compte'
-      fullPath: '/compte/'
-      preLoaderRoute: typeof CompteIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compte/connexion': {
-      id: '/compte/connexion'
-      path: '/compte/connexion'
-      fullPath: '/compte/connexion'
-      preLoaderRoute: typeof CompteConnexionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compte/inscription': {
-      id: '/compte/inscription'
-      path: '/compte/inscription'
-      fullPath: '/compte/inscription'
-      preLoaderRoute: typeof CompteInscriptionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compte/mot-de-passe-oublie': {
-      id: '/compte/mot-de-passe-oublie'
-      path: '/compte/mot-de-passe-oublie'
-      fullPath: '/compte/mot-de-passe-oublie'
-      preLoaderRoute: typeof CompteMotDePasseOublieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compte/profil': {
-      id: '/compte/profil'
-      path: '/compte/profil'
-      fullPath: '/compte/profil'
-      preLoaderRoute: typeof CompteProfilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/produits/': {
@@ -403,16 +323,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAvisRoute: AdminAvisRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCommandesRoute: AdminCommandesRoute,
+  AdminConnexionRoute: AdminConnexionRoute,
   AdminProduitsRoute: AdminProduitsRoute,
   CheckoutConfirmationRoute: CheckoutConfirmationRoute,
-  CompteConnexionRoute: CompteConnexionRoute,
-  CompteInscriptionRoute: CompteInscriptionRoute,
-  CompteMotDePasseOublieRoute: CompteMotDePasseOublieRoute,
-  CompteProfilRoute: CompteProfilRoute,
   ProduitsSlugRoute: ProduitsSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
   CheckoutIndexRoute: CheckoutIndexRoute,
-  CompteIndexRoute: CompteIndexRoute,
   ProduitsIndexRoute: ProduitsIndexRoute,
 }
 export const routeTree = rootRouteImport

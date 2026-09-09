@@ -12,7 +12,7 @@ export function useRequireAdmin() {
     const current = authStore.getCurrentUser();
     if (!current || current.role !== "admin") {
       toast.error("Accès réservé aux administrateurs.");
-      navigate({ to: "/" });
+      navigate({ to: "/admin/connexion" });
       return;
     }
     setUser(current);
