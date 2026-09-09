@@ -1,9 +1,13 @@
 import { CONTACT } from "@/lib/categories";
 import { useAllCategories } from "@/lib/category-store";
+import { useAllProducts } from "@/lib/product-store";
 import { Newsletter } from "@/components/Newsletter";
 
 export function Footer() {
-  const categories = useAllCategories().filter((c) => c.slug !== "coffre-fort");
+  const allProducts = useAllProducts();
+  const categories = useAllCategories().filter((c) =>
+    allProducts.some((p) => p.categorySlug === c.slug),
+  );
 
   return (
     <footer className="bg-[var(--color-ink)] text-primary-foreground">

@@ -1,4 +1,13 @@
-import { Archive, Armchair, Cpu, ShieldCheck, Sofa, Table2, type LucideIcon } from "lucide-react";
+import {
+  Archive,
+  Armchair,
+  Cpu,
+  ShieldCheck,
+  Sofa,
+  Sparkles,
+  Table2,
+  type LucideIcon,
+} from "lucide-react";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "meubles-de-bureau": Table2,
@@ -7,6 +16,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   armoires: Archive,
   electroniques: Cpu,
   "coffre-fort": ShieldCheck,
+  parfumerie: Sparkles,
 };
 
 export function getCategoryIcon(categorySlug: string): LucideIcon {

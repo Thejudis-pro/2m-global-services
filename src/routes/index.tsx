@@ -41,7 +41,9 @@ const FEATURES = [
 
 function Index() {
   const allProducts = useAllProducts();
-  const categories = useAllCategories().filter((c) => c.slug !== "coffre-fort");
+  const categories = useAllCategories().filter((c) =>
+    allProducts.some((p) => p.categorySlug === c.slug),
+  );
   const featuredProducts = allProducts.filter((p) => p.featured);
 
   const total = allProducts.length;

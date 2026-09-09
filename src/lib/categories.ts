@@ -34,6 +34,7 @@ export const CATEGORIES: Category[] = [
   { slug: "armoires", label: "Armoires Métalliques & Bois" },
   { slug: "electroniques", label: "Électroniques" },
   { slug: "coffre-fort", label: "Coffre Fort" },
+  { slug: "parfumerie", label: "Parfumerie" },
 ];
 
 export const CONTACT = {

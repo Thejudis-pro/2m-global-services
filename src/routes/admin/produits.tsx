@@ -488,6 +488,21 @@ function ProductFormDialog({
   const [discountPercent, setDiscountPercent] = useState(String(product?.discountPercent ?? 0));
   const [stockQuantity, setStockQuantity] = useState(String(product?.stockQuantity ?? ""));
   const [description, setDescription] = useState(product?.description ?? "");
+  const [sku, setSku] = useState(product?.sku ?? "");
+  const [weightKg, setWeightKg] = useState(
+    product?.weightKg !== undefined ? String(product.weightKg) : "",
+  );
+  const [height, setHeight] = useState(
+    product?.dimensions?.height !== undefined ? String(product.dimensions.height) : "",
+  );
+  const [width, setWidth] = useState(
+    product?.dimensions?.width !== undefined ? String(product.dimensions.width) : "",
+  );
+  const [depth, setDepth] = useState(
+    product?.dimensions?.depth !== undefined ? String(product.dimensions.depth) : "",
+  );
+  const [featured, setFeatured] = useState(product?.featured ?? false);
+  const [isNew, setIsNew] = useState(product?.isNew ?? true);
   const [images, setImages] = useState<{ src: string; alt: string }[]>(product?.images ?? []);
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -538,6 +553,21 @@ function ProductFormDialog({
     } else if (images.some((img) => img.alt.trim().length === 0)) {
       nextErrors.images = "Chaque image doit avoir un texte alternatif.";
     }
+    const weightNum = weightKg.trim() ? Number(weightKg) : undefined;
+    if (weightNum !== undefined && (Number.isNaN(weightNum) || weightNum < 0)) {
+      nextErrors.weight = "Poids invalide.";
+    }
+    const heightNum = height.trim() ? Number(height) : undefined;
+    const widthNum = width.trim() ? Number(width) : undefined;
+    const depthNum = depth.trim() ? Number(depth) : undefined;
+    const dimensionValues = [heightNum, widthNum, depthNum];
+    const someDimensionSet = dimensionValues.some((v) => v !== undefined);
+    const allDimensionsSet = dimensionValues.every((v) => v !== undefined);
+    if (someDimensionSet && !allDimensionsSet) {
+      nextErrors.dimensions = "Renseignez hauteur, largeur et profondeur, ou aucune des trois.";
+    } else if (dimensionValues.some((v) => v !== undefined && (Number.isNaN(v) || v < 0))) {
+      nextErrors.dimensions = "Dimensions invalides.";
+    }
 
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
@@ -545,6 +575,14 @@ function ProductFormDialog({
     }
     setErrors({});
     setSaving(true);
+
+    const dimensions =
+      allDimensionsSet &&
+      heightNum !== undefined &&
+      widthNum !== undefined &&
+      depthNum !== undefined
+        ? { height: heightNum, width: widthNum, depth: depthNum }
+        : undefined;
 
     if (mode === "add") {
       productStore.addProduct({
@@ -558,6 +596,10 @@ function ProductFormDialog({
         discountPercent: discountNum,
         stockQuantity: stockNum,
         description: description.trim() || undefined,
+        sku: sku.trim() || undefined,
+        weightKg: weightNum,
+        dimensions,
+        featured,
       });
       toast.success(`« ${name.trim()} » ajouté au catalogue.`);
     } else if (product) {
@@ -569,6 +611,11 @@ function ProductFormDialog({
         discountPercent: discountNum,
         stockQuantity: stockNum,
         description: description.trim() || undefined,
+        sku: sku.trim() || undefined,
+        weightKg: weightNum,
+        dimensions,
+        featured,
+        isNew,
         ...(images.length > 0 ? { images, image: images[0].src, alt: images[0].alt } : {}),
       });
       toast.success(`« ${name.trim()} » mis à jour.`);
@@ -724,6 +771,84 @@ function ProductFormDialog({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="product-sku">Référence / SKU (optionnel)</Label>
+              <Input
+                id="product-sku"
+                value={sku}
+                onChange={(e) => setSku(e.target.value)}
+                placeholder="Généré automatiquement si vide"
+              />
+            </div>
+            <div>
+              <Label htmlFor="product-weight">Poids en kg (optionnel)</Label>
+              <Input
+                id="product-weight"
+                type="number"
+                min={0}
+                step="0.1"
+                value={weightKg}
+                onChange={(e) => setWeightKg(e.target.value)}
+                aria-invalid={Boolean(errors.weight)}
+                aria-describedby="product-weight-error"
+              />
+              <p
+                id="product-weight-error"
+                role="alert"
+                className="mt-1 min-h-[1rem] text-xs text-destructive"
+              >
+                {errors.weight}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <Label>Dimensions en cm (optionnel)</Label>
+            <div className="grid gap-2 sm:grid-cols-3">
+              <Input
+                type="number"
+                min={0}
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                placeholder="Hauteur"
+                aria-label="Hauteur en cm"
+              />
+              <Input
+                type="number"
+                min={0}
+                value={width}
+                onChange={(e) => setWidth(e.target.value)}
+                placeholder="Largeur"
+                aria-label="Largeur en cm"
+              />
+              <Input
+                type="number"
+                min={0}
+                value={depth}
+                onChange={(e) => setDepth(e.target.value)}
+                placeholder="Profondeur"
+                aria-label="Profondeur en cm"
+              />
+            </div>
+            <p role="alert" className="mt-1 min-h-[1rem] text-xs text-destructive">
+              {errors.dimensions}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-6">
+            <label className="flex items-center gap-2 text-sm text-foreground">
+              <Checkbox checked={featured} onCheckedChange={(v) => setFeatured(v === true)} />
+              Produit vedette (mis en avant sur l&apos;accueil)
+            </label>
+            {mode === "edit" && (
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <Checkbox checked={isNew} onCheckedChange={(v) => setIsNew(v === true)} />
+                Nouvel arrivage
+              </label>
+            )}
           </div>
 
           <div>

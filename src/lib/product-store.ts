@@ -101,7 +101,7 @@ export const productStore = {
       popularity: 0,
       isNew: true,
       createdAt: new Date().toISOString().slice(0, 10),
-      sku: input.sku ?? `TOS-ADM-${Date.now().toString().slice(-6)}`,
+      sku: input.sku ?? `2M-ADM-${Date.now().toString().slice(-6)}`,
     };
     commit({ ...data, added: [product, ...data.added] });
     return product;
