@@ -105,114 +105,117 @@ export function Header() {
           </a>
         </div>
 
-        <Sheet open={open} onOpenChange={setOpen}>
-          <button
-            type="button"
-            className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-border md:hidden"
-            onClick={() => setOpen(true)}
-            aria-label="Ouvrir le menu"
+        <div className="ml-auto flex items-center gap-2 md:hidden">
+          <a
+            href="/panier"
+            className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 font-display text-[12px] font-bold text-primary-foreground"
+            aria-label={`Panier (${count} article${count === 1 ? "" : "s"})`}
           >
-            <Menu className="h-5 w-5" />
-          </button>
-          <SheetContent
-            side="right"
-            className="w-[85%] max-w-sm border-l border-border bg-background p-0"
-          >
-            <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
-              <SheetTitle className="font-display text-base uppercase tracking-[0.04em]">
-                Menu
-              </SheetTitle>
-              <SheetClose asChild>
-                <button
-                  type="button"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border"
-                  aria-label="Fermer le menu"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </SheetClose>
-            </SheetHeader>
-            <form
-              className="flex items-center gap-2 border-b border-border px-4 py-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                submitSearch(mobileSearchValue, true);
-              }}
+            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+            <span>{count}</span>
+          </a>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <button
+              type="button"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border"
+              onClick={() => setOpen(true)}
+              aria-label="Ouvrir le menu"
             >
-              <input
-                type="search"
-                value={mobileSearchValue}
-                onChange={(e) => setMobileSearchValue(e.target.value)}
-                placeholder="Rechercher un produit…"
-                aria-label="Rechercher un produit"
-                className="w-full rounded-full border border-border bg-[var(--color-cream-light)] px-4 py-2 text-sm text-foreground outline-none focus:border-accent"
-              />
-              <button
-                type="submit"
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border"
-                aria-label="Lancer la recherche"
+              <Menu className="h-5 w-5" />
+            </button>
+            <SheetContent
+              side="right"
+              className="w-[85%] max-w-sm border-l border-border bg-background p-0"
+            >
+              <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
+                <SheetTitle className="font-display text-base uppercase tracking-[0.04em]">
+                  Menu
+                </SheetTitle>
+                <SheetClose asChild>
+                  <button
+                    type="button"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border"
+                    aria-label="Fermer le menu"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </SheetClose>
+              </SheetHeader>
+              <form
+                className="flex items-center gap-2 border-b border-border px-4 py-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitSearch(mobileSearchValue, true);
+                }}
               >
-                <Search className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </form>
-            <nav className="flex flex-col divide-y divide-border" aria-label="Navigation mobile">
-              <a
-                href="/"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                Accueil
-              </a>
-              <a
-                href="/produits"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                Catalogue
-              </a>
-              {categories.map((c) => (
-                <a
-                  key={c.slug}
-                  href={`/produits?category=${c.slug}`}
-                  onClick={() => setOpen(false)}
-                  className="px-6 py-2 text-sm text-muted-foreground hover:text-accent"
+                <input
+                  type="search"
+                  value={mobileSearchValue}
+                  onChange={(e) => setMobileSearchValue(e.target.value)}
+                  placeholder="Rechercher un produit…"
+                  aria-label="Rechercher un produit"
+                  className="w-full rounded-full border border-border bg-[var(--color-cream-light)] px-4 py-2 text-sm text-foreground outline-none focus:border-accent"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border"
+                  aria-label="Lancer la recherche"
                 >
-                  {c.label}
+                  <Search className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </form>
+              <nav className="flex flex-col divide-y divide-border" aria-label="Navigation mobile">
+                <a
+                  href="/"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+                >
+                  Accueil
                 </a>
-              ))}
-              <a
-                href="/a-propos"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                Maison
-              </a>
-              <a
-                href="/contact"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                Contact
-              </a>
-              <a
-                href="https://2mparfumeriedk.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                Parfumerie
-              </a>
-              <a
-                href="/panier"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
-              >
-                <ShoppingCart className="h-4 w-4" aria-hidden="true" /> Panier ({count})
-              </a>
-            </nav>
-          </SheetContent>
-        </Sheet>
+                <a
+                  href="/produits"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+                >
+                  Catalogue
+                </a>
+                {categories.map((c) => (
+                  <a
+                    key={c.slug}
+                    href={`/produits?category=${c.slug}`}
+                    onClick={() => setOpen(false)}
+                    className="px-6 py-2 text-sm text-muted-foreground hover:text-accent"
+                  >
+                    {c.label}
+                  </a>
+                ))}
+                <a
+                  href="/a-propos"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+                >
+                  Maison
+                </a>
+                <a
+                  href="/contact"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+                >
+                  Contact
+                </a>
+                <a
+                  href="https://2mparfumeriedk.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
+                >
+                  Parfumerie
+                </a>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

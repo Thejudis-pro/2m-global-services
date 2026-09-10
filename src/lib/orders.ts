@@ -33,7 +33,7 @@ export type Order = {
   region: string;
   deliveryMethod: "pickup" | "delivery";
   deliverySlot?: string;
-  paymentMethod: "cod" | "wave" | "bank-transfer" | "installments";
+  paymentMethod: "cod" | "wave" | "bank-transfer";
 };
 
 const ORDERS_STORAGE_KEY = "2m-global-services-orders";

@@ -55,6 +55,16 @@ export function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href="https://2mparfumeriedk.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--color-gold-light)]"
+              >
+                Parfumerie
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -76,12 +86,6 @@ export function Footer() {
                 Contact &amp; devis
               </a>
             </li>
-            <li>
-              <a href="/produits" className="hover:text-[var(--color-gold-light)]">
-                Déstockage
-              </a>
-            </li>
-            <li>Livraison &amp; montage</li>
           </ul>
         </nav>
 

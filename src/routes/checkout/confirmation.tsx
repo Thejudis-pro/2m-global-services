@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { formatCFA } from "@/lib/format";
 import { loadLastOrder, type Order } from "@/lib/orders";
-import { CONTACT } from "@/lib/categories";
+import { buildOrderWhatsAppLink } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/checkout/confirmation")({
@@ -19,7 +19,6 @@ const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
   cod: "À la livraison",
   wave: "Wave",
   "bank-transfer": "Virement bancaire",
-  installments: "En 3 fois",
 };
 
 function ConfirmationPage() {
@@ -106,7 +105,7 @@ function ConfirmationPage() {
             <div className="rounded-2xl bg-primary-foreground/10 p-4">
               <div className="text-[12px] text-primary-foreground/70">Livraison</div>
               <div className="mt-1 font-display text-[15px] font-bold">
-                {order.deliverySlot ? order.deliverySlot.split(" — ")[0] : "Retrait showroom"}
+                {order.deliverySlot?.split(" — ")[0] ?? "—"}
               </div>
             </div>
           </div>
@@ -116,8 +115,8 @@ function ConfirmationPage() {
               asChild
               className="rounded-full bg-background text-[var(--color-ink)] hover:bg-[var(--color-gold-light)]"
             >
-              <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
-                Suivre ma commande sur WhatsApp
+              <a href={buildOrderWhatsAppLink(order)} target="_blank" rel="noopener noreferrer">
+                Confirmer par WhatsApp
               </a>
             </Button>
             <Button

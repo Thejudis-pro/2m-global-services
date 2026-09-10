@@ -7,6 +7,7 @@ import { formatCFA } from "@/lib/format";
 import { cartStore, useCartLines } from "@/lib/cart-store";
 import { isValidSenegalPhone } from "@/lib/senegal";
 import { generateOrderNumber, saveOrder, type Order } from "@/lib/orders";
+import { sendOrderNotifications } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,13 +31,6 @@ const DELIVERY_SLOTS = [
     deliveryMethod: "delivery" as const,
     fee: DELIVERY_FEE,
   },
-  {
-    value: "retrait",
-    label: "Retrait showroom",
-    note: "Front de Terre · dès 2h",
-    deliveryMethod: "pickup" as const,
-    fee: 0,
-  },
 ];
 
 const PAYMENT_METHODS = [
@@ -56,11 +50,6 @@ const PAYMENT_METHODS = [
     label: "Virement bancaire",
     note: "Pour les commandes entreprise avec facture",
   },
-  {
-    value: "installments" as const,
-    label: "Paiement en 3 fois",
-    note: "Dès 250.000 CFA — sur dossier",
-  },
 ];
 
 const deliverySchema = z.object({
@@ -71,6 +60,7 @@ const deliverySchema = z.object({
     .trim()
     .min(1, "Le numéro de téléphone est requis.")
     .refine(isValidSenegalPhone, "Numéro sénégalais invalide (ex : 77 123 45 67)."),
+  email: z.string().trim().email("Adresse e-mail invalide."),
   quartier: z.string().trim().min(2, "Le quartier est requis."),
 });
 
@@ -128,12 +118,11 @@ function CheckoutPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [quartier, setQuartier] = useState("");
   const [landmark, setLandmark] = useState("");
   const [slot, setSlot] = useState(DELIVERY_SLOTS[0].value);
-  const [paymentMethod, setPaymentMethod] = useState<
-    "cod" | "wave" | "bank-transfer" | "installments"
-  >("cod");
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "wave" | "bank-transfer">("cod");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -158,7 +147,7 @@ function CheckoutPage() {
 
   function handleContinue(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = deliverySchema.safeParse({ firstName, lastName, phone, quartier });
+    const parsed = deliverySchema.safeParse({ firstName, lastName, phone, email, quartier });
     if (!parsed.success) {
       const nextErrors: Record<string, string> = {};
       for (const issue of parsed.error.issues) {
@@ -195,7 +184,7 @@ function CheckoutPage() {
         total: grandTotal,
         customerName: `${firstName} ${lastName}`.trim(),
         phone,
-        email: "",
+        email,
         address: landmark ? `${quartier} — ${landmark}` : quartier,
         city: "Dakar",
         region: "Dakar",
@@ -206,6 +195,7 @@ function CheckoutPage() {
       saveOrder(order);
       cartStore.clear();
       setSubmitting(false);
+      void sendOrderNotifications(order);
       navigate({ to: "/checkout/confirmation" });
     }, 700);
   }
@@ -270,6 +260,19 @@ function CheckoutPage() {
                   aria-invalid={Boolean(errors.phone)}
                 />
                 <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.phone}</p>
+              </div>
+              <div>
+                <Label htmlFor="email">E-mail</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="vous@exemple.com"
+                  className="rounded-xl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={Boolean(errors.email)}
+                />
+                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.email}</p>
               </div>
               <div>
                 <Label htmlFor="quartier">Quartier</Label>
@@ -367,8 +370,7 @@ function CheckoutPage() {
                 onCheckedChange={(checked) => setAcceptTerms(checked === true)}
                 className="mt-0.5"
               />
-              J&apos;accepte les conditions de vente, l&apos;échange sous 7 jours et la garantie 2
-              ans.
+              J&apos;accepte les conditions de vente.
             </label>
 
             <div className="mt-5 flex gap-3">
@@ -436,9 +438,6 @@ function CheckoutPage() {
               <dd className="text-[20px]">{formatCFA(grandTotal)}</dd>
             </div>
           </dl>
-          <p className="mt-4 rounded-xl bg-[var(--color-cream-alt)] p-3 text-[13px] text-[var(--color-muted-4)]">
-            Échange sous 7 jours et garantie 2 ans sur tous les articles de cette commande.
-          </p>
         </div>
       </div>
     </main>

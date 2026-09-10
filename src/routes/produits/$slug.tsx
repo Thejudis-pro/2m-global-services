@@ -447,7 +447,7 @@ function ProductDetailPage() {
             </div>
             <div className="flex justify-between py-[15px]">
               <span className="text-muted-foreground">Livraison</span>
-              <span className="font-medium">24–48h · montage offert</span>
+              <span className="font-medium">24–48h</span>
             </div>
           </div>
         </div>

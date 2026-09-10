@@ -46,6 +46,7 @@ export const CONTACT = {
   ],
   email: "commercial@2mglobalservices.com",
   whatsapp: "https://wa.me/c/221764627777",
+  whatsappNumber: "221764627777",
   facebook: "https://facebook.com",
   tiktok: "https://tiktok.com",
 };
