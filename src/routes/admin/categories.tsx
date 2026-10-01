@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
-import { categoryStore, useAllCategories } from "@/lib/category-store";
+import { categoryStore, useAllCategories, useInvalidateCategories } from "@/lib/category-store";
 import { useAllProducts } from "@/lib/product-store";
 import type { Category, Subcategory } from "@/lib/categories";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
@@ -32,21 +32,32 @@ function AdminCategoriesPage() {
   const { checked, user } = useRequireAdmin();
   const categories = useAllCategories();
   const products = useAllProducts();
+  const invalidate = useInvalidateCategories();
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   if (!checked || !user) {
     return <div className="mx-auto max-w-4xl px-4 py-16 md:px-6" aria-hidden="true" />;
   }
 
-  function handleAddCategory(e: React.FormEvent) {
+  async function handleAddCategory(e: React.FormEvent) {
     e.preventDefault();
-    if (newCategoryName.trim().length < 2) {
+    const name = newCategoryName.trim();
+    if (name.length < 2) {
       toast.error("Le nom de la catégorie est requis.");
       return;
     }
-    categoryStore.addCategory(newCategoryName.trim());
-    toast.success(`Catégorie « ${newCategoryName.trim()} » ajoutée.`);
-    setNewCategoryName("");
+    setSubmitting(true);
+    try {
+      await categoryStore.addCategory(name);
+      await invalidate();
+      toast.success(`Catégorie « ${name} » ajoutée.`);
+      setNewCategoryName("");
+    } catch {
+      toast.error("Impossible d'ajouter la catégorie.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -66,7 +77,7 @@ function AdminCategoriesPage() {
             placeholder="Ex : Literie"
           />
         </div>
-        <Button type="submit">
+        <Button type="submit" disabled={submitting}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Ajouter
         </Button>
@@ -101,27 +112,59 @@ function CategoryCard({
   isFirst: boolean;
   isLast: boolean;
 }) {
+  const invalidate = useInvalidateCategories();
   const [label, setLabel] = useState(category.label);
   const [newSubName, setNewSubName] = useState("");
 
-  function handleRename() {
-    if (label.trim().length < 2) {
+  async function handleRename() {
+    const name = label.trim();
+    if (name.length < 2) {
       toast.error("Le nom de la catégorie est requis.");
       return;
     }
-    categoryStore.renameCategory(category.slug, label.trim());
-    toast.success("Catégorie renommée.");
+    try {
+      await categoryStore.renameCategory(category.slug, name);
+      await invalidate();
+      toast.success("Catégorie renommée.");
+    } catch {
+      toast.error("Impossible de renommer la catégorie.");
+    }
   }
 
-  function handleAddSub(e: React.FormEvent) {
+  async function handleReorder(direction: "up" | "down") {
+    try {
+      await categoryStore.reorderCategory(category.slug, direction);
+      await invalidate();
+    } catch {
+      toast.error("Impossible de réordonner la catégorie.");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await categoryStore.deleteCategory(category.slug);
+      await invalidate();
+      toast.success("Catégorie supprimée.");
+    } catch {
+      toast.error("Impossible de supprimer la catégorie.");
+    }
+  }
+
+  async function handleAddSub(e: React.FormEvent) {
     e.preventDefault();
-    if (newSubName.trim().length < 2) {
+    const name = newSubName.trim();
+    if (name.length < 2) {
       toast.error("Le nom de la sous-catégorie est requis.");
       return;
     }
-    categoryStore.addSubcategory(category.slug, newSubName.trim());
-    toast.success(`Sous-catégorie « ${newSubName.trim()} » ajoutée.`);
-    setNewSubName("");
+    try {
+      await categoryStore.addSubcategory(category.slug, name);
+      await invalidate();
+      toast.success(`Sous-catégorie « ${name} » ajoutée.`);
+      setNewSubName("");
+    } catch {
+      toast.error("Impossible d'ajouter la sous-catégorie.");
+    }
   }
 
   return (
@@ -136,7 +179,7 @@ function CategoryCard({
             variant="ghost"
             size="icon"
             disabled={isFirst}
-            onClick={() => categoryStore.reorderCategory(category.slug, "up")}
+            onClick={() => handleReorder("up")}
             aria-label={`Monter ${category.label}`}
           >
             <ChevronUp className="h-4 w-4" />
@@ -145,7 +188,7 @@ function CategoryCard({
             variant="ghost"
             size="icon"
             disabled={isLast}
-            onClick={() => categoryStore.reorderCategory(category.slug, "down")}
+            onClick={() => handleReorder("down")}
             aria-label={`Descendre ${category.label}`}
           >
             <ChevronDown className="h-4 w-4" />
@@ -174,9 +217,7 @@ function CategoryCard({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={() => categoryStore.deleteCategory(category.slug)}>
-                Supprimer
-              </AlertDialogAction>
+              <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -229,15 +270,41 @@ function SubcategoryRow({
   isFirst: boolean;
   isLast: boolean;
 }) {
+  const invalidate = useInvalidateCategories();
   const [label, setLabel] = useState(subcategory.label);
 
-  function handleRename() {
-    if (label.trim().length < 2) {
+  async function handleRename() {
+    const name = label.trim();
+    if (name.length < 2) {
       toast.error("Le nom de la sous-catégorie est requis.");
       return;
     }
-    categoryStore.renameSubcategory(category.slug, subcategory.slug, label.trim());
-    toast.success("Sous-catégorie renommée.");
+    try {
+      await categoryStore.renameSubcategory(category.slug, subcategory.slug, name);
+      await invalidate();
+      toast.success("Sous-catégorie renommée.");
+    } catch {
+      toast.error("Impossible de renommer la sous-catégorie.");
+    }
+  }
+
+  async function handleReorder(direction: "up" | "down") {
+    try {
+      await categoryStore.reorderSubcategory(category.slug, subcategory.slug, direction);
+      await invalidate();
+    } catch {
+      toast.error("Impossible de réordonner la sous-catégorie.");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await categoryStore.deleteSubcategory(category.slug, subcategory.slug);
+      await invalidate();
+      toast.success("Sous-catégorie supprimée.");
+    } catch {
+      toast.error("Impossible de supprimer la sous-catégorie.");
+    }
   }
 
   return (
@@ -251,7 +318,7 @@ function SubcategoryRow({
           variant="ghost"
           size="icon"
           disabled={isFirst}
-          onClick={() => categoryStore.reorderSubcategory(category.slug, subcategory.slug, "up")}
+          onClick={() => handleReorder("up")}
           aria-label={`Monter ${subcategory.label}`}
         >
           <ChevronUp className="h-4 w-4" />
@@ -260,7 +327,7 @@ function SubcategoryRow({
           variant="ghost"
           size="icon"
           disabled={isLast}
-          onClick={() => categoryStore.reorderSubcategory(category.slug, subcategory.slug, "down")}
+          onClick={() => handleReorder("down")}
           aria-label={`Descendre ${subcategory.label}`}
         >
           <ChevronDown className="h-4 w-4" />
@@ -289,11 +356,7 @@ function SubcategoryRow({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => categoryStore.deleteSubcategory(category.slug, subcategory.slug)}
-            >
-              Supprimer
-            </AlertDialogAction>
+            <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

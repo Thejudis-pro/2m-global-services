@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Check, Star, X } from "lucide-react";
-import { reviewsStore, usePendingReviews } from "@/lib/reviews-store";
+import { reviewsStore, usePendingReviews, useInvalidateReviews } from "@/lib/reviews-store";
 import { useAllProducts } from "@/lib/product-store";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
@@ -40,6 +40,7 @@ function AdminReviewsPage() {
   const { checked, user } = useRequireAdmin();
   const pending = usePendingReviews();
   const products = useAllProducts();
+  const invalidate = useInvalidateReviews();
   const [page, setPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(pending.length / PAGE_SIZE));
@@ -117,9 +118,14 @@ function AdminReviewsPage() {
                           <AlertDialogFooter>
                             <AlertDialogCancel>Annuler</AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => {
-                                reviewsStore.approve(review.id);
-                                toast.success("Avis approuvé.");
+                              onClick={async () => {
+                                try {
+                                  await reviewsStore.approve(review.id);
+                                  invalidate(review.productId);
+                                  toast.success("Avis approuvé.");
+                                } catch {
+                                  toast.error("Impossible d'approuver cet avis.");
+                                }
                               }}
                             >
                               Approuver
@@ -144,9 +150,14 @@ function AdminReviewsPage() {
                           <AlertDialogFooter>
                             <AlertDialogCancel>Annuler</AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => {
-                                reviewsStore.reject(review.id);
-                                toast.success("Avis rejeté.");
+                              onClick={async () => {
+                                try {
+                                  await reviewsStore.reject(review.id);
+                                  invalidate(review.productId);
+                                  toast.success("Avis rejeté.");
+                                } catch {
+                                  toast.error("Impossible de rejeter cet avis.");
+                                }
                               }}
                             >
                               Rejeter

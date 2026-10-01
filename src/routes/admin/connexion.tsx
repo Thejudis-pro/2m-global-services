@@ -2,13 +2,13 @@ import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { Eye, EyeOff } from "lucide-react";
-import { authStore } from "@/lib/auth-store";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
-  identifier: z.string().trim().min(1, "L'e-mail ou le téléphone est requis."),
+  email: z.string().trim().email("Adresse e-mail invalide."),
   password: z.string().min(1, "Le mot de passe est requis."),
 });
 
@@ -21,15 +21,16 @@ export const Route = createFileRoute("/admin/connexion")({
 
 function AdminLoginPage() {
   const navigate = useNavigate();
-  const [identifier, setIdentifier] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const parsed = loginSchema.safeParse({ identifier, password });
+    const parsed = loginSchema.safeParse({ email, password });
     if (!parsed.success) {
       const nextErrors: Record<string, string> = {};
       for (const issue of parsed.error.issues) {
@@ -39,16 +40,20 @@ function AdminLoginPage() {
       return;
     }
     setErrors({});
-    try {
-      const user = authStore.login(parsed.data.identifier, parsed.data.password);
-      if (user.role !== "admin") {
-        setFormError("Ce compte n'a pas accès à l'espace gestion.");
-        return;
-      }
-      navigate({ to: "/admin" });
-    } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Une erreur est survenue.");
+    setFormError("");
+    setSubmitting(true);
+    const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
+    setSubmitting(false);
+    if (error) {
+      setFormError("Identifiants incorrects.");
+      return;
     }
+    if (data.user?.app_metadata?.role !== "admin") {
+      setFormError("Ce compte n'a pas accès à l'espace gestion.");
+      await supabase.auth.signOut();
+      return;
+    }
+    navigate({ to: "/admin" });
   }
 
   return (
@@ -64,20 +69,17 @@ function AdminLoginPage() {
         className="space-y-4 rounded-[22px] border border-border bg-[var(--color-cream-light)] p-6"
       >
         <div>
-          <Label htmlFor="identifier">E-mail ou téléphone</Label>
+          <Label htmlFor="email">E-mail</Label>
           <Input
-            id="identifier"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            aria-invalid={Boolean(errors.identifier)}
-            aria-describedby="identifier-error"
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby="email-error"
           />
-          <p
-            id="identifier-error"
-            role="alert"
-            className="mt-1 min-h-[1rem] text-xs text-destructive"
-          >
-            {errors.identifier}
+          <p id="email-error" role="alert" className="mt-1 min-h-[1rem] text-xs text-destructive">
+            {errors.email}
           </p>
         </div>
 
@@ -115,8 +117,8 @@ function AdminLoginPage() {
           {formError}
         </p>
 
-        <Button type="submit" className="w-full rounded-full">
-          Se connecter
+        <Button type="submit" disabled={submitting} className="w-full rounded-full">
+          {submitting ? "Connexion..." : "Se connecter"}
         </Button>
       </form>
     </main>

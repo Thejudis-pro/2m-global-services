@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { authStore } from "@/lib/auth-store";
+import { supabase } from "@/integrations/supabase/client";
 
 const ADMIN_LINKS = [
   { to: "/admin", label: "Tableau de bord" },
@@ -32,8 +32,8 @@ export function AdminNav() {
       </div>
       <button
         type="button"
-        onClick={() => {
-          authStore.logout();
+        onClick={async () => {
+          await supabase.auth.signOut();
           navigate({ to: "/admin/connexion" });
         }}
         className="rounded-full px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.08em] text-muted-foreground hover:bg-[var(--color-cream-alt)] hover:text-foreground"

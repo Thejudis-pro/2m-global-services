@@ -5,9 +5,14 @@ import { z } from "zod";
 import { Loader2, Star } from "lucide-react";
 import { CATEGORIES, CONTACT } from "@/lib/categories";
 import { getSalePrice } from "@/lib/products";
-import { productStore, useAllProducts } from "@/lib/product-store";
+import { fetchProductById, useAllProducts } from "@/lib/product-store";
 import { getProductDetails } from "@/lib/product-details";
-import { getReviewSummary, reviewsStore, useApprovedReviews } from "@/lib/reviews-store";
+import {
+  getReviewSummary,
+  reviewsStore,
+  useApprovedReviews,
+  useInvalidateReviews,
+} from "@/lib/reviews-store";
 import { formatCFA } from "@/lib/format";
 import { cartStore } from "@/lib/cart-store";
 import { ProductCard } from "@/components/ProductCard";
@@ -22,8 +27,8 @@ const MIN_QTY = 1;
 const MAX_QTY = 10;
 
 export const Route = createFileRoute("/produits/$slug")({
-  loader: ({ params }) => {
-    const product = productStore.getAll().find((p) => p.id === params.slug);
+  loader: async ({ params }) => {
+    const product = await fetchProductById(params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -178,6 +183,8 @@ function ProductDetailPage() {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewErrors, setReviewErrors] = useState<Record<string, string>>({});
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const invalidateReviews = useInvalidateReviews();
 
   useEffect(() => {
     setQuantity(1);
@@ -223,7 +230,7 @@ function ProductDetailPage() {
     }, 500);
   }
 
-  function handleReviewSubmit(e: React.FormEvent) {
+  async function handleReviewSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = reviewSchema.safeParse({
       name: reviewName,
@@ -239,17 +246,25 @@ function ProductDetailPage() {
       return;
     }
     setReviewErrors({});
-    reviewsStore.submit(product.id, {
-      name: parsed.data.name,
-      rating: reviewRating,
-      comment: parsed.data.comment,
-    });
-    setReviewName("");
-    setReviewEmail("");
-    setReviewRating(5);
-    setReviewComment("");
-    setReviewSubmitted(true);
-    toast.success("Merci pour votre avis ! Il sera visible après validation.");
+    setReviewSubmitting(true);
+    try {
+      await reviewsStore.submit(product.id, {
+        name: parsed.data.name,
+        rating: reviewRating,
+        comment: parsed.data.comment,
+      });
+      invalidateReviews(product.id);
+      setReviewName("");
+      setReviewEmail("");
+      setReviewRating(5);
+      setReviewComment("");
+      setReviewSubmitted(true);
+      toast.success("Merci pour votre avis ! Il sera visible après validation.");
+    } catch {
+      toast.error("Impossible d'envoyer votre avis. Réessayez.");
+    } finally {
+      setReviewSubmitting(false);
+    }
   }
 
   const jsonLd = {
@@ -580,8 +595,8 @@ function ProductDetailPage() {
               {reviewErrors.comment}
             </p>
           </div>
-          <Button type="submit" className="rounded-full">
-            Envoyer mon avis
+          <Button type="submit" disabled={reviewSubmitting} className="rounded-full">
+            {reviewSubmitting ? "Envoi..." : "Envoyer mon avis"}
           </Button>
         </form>
       </section>

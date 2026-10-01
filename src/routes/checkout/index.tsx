@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 import { getSalePrice, type Product } from "@/lib/products";
 import { useAllProducts } from "@/lib/product-store";
@@ -160,44 +161,47 @@ function CheckoutPage() {
     setStep("paiement");
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!acceptTerms || submitting) return;
     setSubmitting(true);
 
     // Payment integration placeholder — connect a real gateway here (Wave / bank
-    // transfer / installments). No real charge is made; this only records a
-    // mock order locally.
-    window.setTimeout(() => {
-      const order: Order = {
-        orderNumber: generateOrderNumber(),
-        createdAt: new Date().toISOString(),
-        status: "nouvelle",
-        items: items.map(({ product, quantity }) => ({
-          productId: product.id,
-          name: product.name,
-          quantity,
-          unitPrice: getSalePrice(product),
-        })),
-        subtotal,
-        discountTotal,
-        deliveryFee,
-        total: grandTotal,
-        customerName: `${firstName} ${lastName}`.trim(),
-        phone,
-        email,
-        address: landmark ? `${quartier} — ${landmark}` : quartier,
-        city: "Dakar",
-        region: "Dakar",
-        deliveryMethod: selectedSlot.deliveryMethod,
-        deliverySlot: `${selectedSlot.label} — ${selectedSlot.note}`,
-        paymentMethod,
-      };
-      saveOrder(order);
+    // transfer). No real charge is made; this only records the order.
+    const order: Order = {
+      orderNumber: generateOrderNumber(),
+      createdAt: new Date().toISOString(),
+      status: "nouvelle",
+      items: items.map(({ product, quantity }) => ({
+        productId: product.id,
+        name: product.name,
+        quantity,
+        unitPrice: getSalePrice(product),
+      })),
+      subtotal,
+      discountTotal,
+      deliveryFee,
+      total: grandTotal,
+      customerName: `${firstName} ${lastName}`.trim(),
+      phone,
+      email,
+      address: landmark ? `${quartier} — ${landmark}` : quartier,
+      city: "Dakar",
+      region: "Dakar",
+      deliveryMethod: selectedSlot.deliveryMethod,
+      deliverySlot: `${selectedSlot.label} — ${selectedSlot.note}`,
+      paymentMethod,
+    };
+
+    try {
+      await saveOrder(order);
       cartStore.clear();
-      setSubmitting(false);
       void sendOrderNotifications(order);
       navigate({ to: "/checkout/confirmation" });
-    }, 700);
+    } catch {
+      toast.error("Impossible d'enregistrer la commande. Vérifiez votre connexion et réessayez.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (

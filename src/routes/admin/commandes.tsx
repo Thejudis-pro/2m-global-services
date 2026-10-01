@@ -5,6 +5,7 @@ import {
   ORDER_STATUS_LABELS,
   updateOrderStatus,
   useAllOrders,
+  useInvalidateOrders,
   type Order,
   type OrderStatus,
 } from "@/lib/orders";
@@ -141,6 +142,7 @@ function AdminOrdersPage() {
 }
 
 function AdminOrderRow({ order }: { order: Order }) {
+  const invalidate = useInvalidateOrders();
   const [pendingStatus, setPendingStatus] = useState<OrderStatus | null>(null);
 
   return (
@@ -186,10 +188,15 @@ function AdminOrderRow({ order }: { order: Order }) {
             <AlertDialogFooter>
               <AlertDialogCancel onClick={() => setPendingStatus(null)}>Annuler</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => {
+                onClick={async () => {
                   if (pendingStatus) {
-                    updateOrderStatus(order.orderNumber, pendingStatus);
-                    toast.success("Statut de la commande mis à jour.");
+                    try {
+                      await updateOrderStatus(order, pendingStatus);
+                      await invalidate();
+                      toast.success("Statut de la commande mis à jour.");
+                    } catch {
+                      toast.error("Impossible de mettre à jour le statut.");
+                    }
                   }
                   setPendingStatus(null);
                 }}

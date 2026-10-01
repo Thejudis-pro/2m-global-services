@@ -1,113 +1,165 @@
-import { useSyncExternalStore } from "react";
-import { CATEGORIES as SEED_CATEGORIES, type Category } from "@/lib/categories";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { Category } from "@/lib/categories";
 import { slugify } from "@/lib/slugify";
 
-// Reactive overlay on top of the static category tree — lets the admin panel
-// add/rename/reorder/delete categories without a backend. Replace with real
-// Supabase queries once the backend is connected.
+// Categories/subcategories now live in Supabase (tables `categories` and
+// `subcategories`, seeded by supabase/migrations/20261001000000_*.sql).
+// Reordering is a sort_order swap between the two affected rows.
 
-const STORAGE_KEY = "2m-global-services-admin-categories";
+const CATEGORIES_QUERY_KEY = ["categories"] as const;
 
-function loadTree(): Category[] {
-  if (typeof window === "undefined") return SEED_CATEGORIES;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return SEED_CATEGORIES;
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as Category[]) : SEED_CATEGORIES;
-  } catch {
-    return SEED_CATEGORIES;
-  }
+type CategoryRow = { slug: string; label: string; sort_order: number };
+type SubcategoryRow = { category_slug: string; slug: string; label: string; sort_order: number };
+
+async function fetchCategories(): Promise<Category[]> {
+  const [{ data: categories, error: categoriesError }, { data: subcategories, error: subError }] =
+    await Promise.all([
+      supabase.from("categories").select("slug, label, sort_order").order("sort_order"),
+      supabase
+        .from("subcategories")
+        .select("category_slug, slug, label, sort_order")
+        .order("sort_order"),
+    ]);
+
+  if (categoriesError) throw categoriesError;
+  if (subError) throw subError;
+
+  const rows = (categories ?? []) as CategoryRow[];
+  const subRows = (subcategories ?? []) as SubcategoryRow[];
+
+  return rows.map((c) => ({
+    slug: c.slug,
+    label: c.label,
+    subcategories: subRows
+      .filter((s) => s.category_slug === c.slug)
+      .map((s) => ({ slug: s.slug, label: s.label })),
+  }));
 }
 
-let tree: Category[] = loadTree();
-const listeners = new Set<() => void>();
-
-function commit(next: Category[]) {
-  tree = next;
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tree));
-  }
-  listeners.forEach((l) => l());
+export function useAllCategories(): Category[] {
+  const { data } = useQuery({ queryKey: CATEGORIES_QUERY_KEY, queryFn: fetchCategories });
+  return data ?? [];
 }
 
-function moveItem<T>(list: T[], index: number, direction: "up" | "down"): T[] {
-  const target = direction === "up" ? index - 1 : index + 1;
-  if (target < 0 || target >= list.length) return list;
-  const next = [...list];
-  [next[index], next[target]] = [next[target], next[index]];
-  return next;
+export function useInvalidateCategories() {
+  const queryClient = useQueryClient();
+  return () => queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY });
+}
+
+async function nextSortOrder(
+  table: "categories" | "subcategories",
+  filter?: Record<string, string>,
+) {
+  let query = supabase
+    .from(table)
+    .select("sort_order")
+    .order("sort_order", { ascending: false })
+    .limit(1);
+  if (filter) {
+    for (const [key, value] of Object.entries(filter)) query = query.eq(key, value);
+  }
+  const { data, error } = await query;
+  if (error) throw error;
+  const max = (data?.[0] as { sort_order: number } | undefined)?.sort_order;
+  return max === undefined ? 0 : max + 1;
+}
+
+async function swapSortOrder(
+  table: "categories" | "subcategories",
+  idColumn: string,
+  rows: { id: string; sortOrder: number }[],
+) {
+  const [a, b] = rows;
+  await Promise.all([
+    supabase.from(table).update({ sort_order: b.sortOrder }).eq(idColumn, a.id),
+    supabase.from(table).update({ sort_order: a.sortOrder }).eq(idColumn, b.id),
+  ]);
 }
 
 export const categoryStore = {
-  getAll(): Category[] {
-    return tree;
-  },
-  addCategory(name: string) {
+  async addCategory(name: string): Promise<void> {
     const slug = slugify(name);
-    commit([...tree, { slug, label: name, subcategories: [] }]);
+    const sortOrder = await nextSortOrder("categories");
+    const { error } = await supabase
+      .from("categories")
+      .insert({ slug, label: name, sort_order: sortOrder });
+    if (error) throw error;
   },
-  renameCategory(slug: string, name: string) {
-    commit(tree.map((c) => (c.slug === slug ? { ...c, label: name } : c)));
+  async renameCategory(slug: string, name: string): Promise<void> {
+    const { error } = await supabase.from("categories").update({ label: name }).eq("slug", slug);
+    if (error) throw error;
   },
-  deleteCategory(slug: string) {
-    commit(tree.filter((c) => c.slug !== slug));
+  async deleteCategory(slug: string): Promise<void> {
+    const { error } = await supabase.from("categories").delete().eq("slug", slug);
+    if (error) throw error;
   },
-  reorderCategory(slug: string, direction: "up" | "down") {
-    const index = tree.findIndex((c) => c.slug === slug);
-    if (index === -1) return;
-    commit(moveItem(tree, index, direction));
+  async reorderCategory(slug: string, direction: "up" | "down"): Promise<void> {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("slug, sort_order")
+      .order("sort_order");
+    if (error) throw error;
+    const rows = (data ?? []) as CategoryRow[];
+    const index = rows.findIndex((r) => r.slug === slug);
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (index === -1 || targetIndex < 0 || targetIndex >= rows.length) return;
+    await swapSortOrder("categories", "slug", [
+      { id: rows[index].slug, sortOrder: rows[index].sort_order },
+      { id: rows[targetIndex].slug, sortOrder: rows[targetIndex].sort_order },
+    ]);
   },
-  addSubcategory(categorySlug: string, name: string) {
+  async addSubcategory(categorySlug: string, name: string): Promise<void> {
     const slug = slugify(name);
-    commit(
-      tree.map((c) =>
-        c.slug === categorySlug
-          ? { ...c, subcategories: [...(c.subcategories ?? []), { slug, label: name }] }
-          : c,
-      ),
-    );
+    const sortOrder = await nextSortOrder("subcategories", { category_slug: categorySlug });
+    const { error } = await supabase
+      .from("subcategories")
+      .insert({ category_slug: categorySlug, slug, label: name, sort_order: sortOrder });
+    if (error) throw error;
   },
-  renameSubcategory(categorySlug: string, subSlug: string, name: string) {
-    commit(
-      tree.map((c) =>
-        c.slug === categorySlug
-          ? {
-              ...c,
-              subcategories: (c.subcategories ?? []).map((s) =>
-                s.slug === subSlug ? { ...s, label: name } : s,
-              ),
-            }
-          : c,
-      ),
-    );
+  async renameSubcategory(categorySlug: string, subSlug: string, name: string): Promise<void> {
+    const { error } = await supabase
+      .from("subcategories")
+      .update({ label: name })
+      .eq("category_slug", categorySlug)
+      .eq("slug", subSlug);
+    if (error) throw error;
   },
-  deleteSubcategory(categorySlug: string, subSlug: string) {
-    commit(
-      tree.map((c) =>
-        c.slug === categorySlug
-          ? { ...c, subcategories: (c.subcategories ?? []).filter((s) => s.slug !== subSlug) }
-          : c,
-      ),
-    );
+  async deleteSubcategory(categorySlug: string, subSlug: string): Promise<void> {
+    const { error } = await supabase
+      .from("subcategories")
+      .delete()
+      .eq("category_slug", categorySlug)
+      .eq("slug", subSlug);
+    if (error) throw error;
   },
-  reorderSubcategory(categorySlug: string, subSlug: string, direction: "up" | "down") {
-    commit(
-      tree.map((c) => {
-        if (c.slug !== categorySlug) return c;
-        const subs = c.subcategories ?? [];
-        const index = subs.findIndex((s) => s.slug === subSlug);
-        if (index === -1) return c;
-        return { ...c, subcategories: moveItem(subs, index, direction) };
-      }),
-    );
-  },
-  subscribe(l: () => void) {
-    listeners.add(l);
-    return () => listeners.delete(l);
+  async reorderSubcategory(
+    categorySlug: string,
+    subSlug: string,
+    direction: "up" | "down",
+  ): Promise<void> {
+    const { data, error } = await supabase
+      .from("subcategories")
+      .select("slug, sort_order")
+      .eq("category_slug", categorySlug)
+      .order("sort_order");
+    if (error) throw error;
+    const rows = (data ?? []) as { slug: string; sort_order: number }[];
+    const index = rows.findIndex((r) => r.slug === subSlug);
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (index === -1 || targetIndex < 0 || targetIndex >= rows.length) return;
+    const [a, b] = [rows[index], rows[targetIndex]];
+    await Promise.all([
+      supabase
+        .from("subcategories")
+        .update({ sort_order: b.sort_order })
+        .eq("category_slug", categorySlug)
+        .eq("slug", a.slug),
+      supabase
+        .from("subcategories")
+        .update({ sort_order: a.sort_order })
+        .eq("category_slug", categorySlug)
+        .eq("slug", b.slug),
+    ]);
   },
 };
-
-export function useAllCategories() {
-  return useSyncExternalStore(categoryStore.subscribe, categoryStore.getAll, categoryStore.getAll);
-}

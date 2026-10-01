@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import type { Product } from "@/lib/products";
-import { productStore, useAllProducts } from "@/lib/product-store";
+import { productStore, useAllProducts, useInvalidateProducts } from "@/lib/product-store";
 import { useAllCategories } from "@/lib/category-store";
 import type { Category } from "@/lib/categories";
 import { formatCFA } from "@/lib/format";
-import { compressImageFile } from "@/lib/image-compression";
+import { compressImageFile, uploadProductImage } from "@/lib/image-compression";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,7 @@ function AdminProductsPage() {
   const { checked, user } = useRequireAdmin();
   const products = useAllProducts();
   const categories = useAllCategories();
+  const invalidate = useInvalidateProducts();
 
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -102,37 +103,52 @@ function AdminProductsPage() {
     });
   }
 
-  function handleBulkDiscount() {
+  async function handleBulkDiscount() {
     const value = Number(bulkDiscount);
     if (Number.isNaN(value) || value < 0 || value > 100) {
       toast.error("Veuillez entrer un pourcentage valide (0-100).");
       return;
     }
-    productStore.bulkUpdateDiscount([...selectedIds], value);
-    toast.success(`Réduction de ${value}% appliquée à ${selectedIds.size} produit(s).`);
-    setSelectedIds(new Set());
-    setBulkDiscount("");
+    try {
+      await productStore.bulkUpdateDiscount([...selectedIds], value);
+      await invalidate();
+      toast.success(`Réduction de ${value}% appliquée à ${selectedIds.size} produit(s).`);
+      setSelectedIds(new Set());
+      setBulkDiscount("");
+    } catch {
+      toast.error("Impossible d'appliquer la réduction.");
+    }
   }
 
-  function handleBulkCategory() {
+  async function handleBulkCategory() {
     if (!bulkCategory) {
       toast.error("Veuillez choisir une catégorie.");
       return;
     }
-    productStore.bulkReassignCategory([...selectedIds], bulkCategory);
-    toast.success(`Catégorie mise à jour pour ${selectedIds.size} produit(s).`);
-    setSelectedIds(new Set());
-    setBulkCategory("");
+    try {
+      await productStore.bulkReassignCategory([...selectedIds], bulkCategory);
+      await invalidate();
+      toast.success(`Catégorie mise à jour pour ${selectedIds.size} produit(s).`);
+      setSelectedIds(new Set());
+      setBulkCategory("");
+    } catch {
+      toast.error("Impossible de réassigner la catégorie.");
+    }
   }
 
-  function handleDelete(product: Product) {
-    productStore.deleteProduct(product.id);
-    toast.success(`« ${product.name} » supprimé.`);
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      next.delete(product.id);
-      return next;
-    });
+  async function handleDelete(product: Product) {
+    try {
+      await productStore.deleteProduct(product.id);
+      await invalidate();
+      toast.success(`« ${product.name} » supprimé.`);
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(product.id);
+        return next;
+      });
+    } catch {
+      toast.error("Impossible de supprimer ce produit.");
+    }
   }
 
   return (
@@ -346,9 +362,11 @@ function AdminProductRow({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const invalidate = useInvalidateProducts();
   const [price, setPrice] = useState(String(product.originalPrice));
   const [discount, setDiscount] = useState(String(product.discountPercent));
   const [stock, setStock] = useState(String(product.stockQuantity));
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setPrice(String(product.originalPrice));
@@ -356,7 +374,7 @@ function AdminProductRow({
     setStock(String(product.stockQuantity));
   }, [product.originalPrice, product.discountPercent, product.stockQuantity]);
 
-  function handleSave() {
+  async function handleSave() {
     const priceNum = Number(price);
     const discountNum = Number(discount);
     const stockNum = Number(stock);
@@ -372,12 +390,20 @@ function AdminProductRow({
       toast.error("Stock invalide.");
       return;
     }
-    productStore.updateProduct(product.id, {
-      originalPrice: priceNum,
-      discountPercent: discountNum,
-      stockQuantity: stockNum,
-    });
-    toast.success(`« ${product.name} » mis à jour.`);
+    setSaving(true);
+    try {
+      await productStore.updateProduct(product.id, {
+        originalPrice: priceNum,
+        discountPercent: discountNum,
+        stockQuantity: stockNum,
+      });
+      await invalidate();
+      toast.success(`« ${product.name} » mis à jour.`);
+    } catch {
+      toast.error("Impossible d'enregistrer ce produit.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const priceNum = Number(price) || 0;
@@ -432,7 +458,7 @@ function AdminProductRow({
       </TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
-          <Button variant="outline" size="sm" onClick={handleSave}>
+          <Button variant="outline" size="sm" disabled={saving} onClick={handleSave}>
             Enregistrer
           </Button>
           <Button
@@ -468,6 +494,10 @@ function AdminProductRow({
   );
 }
 
+type ImageEntry =
+  | { kind: "uploaded"; src: string; alt: string }
+  | { kind: "pending"; blob: Blob; previewUrl: string; alt: string };
+
 function ProductFormDialog({
   mode,
   product,
@@ -479,6 +509,7 @@ function ProductFormDialog({
   categories: Category[];
   onClose: () => void;
 }) {
+  const invalidate = useInvalidateProducts();
   const [name, setName] = useState(product?.name ?? "");
   const [categorySlug, setCategorySlug] = useState(
     product?.categorySlug ?? categories[0]?.slug ?? "",
@@ -503,7 +534,9 @@ function ProductFormDialog({
   );
   const [featured, setFeatured] = useState(product?.featured ?? false);
   const [isNew, setIsNew] = useState(product?.isNew ?? true);
-  const [images, setImages] = useState<{ src: string; alt: string }[]>(product?.images ?? []);
+  const [images, setImages] = useState<ImageEntry[]>(
+    (product?.images ?? []).map((img) => ({ kind: "uploaded" as const, ...img })),
+  );
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
@@ -518,7 +551,15 @@ function ProductFormDialog({
       const compressed = await Promise.all(
         Array.from(files).map((file) => compressImageFile(file)),
       );
-      setImages((prev) => [...prev, ...compressed.map((src) => ({ src, alt: "" }))]);
+      setImages((prev) => [
+        ...prev,
+        ...compressed.map((blob): ImageEntry => ({
+          kind: "pending",
+          blob,
+          previewUrl: URL.createObjectURL(blob),
+          alt: "",
+        })),
+      ]);
     } catch {
       toast.error("Une image n'a pas pu être traitée.");
     } finally {
@@ -535,7 +576,7 @@ function ProductFormDialog({
     setImages((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const nextErrors: Record<string, string> = {};
     if (name.trim().length < 2) nextErrors.name = "Le nom du produit est requis.";
@@ -576,52 +617,72 @@ function ProductFormDialog({
     setErrors({});
     setSaving(true);
 
-    const dimensions =
-      allDimensionsSet &&
-      heightNum !== undefined &&
-      widthNum !== undefined &&
-      depthNum !== undefined
-        ? { height: heightNum, width: widthNum, depth: depthNum }
-        : undefined;
+    try {
+      const dimensions =
+        allDimensionsSet &&
+        heightNum !== undefined &&
+        widthNum !== undefined &&
+        depthNum !== undefined
+          ? { height: heightNum, width: widthNum, depth: depthNum }
+          : undefined;
 
-    if (mode === "add") {
-      productStore.addProduct({
-        name: name.trim(),
-        alt: images[0].alt,
-        image: images[0].src,
-        images,
-        categorySlug,
-        subcategorySlug: subcategorySlug || undefined,
-        originalPrice: priceNum,
-        discountPercent: discountNum,
-        stockQuantity: stockNum,
-        description: description.trim() || undefined,
-        sku: sku.trim() || undefined,
-        weightKg: weightNum,
-        dimensions,
-        featured,
-      });
-      toast.success(`« ${name.trim()} » ajouté au catalogue.`);
-    } else if (product) {
-      productStore.updateProduct(product.id, {
-        name: name.trim(),
-        categorySlug,
-        subcategorySlug: subcategorySlug || undefined,
-        originalPrice: priceNum,
-        discountPercent: discountNum,
-        stockQuantity: stockNum,
-        description: description.trim() || undefined,
-        sku: sku.trim() || undefined,
-        weightKg: weightNum,
-        dimensions,
-        featured,
-        isNew,
-        ...(images.length > 0 ? { images, image: images[0].src, alt: images[0].alt } : {}),
-      });
-      toast.success(`« ${name.trim()} » mis à jour.`);
+      const productId = mode === "add" ? productStore.generateId(name.trim()) : product!.id;
+
+      // Upload any newly-selected images now that we know the final product id.
+      const resolvedImages = await Promise.all(
+        images.map(async (img, index) => {
+          if (img.kind === "uploaded") return { src: img.src, alt: img.alt };
+          const src = await uploadProductImage(productId, index, img.blob);
+          return { src, alt: img.alt };
+        }),
+      );
+
+      if (mode === "add") {
+        await productStore.addProduct({
+          id: productId,
+          name: name.trim(),
+          alt: resolvedImages[0].alt,
+          image: resolvedImages[0].src,
+          images: resolvedImages,
+          categorySlug,
+          subcategorySlug: subcategorySlug || undefined,
+          originalPrice: priceNum,
+          discountPercent: discountNum,
+          stockQuantity: stockNum,
+          description: description.trim() || undefined,
+          sku: sku.trim() || undefined,
+          weightKg: weightNum,
+          dimensions,
+          featured,
+        });
+        toast.success(`« ${name.trim()} » ajouté au catalogue.`);
+      } else if (product) {
+        await productStore.updateProduct(product.id, {
+          name: name.trim(),
+          categorySlug,
+          subcategorySlug: subcategorySlug || undefined,
+          originalPrice: priceNum,
+          discountPercent: discountNum,
+          stockQuantity: stockNum,
+          description: description.trim() || undefined,
+          sku: sku.trim() || undefined,
+          weightKg: weightNum,
+          dimensions,
+          featured,
+          isNew,
+          ...(resolvedImages.length > 0
+            ? { images: resolvedImages, image: resolvedImages[0].src, alt: resolvedImages[0].alt }
+            : {}),
+        });
+        toast.success(`« ${name.trim()} » mis à jour.`);
+      }
+      await invalidate();
+      onClose();
+    } catch {
+      toast.error("Impossible d'enregistrer ce produit.");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
-    onClose();
   }
 
   return (
@@ -875,7 +936,7 @@ function ProductFormDialog({
                     className="flex items-center gap-2 rounded-md border border-border p-2"
                   >
                     <img
-                      src={img.src}
+                      src={img.kind === "uploaded" ? img.src : img.previewUrl}
                       alt={img.alt || "Aperçu de l'image téléversée"}
                       className="h-12 w-12 rounded object-cover"
                     />
