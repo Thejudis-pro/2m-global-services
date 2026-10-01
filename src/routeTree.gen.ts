@@ -9,29 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PanierRouteImport } from './routes/panier'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProduitsIndexRouteImport } from './routes/produits/index'
-import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
+import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as PanierRouteImport } from './routes/panier'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as ProduitsSlugRouteImport } from './routes/produits/$slug'
-import { Route as CheckoutConfirmationRouteImport } from './routes/checkout/confirmation'
-import { Route as AdminProduitsRouteImport } from './routes/admin/produits'
-import { Route as AdminConnexionRouteImport } from './routes/admin/connexion'
-import { Route as AdminCommandesRouteImport } from './routes/admin/commandes'
-import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminAvisRouteImport } from './routes/admin/avis'
+import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
+import { Route as AdminCommandesRouteImport } from './routes/admin/commandes'
+import { Route as AdminConnexionRouteImport } from './routes/admin/connexion'
+import { Route as AdminProduitsRouteImport } from './routes/admin/produits'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
+import { Route as CheckoutConfirmationRouteImport } from './routes/checkout/confirmation'
+import { Route as ProduitsIndexRouteImport } from './routes/produits/index'
+import { Route as ProduitsSlugRouteImport } from './routes/produits/$slug'
 
-const PanierRoute = PanierRouteImport.update({
-  id: '/panier',
-  path: '/panier',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AProposRoute = AProposRouteImport.update({
@@ -39,19 +34,14 @@ const AProposRoute = AProposRouteImport.update({
   path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProduitsIndexRoute = ProduitsIndexRouteImport.update({
-  id: '/produits/',
-  path: '/produits/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
-  id: '/checkout/',
-  path: '/checkout/',
+const PanierRoute = PanierRouteImport.update({
+  id: '/panier',
+  path: '/panier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -59,29 +49,9 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProduitsSlugRoute = ProduitsSlugRouteImport.update({
-  id: '/produits/$slug',
-  path: '/produits/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutConfirmationRoute = CheckoutConfirmationRouteImport.update({
-  id: '/checkout/confirmation',
-  path: '/checkout/confirmation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminProduitsRoute = AdminProduitsRouteImport.update({
-  id: '/admin/produits',
-  path: '/admin/produits',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminConnexionRoute = AdminConnexionRouteImport.update({
-  id: '/admin/connexion',
-  path: '/admin/connexion',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminCommandesRoute = AdminCommandesRouteImport.update({
-  id: '/admin/commandes',
-  path: '/admin/commandes',
+const AdminAvisRoute = AdminAvisRouteImport.update({
+  id: '/admin/avis',
+  path: '/admin/avis',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
@@ -89,9 +59,39 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/admin/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminAvisRoute = AdminAvisRouteImport.update({
-  id: '/admin/avis',
-  path: '/admin/avis',
+const AdminCommandesRoute = AdminCommandesRouteImport.update({
+  id: '/admin/commandes',
+  path: '/admin/commandes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminConnexionRoute = AdminConnexionRouteImport.update({
+  id: '/admin/connexion',
+  path: '/admin/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProduitsRoute = AdminProduitsRouteImport.update({
+  id: '/admin/produits',
+  path: '/admin/produits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutConfirmationRoute = CheckoutConfirmationRouteImport.update({
+  id: '/checkout/confirmation',
+  path: '/checkout/confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProduitsIndexRoute = ProduitsIndexRouteImport.update({
+  id: '/produits/',
+  path: '/produits/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProduitsSlugRoute = ProduitsSlugRouteImport.update({
+  id: '/produits/$slug',
+  path: '/produits/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -214,18 +214,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/panier': {
-      id: '/panier'
-      path: '/panier'
-      fullPath: '/panier'
-      preLoaderRoute: typeof PanierRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a-propos': {
@@ -235,25 +228,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/produits/': {
-      id: '/produits/'
-      path: '/produits'
-      fullPath: '/produits/'
-      preLoaderRoute: typeof ProduitsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout/': {
-      id: '/checkout/'
-      path: '/checkout'
-      fullPath: '/checkout/'
-      preLoaderRoute: typeof CheckoutIndexRouteImport
+    '/panier': {
+      id: '/panier'
+      path: '/panier'
+      fullPath: '/panier'
+      preLoaderRoute: typeof PanierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -263,39 +249,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/produits/$slug': {
-      id: '/produits/$slug'
-      path: '/produits/$slug'
-      fullPath: '/produits/$slug'
-      preLoaderRoute: typeof ProduitsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout/confirmation': {
-      id: '/checkout/confirmation'
-      path: '/checkout/confirmation'
-      fullPath: '/checkout/confirmation'
-      preLoaderRoute: typeof CheckoutConfirmationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/produits': {
-      id: '/admin/produits'
-      path: '/admin/produits'
-      fullPath: '/admin/produits'
-      preLoaderRoute: typeof AdminProduitsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/connexion': {
-      id: '/admin/connexion'
-      path: '/admin/connexion'
-      fullPath: '/admin/connexion'
-      preLoaderRoute: typeof AdminConnexionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/commandes': {
-      id: '/admin/commandes'
-      path: '/admin/commandes'
-      fullPath: '/admin/commandes'
-      preLoaderRoute: typeof AdminCommandesRouteImport
+    '/admin/avis': {
+      id: '/admin/avis'
+      path: '/admin/avis'
+      fullPath: '/admin/avis'
+      preLoaderRoute: typeof AdminAvisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/categories': {
@@ -305,11 +263,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/avis': {
-      id: '/admin/avis'
-      path: '/admin/avis'
-      fullPath: '/admin/avis'
-      preLoaderRoute: typeof AdminAvisRouteImport
+    '/admin/commandes': {
+      id: '/admin/commandes'
+      path: '/admin/commandes'
+      fullPath: '/admin/commandes'
+      preLoaderRoute: typeof AdminCommandesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/connexion': {
+      id: '/admin/connexion'
+      path: '/admin/connexion'
+      fullPath: '/admin/connexion'
+      preLoaderRoute: typeof AdminConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/produits': {
+      id: '/admin/produits'
+      path: '/admin/produits'
+      fullPath: '/admin/produits'
+      preLoaderRoute: typeof AdminProduitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout/'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/confirmation': {
+      id: '/checkout/confirmation'
+      path: '/checkout/confirmation'
+      fullPath: '/checkout/confirmation'
+      preLoaderRoute: typeof CheckoutConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produits/': {
+      id: '/produits/'
+      path: '/produits'
+      fullPath: '/produits/'
+      preLoaderRoute: typeof ProduitsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produits/$slug': {
+      id: '/produits/$slug'
+      path: '/produits/$slug'
+      fullPath: '/produits/$slug'
+      preLoaderRoute: typeof ProduitsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
