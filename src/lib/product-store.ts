@@ -86,7 +86,10 @@ async function fetchProducts(): Promise<Product[]> {
     .from("products")
     .select("*")
     .order("created_at", { ascending: false });
-  if (error) throw error;
+  if (error) {
+    console.error("[products] falling back to bundled catalog:", error.message);
+    return SEED_PRODUCTS;
+  }
   if (!data || data.length === 0) return SEED_PRODUCTS;
   return (data as ProductRow[]).map(rowToProduct);
 }
