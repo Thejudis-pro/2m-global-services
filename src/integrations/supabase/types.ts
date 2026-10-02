@@ -14,16 +14,258 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          label: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          label: string
+          slug: string
+          sort_order: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          label?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          created_at: string
+          customer_name: string
+          delivery_fee: number
+          delivery_method: Database["public"]["Enums"]["delivery_method"]
+          delivery_slot: string | null
+          discount_total: number
+          email: string
+          items: Json
+          order_number: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          phone: string
+          region: string
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total: number
+        }
+        Insert: {
+          address: string
+          city: string
+          created_at?: string
+          customer_name: string
+          delivery_fee?: number
+          delivery_method: Database["public"]["Enums"]["delivery_method"]
+          delivery_slot?: string | null
+          discount_total?: number
+          email: string
+          items: Json
+          order_number: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          phone: string
+          region: string
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total: number
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string
+          customer_name?: string
+          delivery_fee?: number
+          delivery_method?: Database["public"]["Enums"]["delivery_method"]
+          delivery_slot?: string | null
+          discount_total?: number
+          email?: string
+          items?: Json
+          order_number?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          phone?: string
+          region?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          alt: string
+          category_slug: string
+          created_at: string
+          description: string | null
+          dimensions: Json | null
+          discount_percent: number
+          featured: boolean
+          id: string
+          image: string
+          images: Json
+          is_new: boolean
+          name: string
+          original_price: number
+          popularity: number
+          rating: number
+          sku: string | null
+          stock_quantity: number
+          subcategory_slug: string | null
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          alt: string
+          category_slug: string
+          created_at?: string
+          description?: string | null
+          dimensions?: Json | null
+          discount_percent?: number
+          featured?: boolean
+          id: string
+          image: string
+          images?: Json
+          is_new?: boolean
+          name: string
+          original_price: number
+          popularity?: number
+          rating?: number
+          sku?: string | null
+          stock_quantity?: number
+          subcategory_slug?: string | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          alt?: string
+          category_slug?: string
+          created_at?: string
+          description?: string | null
+          dimensions?: Json | null
+          discount_percent?: number
+          featured?: boolean
+          id?: string
+          image?: string
+          images?: Json
+          is_new?: boolean
+          name?: string
+          original_price?: number
+          popularity?: number
+          rating?: number
+          sku?: string | null
+          stock_quantity?: number
+          subcategory_slug?: string | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_slug_fkey"
+            columns: ["category_slug"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "products_category_slug_subcategory_slug_fkey"
+            columns: ["category_slug", "subcategory_slug"]
+            isOneToOne: false
+            referencedRelation: "subcategories"
+            referencedColumns: ["category_slug", "slug"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          approved: boolean
+          comment: string
+          date: string
+          id: string
+          name: string
+          product_id: string
+          rating: number
+        }
+        Insert: {
+          approved?: boolean
+          comment: string
+          date?: string
+          id?: string
+          name: string
+          product_id: string
+          rating: number
+        }
+        Update: {
+          approved?: boolean
+          comment?: string
+          date?: string
+          id?: string
+          name?: string
+          product_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subcategories: {
+        Row: {
+          category_slug: string
+          created_at: string
+          label: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          category_slug: string
+          created_at?: string
+          label: string
+          slug: string
+          sort_order: number
+          updated_at?: string
+        }
+        Update: {
+          category_slug?: string
+          created_at?: string
+          label?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subcategories_category_slug_fkey"
+            columns: ["category_slug"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      delivery_method: "pickup" | "delivery"
+      order_status: "nouvelle" | "en_traitement" | "expédiée" | "terminée"
+      payment_method: "cod" | "wave" | "bank-transfer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +392,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      delivery_method: ["pickup", "delivery"],
+      order_status: ["nouvelle", "en_traitement", "expédiée", "terminée"],
+      payment_method: ["cod", "wave", "bank-transfer"],
+    },
   },
 } as const
