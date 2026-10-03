@@ -2,7 +2,7 @@ const MESSAGES = [
   "Livraison 24h dans Dakar",
   "Paiement à la livraison",
   "Montage offert dès 200.000 CFA",
-  "Déstockage showroom en cours",
+  "Déstockage en cours",
 ];
 
 function MarqueeGroup() {

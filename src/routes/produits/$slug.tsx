@@ -366,7 +366,7 @@ function ProductDetailPage() {
             {details.inStock ? (
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                 <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-                En stock — showroom Dakar
+                En stock — Dakar
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 text-sm font-medium text-destructive">
@@ -457,7 +457,7 @@ function ProductDetailPage() {
             <div className="flex justify-between border-b border-border py-[15px]">
               <span className="text-muted-foreground">Disponibilité</span>
               <span className="font-medium text-primary">
-                {details.inStock ? "En stock — showroom Dakar" : "Rupture de stock"}
+                {details.inStock ? "En stock — Dakar" : "Rupture de stock"}
               </span>
             </div>
             <div className="flex justify-between py-[15px]">

@@ -60,7 +60,7 @@ function AboutPage() {
         <div className="mb-12 overflow-hidden rounded-[24px] bg-[var(--color-placeholder)]">
           <img
             src={heroProduct.image}
-            alt="Showroom 2M Global Services"
+            alt={heroProduct.alt}
             className="h-[min(52vh,460px)] w-full object-cover"
           />
         </div>

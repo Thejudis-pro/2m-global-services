@@ -75,7 +75,7 @@ function Index() {
           )}
           <div className="relative max-w-[580px] p-[26px] text-primary-foreground md:p-[48px]">
             <div className="mb-[22px] inline-flex items-center whitespace-nowrap rounded-full border border-[var(--color-gold-light)] px-[15px] py-2 font-display text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-gold-light)]">
-              Déstockage showroom
+              Déstockage en cours
             </div>
             <h1 className="mb-[18px] text-[34px] leading-[0.96] md:text-[64px]">
               Jusqu&apos;à <span className="text-[var(--color-gold-light)]">−{maxDiscount}%</span>

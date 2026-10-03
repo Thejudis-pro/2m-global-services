@@ -75,7 +75,7 @@ function ContactPage() {
     <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[56px] md:px-[28px]">
       <h1 className="mb-[14px] text-[30px] md:text-[52px]">Contact &amp; devis</h1>
       <p className="mb-11 max-w-[52ch] text-[18px] leading-[1.7] text-[var(--color-muted-4)]">
-        Showroom ouvert du lundi au samedi, 9h–19h. Devis pour aménagement complet sous 24 heures.
+        Disponibles du lundi au samedi, 9h–19h. Devis pour aménagement complet sous 24 heures.
       </p>
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
@@ -107,13 +107,14 @@ function ContactPage() {
 
           <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
             <div className="mb-[10px] text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-              Showroom
+              Notre adresse
             </div>
             <div className="font-display text-[17px] font-bold leading-[1.55]">
               {CONTACT.address}
             </div>
             <div className="mt-[10px] text-[14px] text-muted-foreground">
-              Lundi – Samedi · 9h – 19h
+              Livraison dans tout Dakar — pas de boutique physique, commandez par téléphone ou
+              WhatsApp.
             </div>
           </div>
 
