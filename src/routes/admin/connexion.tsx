@@ -42,18 +42,28 @@ function AdminLoginPage() {
     setErrors({});
     setFormError("");
     setSubmitting(true);
-    const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
-    setSubmitting(false);
-    if (error) {
-      setFormError("Identifiants incorrects.");
-      return;
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
+      if (error) {
+        setFormError(
+          error.message.toLowerCase().includes("confirm")
+            ? "Adresse e-mail non confirmée."
+            : "Identifiants incorrects.",
+        );
+        return;
+      }
+      if (data.user?.app_metadata?.role !== "admin") {
+        setFormError("Ce compte n'a pas accès à l'espace gestion.");
+        await supabase.auth.signOut();
+        return;
+      }
+      await navigate({ to: "/admin" });
+    } catch (err) {
+      console.error("[admin login]", err);
+      setFormError("Connexion impossible pour le moment. Réessayez.");
+    } finally {
+      setSubmitting(false);
     }
-    if (data.user?.app_metadata?.role !== "admin") {
-      setFormError("Ce compte n'a pas accès à l'espace gestion.");
-      await supabase.auth.signOut();
-      return;
-    }
-    navigate({ to: "/admin" });
   }
 
   return (
