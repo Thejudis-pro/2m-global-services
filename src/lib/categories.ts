@@ -40,13 +40,12 @@ export const CATEGORIES: Category[] = [
 export const CONTACT = {
   address: "68, Route de Front de Terre, Dakar, Sénégal",
   phones: [
-    { label: "33 833 33 64", tel: "+221338333364" },
-    { label: "78 157 98 38", tel: "+221781579838" },
-    { label: "76 462 77 77", tel: "+221764627777" },
+    { label: "76 192 34 41", tel: "+221761923441" },
+    { label: "78 144 17 66", tel: "+221781441766" },
   ],
-  email: "commercial@2mglobalservices.com",
-  whatsapp: "https://wa.me/c/221764627777",
-  whatsappNumber: "221764627777",
+  email: "contact@2mglobalservices.com",
+  whatsapp: "https://wa.me/221761923441",
+  whatsappNumber: "221761923441",
   facebook: "https://facebook.com",
   tiktok: "https://tiktok.com",
 };
