@@ -40,6 +40,23 @@ function AdminCategoriesPage() {
     return <div className="mx-auto max-w-4xl px-4 py-16 md:px-6" aria-hidden="true" />;
   }
 
+  async function handleSyncDefaults() {
+    setSubmitting(true);
+    try {
+      const added = await categoryStore.syncDefaults(categories);
+      await invalidate();
+      toast.success(
+        added > 0
+          ? `${added} catégorie(s) / sous-catégorie(s) ajoutée(s).`
+          : "Tout est déjà à jour.",
+      );
+    } catch {
+      toast.error("Impossible de synchroniser les catégories.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function handleAddCategory(e: React.FormEvent) {
     e.preventDefault();
     const name = newCategoryName.trim();
@@ -80,6 +97,9 @@ function AdminCategoriesPage() {
         <Button type="submit" disabled={submitting}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Ajouter
+        </Button>
+        <Button type="button" variant="outline" disabled={submitting} onClick={handleSyncDefaults}>
+          Ajouter les sous-catégories par défaut
         </Button>
       </form>
 

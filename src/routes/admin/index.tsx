@@ -6,6 +6,7 @@ import { useAllOrders, ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/order
 import { useAllProducts, useInvalidateProducts } from "@/lib/product-store";
 import { useAllCategories } from "@/lib/category-store";
 import { useInvalidateReviews } from "@/lib/reviews-store";
+import { PRODUCTS } from "@/lib/products";
 import { formatCFA } from "@/lib/format";
 import { supabase } from "@/integrations/supabase/client";
 import { importInitialCatalog } from "@/lib/admin-import.server";
@@ -153,7 +154,7 @@ function AdminDashboard() {
     <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[30px] md:px-[28px]">
       <AdminNav />
 
-      {realProductCount !== undefined && realProductCount < 190 && (
+      {realProductCount !== undefined && realProductCount < PRODUCTS.length && (
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-[var(--color-gold-light)] bg-[var(--color-cream-light)] p-6">
           <div>
             <div className="mb-1 font-display text-[13px] font-black uppercase">
@@ -161,8 +162,8 @@ function AdminDashboard() {
             </div>
             <p className="m-0 text-[14px] text-muted-foreground">
               {realProductCount === 0
-                ? "La base de données est vide — importez les 193 produits et leurs photos pour démarrer."
-                : `${realProductCount}/193 produits importés — relancez l'import pour terminer.`}
+                ? `La base de données est vide — importez les ${PRODUCTS.length} produits et leurs photos pour démarrer.`
+                : `${realProductCount}/${PRODUCTS.length} produits importés — relancez l'import pour terminer.`}
             </p>
           </div>
           <Button onClick={handleImport} disabled={importing} className="rounded-full">

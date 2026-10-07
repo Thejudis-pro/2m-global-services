@@ -1,6 +1,6 @@
 // Server-only one-time catalog import — triggered by the "Importer le
 // catalogue initial" button on /admin, which only appears while the live
-// `products` table is (still) empty. Uploads each of the 193 bundled product
+// `products` table is (still) empty. Uploads each of the bundled product
 // photos to Supabase Storage, then upserts every product row and the 7
 // reviews that reference real (still-existing) products. Safe to re-run: both
 // the Storage upload and the product/review rows use upsert semantics, so an

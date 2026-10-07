@@ -87,6 +87,37 @@ async function swapSortOrder(
 }
 
 export const categoryStore = {
+  // Inserts any bundled default category/subcategory (src/lib/categories.ts)
+  // that the database doesn't have yet. Returns how many rows were added.
+  async syncDefaults(current: Category[]): Promise<number> {
+    let added = 0;
+    for (const def of CATEGORIES) {
+      const existing = current.find((c) => c.slug === def.slug);
+      if (!existing) {
+        const sortOrder = await nextSortOrder("categories");
+        const { error } = await supabase
+          .from("categories")
+          .insert({ slug: def.slug, label: def.label, sort_order: sortOrder });
+        if (error) throw error;
+        added += 1;
+      }
+      for (const sub of def.subcategories ?? []) {
+        if (existing?.subcategories?.some((s) => s.slug === sub.slug)) continue;
+        const sortOrder = await nextSortOrder("subcategories", { category_slug: def.slug });
+        const { error } = await supabase
+          .from("subcategories")
+          .insert({
+            category_slug: def.slug,
+            slug: sub.slug,
+            label: sub.label,
+            sort_order: sortOrder,
+          });
+        if (error) throw error;
+        added += 1;
+      }
+    }
+    return added;
+  },
   async addCategory(name: string): Promise<void> {
     const slug = slugify(name);
     const sortOrder = await nextSortOrder("categories");

@@ -4,7 +4,8 @@ import { toast } from "sonner";
 import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { productStore, useAllProducts, useInvalidateProducts } from "@/lib/product-store";
-import { useAllCategories } from "@/lib/category-store";
+import { categoryStore, useAllCategories, useInvalidateCategories } from "@/lib/category-store";
+import { slugify } from "@/lib/slugify";
 import type { Category } from "@/lib/categories";
 import { formatCFA } from "@/lib/format";
 import { compressImageFile, uploadProductImage } from "@/lib/image-compression";
@@ -498,6 +499,78 @@ type ImageEntry =
   | { kind: "uploaded"; src: string; alt: string }
   | { kind: "pending"; blob: Blob; previewUrl: string; alt: string };
 
+// Small "+ Nouvelle …" toggle under a select: creates the category or
+// subcategory in Supabase right from the product form.
+function InlineCreate({
+  label,
+  placeholder,
+  disabled,
+  onCreate,
+}: {
+  label: string;
+  placeholder: string;
+  disabled?: boolean;
+  onCreate: (name: string) => Promise<void>;
+}) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function submit() {
+    const name = value.trim();
+    if (name.length < 2) {
+      toast.error("Le nom est requis (2 caractères minimum).");
+      return;
+    }
+    setBusy(true);
+    try {
+      await onCreate(name);
+      setValue("");
+      setOpen(false);
+    } catch {
+      toast.error("Impossible de créer cet élément. Il existe peut-être déjà.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen(true)}
+        className="mt-1 text-xs font-medium text-accent hover:underline disabled:opacity-50"
+      >
+        + {label}
+      </button>
+    );
+  }
+
+  return (
+    <div className="mt-2 flex gap-2">
+      <Input
+        autoFocus
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            void submit();
+          }
+        }}
+      />
+      <Button type="button" size="sm" disabled={busy} onClick={() => void submit()}>
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ajouter"}
+      </Button>
+      <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+
 function ProductFormDialog({
   mode,
   product,
@@ -510,6 +583,7 @@ function ProductFormDialog({
   onClose: () => void;
 }) {
   const invalidate = useInvalidateProducts();
+  const invalidateCategories = useInvalidateCategories();
   const [name, setName] = useState(product?.name ?? "");
   const [categorySlug, setCategorySlug] = useState(
     product?.categorySlug ?? categories[0]?.slug ?? "",
@@ -542,6 +616,21 @@ function ProductFormDialog({
   const [saving, setSaving] = useState(false);
 
   const selectedCategory = categories.find((c) => c.slug === categorySlug);
+
+  async function createCategory(name: string) {
+    await categoryStore.addCategory(name);
+    await invalidateCategories();
+    setCategorySlug(slugify(name));
+    setSubcategorySlug("");
+    toast.success(`Catégorie « ${name} » ajoutée.`);
+  }
+
+  async function createSubcategory(name: string) {
+    await categoryStore.addSubcategory(categorySlug, name);
+    await invalidateCategories();
+    setSubcategorySlug(slugify(name));
+    toast.success(`Sous-catégorie « ${name} » ajoutée.`);
+  }
 
   async function handleFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -738,6 +827,11 @@ function ProductFormDialog({
                   ))}
                 </SelectContent>
               </Select>
+              <InlineCreate
+                label="Nouvelle catégorie"
+                placeholder="Nom de la catégorie"
+                onCreate={createCategory}
+              />
               <p role="alert" className="mt-1 min-h-[1rem] text-xs text-destructive">
                 {errors.category}
               </p>
@@ -760,6 +854,12 @@ function ProductFormDialog({
                   ))}
                 </SelectContent>
               </Select>
+              <InlineCreate
+                label="Nouvelle sous-catégorie"
+                placeholder="Nom de la sous-catégorie"
+                disabled={!categorySlug}
+                onCreate={createSubcategory}
+              />
             </div>
           </div>
 

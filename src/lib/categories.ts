@@ -34,7 +34,21 @@ export const CATEGORIES: Category[] = [
   { slug: "armoires", label: "Armoires Métalliques & Bois" },
   { slug: "electroniques", label: "Électroniques" },
   { slug: "coffre-fort", label: "Coffre Fort" },
-  { slug: "parfumerie", label: "Parfumerie" },
+  {
+    slug: "parfumerie",
+    label: "Parfumerie",
+    subcategories: [
+      { slug: "collections-privees", label: "Collections privées" },
+      { slug: "coffrets", label: "Coffrets" },
+      { slug: "fragrance-library", label: "Fragrance library" },
+      { slug: "scentlab", label: "SCENTLAB" },
+      { slug: "takeoff-fragrance", label: "Takeoff Fragrance" },
+      { slug: "dubai-perfumes", label: "Dubai Perfumes" },
+      { slug: "parfums-de-poches", label: "Parfums de poches" },
+      { slug: "parfums-authentiques", label: "Parfums authentiques" },
+      { slug: "haqqi", label: "Haqqi" },
+    ],
+  },
 ];
 
 export const CONTACT = {

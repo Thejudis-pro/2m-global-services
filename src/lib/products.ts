@@ -250,26 +250,6 @@ import parfumHaqqiHabitRouge from "@/assets/products/parfum-haqqi-habit-rouge.jp
 import parfumHaqqiUomo from "@/assets/products/parfum-haqqi-uomo.jpg";
 import parfumHaqqiOmbreLeather from "@/assets/products/parfum-haqqi-ombre-leather.jpg";
 
-import parfumPochesLeMale from "@/assets/products/parfum-poches-le-male.jpg";
-import parfumPochesAventus from "@/assets/products/parfum-poches-aventus.jpg";
-import parfumPochesKirke from "@/assets/products/parfum-poches-kirke.jpg";
-import parfumPochesMoussouf from "@/assets/products/parfum-poches-moussouf.jpg";
-import parfumPoches1Million from "@/assets/products/parfum-poches-1-million.jpg";
-import parfumPochesLaVieEstBelle from "@/assets/products/parfum-poches-la-vie-est-belle.jpg";
-import parfumPochesJadore from "@/assets/products/parfum-poches-jadore.jpg";
-import parfumPochesGucciBloom from "@/assets/products/parfum-poches-gucci-bloom.jpg";
-import parfumPochesCocoMademoiselle from "@/assets/products/parfum-poches-coco-mademoiselle.jpg";
-import parfumPochesJourDhermes from "@/assets/products/parfum-poches-jour-dhermes.jpg";
-import parfumPochesBlackOpium from "@/assets/products/parfum-poches-black-opium.jpg";
-import parfumPochesCrystalNoir from "@/assets/products/parfum-poches-crystal-noir.jpg";
-import parfumPoches212Sexy from "@/assets/products/parfum-poches-212-sexy.jpg";
-import parfumPochesZaraOriental from "@/assets/products/parfum-poches-zara-oriental.jpg";
-import parfumPochesInvictus from "@/assets/products/parfum-poches-invictus.jpg";
-import parfumPochesOudWood from "@/assets/products/parfum-poches-oud-wood.jpg";
-import parfumPochesCode from "@/assets/products/parfum-poches-code.jpg";
-import parfumPochesChance from "@/assets/products/parfum-poches-chance.jpg";
-import parfumPochesBaccaratRouge540 from "@/assets/products/parfum-poches-baccarat-rouge-540.jpg";
-import parfumPochesArmaniSi from "@/assets/products/parfum-poches-armani-si.jpg";
 
 export type Product = {
   id: string;
@@ -2173,6 +2153,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Capri, noir et or",
     image: parfumTakeoffCapri,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2188,6 +2169,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance New York, bleu marine et or",
     image: parfumTakeoffNewYork,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2203,6 +2185,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Dubai, noir et gris",
     image: parfumTakeoffDubai,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2218,6 +2201,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Lisbon, bleu clair et or",
     image: parfumTakeoffLisbon,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2233,6 +2217,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Moscow, jaune-vert translucide",
     image: parfumTakeoffMoscow,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2248,6 +2233,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Rome, violet et or",
     image: parfumTakeoffRome,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2263,6 +2249,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Florence, gris anthracite et or",
     image: parfumTakeoffFlorence,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2278,6 +2265,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Paris, rouge-orangé et or",
     image: parfumTakeoffParis,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2293,6 +2281,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Munich, ambré, capuchon doré ouvragé",
     image: parfumTakeoffMunich,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2308,6 +2297,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Berlin, ivoire et or",
     image: parfumTakeoffBerlin,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2323,6 +2313,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Milan, bleu translucide, capuchon doré ouvragé",
     image: parfumTakeoffMilan,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2338,6 +2329,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Muscat, bleu nuit, capuchon doré ouvragé",
     image: parfumTakeoffMuscat,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2353,6 +2345,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Havana, ambré miel, capuchon doré ouvragé",
     image: parfumTakeoffHavana,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2368,6 +2361,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Budapest, jaune-olive translucide",
     image: parfumTakeoffBudapest,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2383,6 +2377,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Stockholm, rouge, capuchon doré ouvragé",
     image: parfumTakeoffStockholm,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2398,6 +2393,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Takeoff Fragrance Istanbul, ivoire, capuchon doré ouvragé",
     image: parfumTakeoffIstanbul,
     categorySlug: "parfumerie",
+    subcategorySlug: "takeoff-fragrance",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3202,306 +3198,6 @@ export const PRODUCTS: Product[] = [
     stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
-  {
-    id: "parfum-poches-le-male",
-    name: "Parfums de poche — inspiré de Jean Paul Gaultier Le Mâle",
-    alt: "Flacon Parfums de poche inspiré de Jean Paul Gaultier Le Mâle, format voyage 50 ml",
-    image: parfumPochesLeMale,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Homme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-aventus",
-    name: "Parfums de poche — inspiré de Creed Aventus",
-    alt: "Flacon Parfums de poche inspiré de Creed Aventus, format voyage 50 ml",
-    image: parfumPochesAventus,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Homme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-kirke",
-    name: "Parfums de poche — inspiré de Tiziana Terenzi Kirké",
-    alt: "Flacon Parfums de poche inspiré de Tiziana Terenzi Kirké, format voyage 50 ml",
-    image: parfumPochesKirke,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Unisexe — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-moussouf",
-    name: "Parfums de poche — Moussouf",
-    alt: "Flacon Parfums de poche Moussouf, format voyage 50 ml",
-    image: parfumPochesMoussouf,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Unisexe — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-1-million",
-    name: "Parfums de poche — inspiré de Paco Rabanne 1 Million",
-    alt: "Flacon Parfums de poche inspiré de Paco Rabanne 1 Million, format voyage 50 ml",
-    image: parfumPoches1Million,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Homme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-la-vie-est-belle",
-    name: "Parfums de poche — inspiré de Lancôme La Vie Est Belle",
-    alt: "Flacon Parfums de poche inspiré de Lancôme La Vie Est Belle, format voyage 50 ml",
-    image: parfumPochesLaVieEstBelle,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-jadore",
-    name: "Parfums de poche — inspiré de Dior J'adore",
-    alt: "Flacon Parfums de poche inspiré de Dior J'adore, format voyage 50 ml",
-    image: parfumPochesJadore,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-gucci-bloom",
-    name: "Parfums de poche — inspiré de Gucci Bloom",
-    alt: "Flacon Parfums de poche inspiré de Gucci Bloom, format voyage 50 ml",
-    image: parfumPochesGucciBloom,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-coco-mademoiselle",
-    name: "Parfums de poche — inspiré de Chanel Coco Mademoiselle",
-    alt: "Flacon Parfums de poche inspiré de Chanel Coco Mademoiselle, format voyage 50 ml",
-    image: parfumPochesCocoMademoiselle,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-jour-dhermes",
-    name: "Parfums de poche — inspiré de Hermès Jour d'Hermès",
-    alt: "Flacon Parfums de poche inspiré de Hermès Jour d'Hermès, format voyage 50 ml",
-    image: parfumPochesJourDhermes,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-black-opium",
-    name: "Parfums de poche — inspiré de YSL Black Opium",
-    alt: "Flacon Parfums de poche inspiré de Yves Saint Laurent Black Opium, format voyage 50 ml",
-    image: parfumPochesBlackOpium,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-crystal-noir",
-    name: "Parfums de poche — inspiré de Versace Crystal Noir",
-    alt: "Flacon Parfums de poche inspiré de Versace Crystal Noir, format voyage 50 ml",
-    image: parfumPochesCrystalNoir,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-212-sexy",
-    name: "Parfums de poche — inspiré de Carolina Herrera 212 Sexy",
-    alt: "Flacon Parfums de poche inspiré de Carolina Herrera 212 Sexy, format voyage 50 ml",
-    image: parfumPoches212Sexy,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-zara-oriental",
-    name: "Parfums de poche — inspiré de Zara Oriental",
-    alt: "Flacon Parfums de poche inspiré de Zara Oriental, format voyage 50 ml",
-    image: parfumPochesZaraOriental,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-invictus",
-    name: "Parfums de poche — inspiré de Paco Rabanne Invictus",
-    alt: "Flacon Parfums de poche inspiré de Paco Rabanne Invictus, format voyage 50 ml",
-    image: parfumPochesInvictus,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Homme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-oud-wood",
-    name: "Parfums de poche — inspiré de Tom Ford Oud Wood",
-    alt: "Flacon Parfums de poche inspiré de Tom Ford Oud Wood, format voyage 50 ml",
-    image: parfumPochesOudWood,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-code",
-    name: "Parfums de poche — inspiré de Giorgio Armani Code",
-    alt: "Flacon Parfums de poche inspiré de Giorgio Armani Code, format voyage 50 ml",
-    image: parfumPochesCode,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Homme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-chance",
-    name: "Parfums de poche — inspiré de Chanel Chance",
-    alt: "Flacon Parfums de poche inspiré de Chanel Chance, format voyage 50 ml",
-    image: parfumPochesChance,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-baccarat-rouge-540",
-    name: "Parfums de poche — inspiré de Baccarat Rouge 540",
-    alt: "Flacon Parfums de poche inspiré de Maison Francis Kurkdjian Baccarat Rouge 540, format voyage 50 ml",
-    image: parfumPochesBaccaratRouge540,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Unisexe — format poche 50 ml.",
-  },
-  {
-    id: "parfum-poches-armani-si",
-    name: "Parfums de poche — inspiré de Giorgio Armani Sì",
-    alt: "Flacon Parfums de poche inspiré de Giorgio Armani Sì, format voyage 50 ml",
-    image: parfumPochesArmaniSi,
-    categorySlug: "parfumerie",
-    originalPrice: 0,
-    discountPercent: 0,
-    rating: 4.5,
-    popularity: 50,
-    isNew: true,
-    createdAt: "2026-09-23",
-    stockQuantity: 15,
-    description: "Eau de Parfum Femme — format poche 50 ml.",
-  },
 ];
 
 export const FEATURED_PRODUCTS = PRODUCTS.filter((p) => p.featured);
@@ -3548,6 +3244,23 @@ export type ProductFilters = {
   sort: SortOption;
 };
 
+// Deterministic (no randomness, so SSR and client agree): takes one product per
+// category in turn, keeping each category's own relative order.
+function interleaveByCategory(products: Product[]): Product[] {
+  const buckets = new Map<string, Product[]>();
+  for (const p of products) {
+    const bucket = buckets.get(p.categorySlug);
+    if (bucket) bucket.push(p);
+    else buckets.set(p.categorySlug, [p]);
+  }
+  const queues = [...buckets.values()];
+  const mixed: Product[] = [];
+  for (let i = 0; mixed.length < products.length; i++) {
+    for (const queue of queues) if (i < queue.length) mixed.push(queue[i]);
+  }
+  return mixed;
+}
+
 export function filterAndSortProducts(products: Product[], filters: ProductFilters) {
   const normalizedQuery = filters.query?.trim().toLowerCase();
 
@@ -3571,6 +3284,9 @@ export function filterAndSortProducts(products: Product[], filters: ProductFilte
     if (filters.newArrivalOnly && !p.isNew) return false;
     return true;
   });
+
+  // "Par défaut" mixes categories (round-robin) instead of listing them in blocks.
+  if (filters.sort === "default") return interleaveByCategory(filtered);
 
   const sorted = [...filtered].sort((a, b) => {
     switch (filters.sort) {
