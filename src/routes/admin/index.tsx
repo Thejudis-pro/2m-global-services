@@ -1,18 +1,11 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useAllOrders, ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/orders";
-import { useAllProducts, useInvalidateProducts } from "@/lib/product-store";
+import { useAllProducts } from "@/lib/product-store";
 import { useAllCategories } from "@/lib/category-store";
-import { useInvalidateReviews } from "@/lib/reviews-store";
-import { PRODUCTS } from "@/lib/products";
 import { formatCFA } from "@/lib/format";
-import { supabase } from "@/integrations/supabase/client";
-import { importInitialCatalog } from "@/lib/admin-import.server";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -37,39 +30,6 @@ function AdminDashboard() {
   const products = useAllProducts();
   const categories = useAllCategories();
   const [days] = useState(PERIOD_DAYS);
-  const invalidateProducts = useInvalidateProducts();
-  const invalidateReviews = useInvalidateReviews();
-  const [importing, setImporting] = useState(false);
-
-  const { data: realProductCount } = useQuery({
-    queryKey: ["products", "real-count"],
-    queryFn: async () => {
-      const { count } = await supabase
-        .from("products")
-        .select("id", { count: "exact", head: true });
-      return count ?? 0;
-    },
-  });
-
-  async function handleImport() {
-    setImporting(true);
-    try {
-      const result = await importInitialCatalog();
-      await invalidateProducts();
-      invalidateReviews();
-      if (result.errors.length > 0) {
-        toast.error(
-          `${result.imported}/${result.total} produits importés — ${result.errors.length} erreur(s). Relancez l'import pour terminer.`,
-        );
-      } else {
-        toast.success(`${result.imported} produits importés avec succès.`);
-      }
-    } catch {
-      toast.error("L'import a échoué. Réessayez.");
-    } finally {
-      setImporting(false);
-    }
-  }
 
   const stats = useMemo(() => {
     const now = new Date();
@@ -153,24 +113,6 @@ function AdminDashboard() {
   return (
     <main className="mx-auto max-w-[1320px] px-[18px] pb-[72px] pt-[30px] md:px-[28px]">
       <AdminNav />
-
-      {realProductCount !== undefined && realProductCount < PRODUCTS.length && (
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-[var(--color-gold-light)] bg-[var(--color-cream-light)] p-6">
-          <div>
-            <div className="mb-1 font-display text-[13px] font-black uppercase">
-              Importer le catalogue initial
-            </div>
-            <p className="m-0 text-[14px] text-muted-foreground">
-              {realProductCount === 0
-                ? `La base de données est vide — importez les ${PRODUCTS.length} produits et leurs photos pour démarrer.`
-                : `${realProductCount}/${PRODUCTS.length} produits importés — relancez l'import pour terminer.`}
-            </p>
-          </div>
-          <Button onClick={handleImport} disabled={importing} className="rounded-full">
-            {importing ? "Import en cours..." : "Importer le catalogue initial"}
-          </Button>
-        </div>
-      )}
 
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
         <div>
