@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { Category } from "@/lib/categories";
+import { CATEGORIES, type Category } from "@/lib/categories";
 import { slugify } from "@/lib/slugify";
 
 // Categories/subcategories now live in Supabase (tables `categories` and
@@ -13,14 +13,23 @@ type CategoryRow = { slug: string; label: string; sort_order: number };
 type SubcategoryRow = { category_slug: string; slug: string; label: string; sort_order: number };
 
 async function fetchCategories(): Promise<Category[]> {
-  const [{ data: categories, error: categoriesError }, { data: subcategories, error: subError }] =
-    await Promise.all([
+  let result;
+  try {
+    result = await Promise.all([
       supabase.from("categories").select("slug, label, sort_order").order("sort_order"),
       supabase
         .from("subcategories")
         .select("category_slug, slug, label, sort_order")
         .order("sort_order"),
     ]);
+  } catch (err) {
+    // The Supabase client throws when its env vars are missing (e.g. a local
+    // checkout without a .env file) — use the bundled categories instead.
+    console.error("[categories] falling back to bundled categories:", err);
+    return CATEGORIES;
+  }
+  const [{ data: categories, error: categoriesError }, { data: subcategories, error: subError }] =
+    result;
 
   if (categoriesError) throw categoriesError;
   if (subError) throw subError;

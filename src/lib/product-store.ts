@@ -82,16 +82,23 @@ function productToRow(product: Product) {
 }
 
 async function fetchProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) {
-    console.error("[products] falling back to bundled catalog:", error.message);
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) {
+      console.error("[products] falling back to bundled catalog:", error.message);
+      return SEED_PRODUCTS;
+    }
+    if (!data || data.length === 0) return SEED_PRODUCTS;
+    return (data as ProductRow[]).map(rowToProduct);
+  } catch (err) {
+    // The Supabase client throws (rather than returning `error`) when its env
+    // vars are missing, e.g. a local checkout without a .env file.
+    console.error("[products] falling back to bundled catalog:", err);
     return SEED_PRODUCTS;
   }
-  if (!data || data.length === 0) return SEED_PRODUCTS;
-  return (data as ProductRow[]).map(rowToProduct);
 }
 
 export function useAllProducts(): Product[] {
@@ -102,8 +109,12 @@ export function useAllProducts(): Product[] {
 // For route loaders, which run outside the component tree and can't use
 // query hooks — a direct one-off fetch with the same empty-table fallback.
 export async function fetchProductById(id: string): Promise<Product | undefined> {
-  const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
-  if (!error && data) return rowToProduct(data as ProductRow);
+  try {
+    const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+    if (!error && data) return rowToProduct(data as ProductRow);
+  } catch {
+    // Supabase unavailable (e.g. missing env vars) — use the bundled catalog.
+  }
   return SEED_PRODUCTS.find((p) => p.id === id);
 }
 
