@@ -250,7 +250,6 @@ import parfumHaqqiHabitRouge from "@/assets/products/parfum-haqqi-habit-rouge.jp
 import parfumHaqqiUomo from "@/assets/products/parfum-haqqi-uomo.jpg";
 import parfumHaqqiOmbreLeather from "@/assets/products/parfum-haqqi-ombre-leather.jpg";
 
-
 export type Product = {
   id: string;
   name: string;
@@ -2409,6 +2408,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Fruity Vanilla, jus violet",
     image: parfumScentlabFruityVanilla,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2424,6 +2424,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Rosy Hazelnut",
     image: parfumScentlabRosyHazelnut,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2439,6 +2440,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Leather Violet",
     image: parfumScentlabLeatherViolet,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2454,6 +2456,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Spicy Caramel",
     image: parfumScentlabSpicyCaramel,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2469,6 +2472,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Fruity Gourmand, jus pêche",
     image: parfumScentlabFruityGourmand,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2484,6 +2488,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Oriental Oud",
     image: parfumScentlabOrientalOud,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2499,6 +2504,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Spicy Leather",
     image: parfumScentlabSpicyLeather,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2514,6 +2520,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Golden Floral, verre blanc",
     image: parfumScentlabGoldenFloral,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2529,6 +2536,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Woody Bergamot, verre bleu nuit",
     image: parfumScentlabWoodyBergamot,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2544,6 +2552,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Creamy Almond, jus rouge",
     image: parfumScentlabCreamyAlmond,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2559,6 +2568,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Iris Cedar",
     image: parfumScentlabIrisCedar,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2574,6 +2584,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Savanna Vetiver",
     image: parfumScentlabSavannaVetiver,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2589,6 +2600,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Vanilla Dream",
     image: parfumScentlabVanillaDream,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2604,6 +2616,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Bright Mandarin",
     image: parfumScentlabBrightMandarin,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2619,6 +2632,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Cognac Whisper",
     image: parfumScentlabCognacWhisper,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2634,6 +2648,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Rosy Glow",
     image: parfumScentlabRosyGlow,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2649,6 +2664,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Caramel Citrus",
     image: parfumScentlabCaramelCitrus,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2664,6 +2680,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Glow Amber",
     image: parfumScentlabGlowAmber,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2679,6 +2696,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Poetic Amber",
     image: parfumScentlabPoeticAmber,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2694,6 +2712,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Dreamy Bloom, verre blanc",
     image: parfumScentlabDreamyBloom,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2709,6 +2728,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Oriental Tonka, verre noir",
     image: parfumScentlabOrientalTonka,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2724,6 +2744,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Sweet Tobacco",
     image: parfumScentlabSweetTobacco,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2739,6 +2760,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Scentlab Dark Leather, motif serpent noir",
     image: parfumScentlabDarkLeather,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2754,6 +2776,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Sandalwood Leather, verre blanc",
     image: parfumScentlabSandalwoodLeather,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2769,6 +2792,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Scentlab Woody Oud",
     image: parfumScentlabWoodyOud,
     categorySlug: "parfumerie",
+    subcategorySlug: "scentlab",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2784,6 +2808,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Haqqi Baccarat Rouge 540",
     image: parfumHaqqiBaccaratRouge540,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2799,6 +2824,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Baccarat Rouge 540 Extrait",
     image: parfumHaqqiBaccaratRouge540Extrait,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2814,6 +2840,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Acqua Di Gio",
     image: parfumHaqqiAcquaDiGio,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2829,6 +2856,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Black Opium",
     image: parfumHaqqiBlackOpium,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2844,6 +2872,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Pink For Her",
     image: parfumHaqqiPinkForHer,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2859,6 +2888,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Hypnotic Poison",
     image: parfumHaqqiHypnoticPoison,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2874,6 +2904,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi So Scandal",
     image: parfumHaqqiSoScandal,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2889,6 +2920,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi My Way",
     image: parfumHaqqiMyWay,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2904,6 +2936,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Haqqi Bloom",
     image: parfumHaqqiBloom,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2919,6 +2952,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Haqqi Libre",
     image: parfumHaqqiLibre,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2934,6 +2968,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi White Patchouli",
     image: parfumHaqqiWhitePatchouli,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2949,6 +2984,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi The One",
     image: parfumHaqqiTheOne,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2964,6 +3000,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Invictus",
     image: parfumHaqqiInvictus,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2979,6 +3016,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Savage Elixir",
     image: parfumHaqqiSavageElixir,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -2994,6 +3032,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon et boîte de parfum Haqqi Scandal Man",
     image: parfumHaqqiScandalMan,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3009,6 +3048,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Le Male",
     image: parfumHaqqiLeMale,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3024,6 +3064,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Pegasus",
     image: parfumHaqqiPegasus,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3039,6 +3080,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Aventus",
     image: parfumHaqqiAventus,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3054,6 +3096,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Homme Intense",
     image: parfumHaqqiHommeIntense,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3069,6 +3112,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi J'adore",
     image: parfumHaqqiJadore,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3084,6 +3128,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi More Than Words",
     image: parfumHaqqiMoreThanWords,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3099,6 +3144,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Gentle Fludity",
     image: parfumHaqqiGentleFludity,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3114,6 +3160,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Cinema",
     image: parfumHaqqiCinema,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3129,6 +3176,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Neroli Portofino",
     image: parfumHaqqiNeroliPortofino,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3144,6 +3192,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Sauvage",
     image: parfumHaqqiSauvage,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3159,6 +3208,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Habit Rouge",
     image: parfumHaqqiHabitRouge,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3174,6 +3224,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Uomo",
     image: parfumHaqqiUomo,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3189,6 +3240,7 @@ export const PRODUCTS: Product[] = [
     alt: "Flacon de parfum Haqqi Ombre Leather",
     image: parfumHaqqiOmbreLeather,
     categorySlug: "parfumerie",
+    subcategorySlug: "haqqi",
     originalPrice: 0,
     discountPercent: 0,
     rating: 4.5,
@@ -3245,20 +3297,31 @@ export type ProductFilters = {
 };
 
 // Deterministic (no randomness, so SSR and client agree): takes one product per
-// category in turn, keeping each category's own relative order.
-function interleaveByCategory(products: Product[]): Product[] {
-  const buckets = new Map<string, Product[]>();
-  for (const p of products) {
-    const bucket = buckets.get(p.categorySlug);
-    if (bucket) bucket.push(p);
-    else buckets.set(p.categorySlug, [p]);
+// group in turn, keeping each group's own relative order. Categories are mixed
+// together, and inside each category its subcategories (e.g. the perfume brands
+// Takeoff / SCENTLAB / Haqqi) are mixed the same way.
+function roundRobin<T>(items: T[], keyOf: (item: T) => string, inner?: (group: T[]) => T[]): T[] {
+  const buckets = new Map<string, T[]>();
+  for (const item of items) {
+    const key = keyOf(item);
+    const bucket = buckets.get(key);
+    if (bucket) bucket.push(item);
+    else buckets.set(key, [item]);
   }
-  const queues = [...buckets.values()];
-  const mixed: Product[] = [];
-  for (let i = 0; mixed.length < products.length; i++) {
+  const queues = [...buckets.values()].map((group) => (inner ? inner(group) : group));
+  const mixed: T[] = [];
+  for (let i = 0; mixed.length < items.length; i++) {
     for (const queue of queues) if (i < queue.length) mixed.push(queue[i]);
   }
   return mixed;
+}
+
+function interleaveByCategory(products: Product[]): Product[] {
+  return roundRobin(
+    products,
+    (p) => p.categorySlug,
+    (group) => roundRobin(group, (p) => p.subcategorySlug ?? ""),
+  );
 }
 
 export function filterAndSortProducts(products: Product[], filters: ProductFilters) {

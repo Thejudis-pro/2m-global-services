@@ -137,6 +137,18 @@ function AdminProductsPage() {
     }
   }
 
+  async function handleBulkDelete() {
+    const count = selectedIds.size;
+    try {
+      await productStore.bulkDelete([...selectedIds]);
+      await invalidate();
+      toast.success(`${count} produit(s) supprimé(s).`);
+      setSelectedIds(new Set());
+    } catch {
+      toast.error("Impossible de supprimer les produits.");
+    }
+  }
+
   async function handleDelete(product: Product) {
     try {
       await productStore.deleteProduct(product.id);
@@ -257,6 +269,27 @@ function AdminProductsPage() {
               <AlertDialogFooter>
                 <AlertDialogCancel>Annuler</AlertDialogCancel>
                 <AlertDialogAction onClick={handleBulkCategory}>Confirmer</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm">
+                Supprimer la sélection
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Supprimer {selectedIds.size} produit(s) ?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Cette action est définitive : les produits sélectionnés disparaîtront du
+                  catalogue.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction onClick={handleBulkDelete}>Supprimer</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

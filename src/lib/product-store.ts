@@ -184,6 +184,10 @@ export const productStore = {
       .in("id", ids);
     if (error) throw error;
   },
+  async bulkDelete(ids: string[]): Promise<void> {
+    const { error } = await supabase.from("products").delete().in("id", ids);
+    if (error) throw error;
+  },
   async deleteProduct(id: string): Promise<void> {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) throw error;

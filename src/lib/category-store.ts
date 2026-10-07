@@ -12,6 +12,15 @@ const CATEGORIES_QUERY_KEY = ["categories"] as const;
 type CategoryRow = { slug: string; label: string; sort_order: number };
 type SubcategoryRow = { category_slug: string; slug: string; label: string; sort_order: number };
 
+// A category with no subcategory rows yet shows its bundled defaults, so new
+// defaults (e.g. the Parfumerie ones) appear before an admin syncs them into
+// the database from /admin/categories.
+function subcategoriesFor(categorySlug: string, subRows: SubcategoryRow[]) {
+  const own = subRows.filter((s) => s.category_slug === categorySlug);
+  if (own.length > 0) return own.map((s) => ({ slug: s.slug, label: s.label }));
+  return CATEGORIES.find((c) => c.slug === categorySlug)?.subcategories ?? [];
+}
+
 async function fetchCategories(): Promise<Category[]> {
   let result;
   try {
@@ -40,9 +49,7 @@ async function fetchCategories(): Promise<Category[]> {
   return rows.map((c) => ({
     slug: c.slug,
     label: c.label,
-    subcategories: subRows
-      .filter((s) => s.category_slug === c.slug)
-      .map((s) => ({ slug: s.slug, label: s.label })),
+    subcategories: subcategoriesFor(c.slug, subRows),
   }));
 }
 
@@ -104,14 +111,12 @@ export const categoryStore = {
       for (const sub of def.subcategories ?? []) {
         if (existing?.subcategories?.some((s) => s.slug === sub.slug)) continue;
         const sortOrder = await nextSortOrder("subcategories", { category_slug: def.slug });
-        const { error } = await supabase
-          .from("subcategories")
-          .insert({
-            category_slug: def.slug,
-            slug: sub.slug,
-            label: sub.label,
-            sort_order: sortOrder,
-          });
+        const { error } = await supabase.from("subcategories").insert({
+          category_slug: def.slug,
+          slug: sub.slug,
+          label: sub.label,
+          sort_order: sortOrder,
+        });
         if (error) throw error;
         added += 1;
       }
