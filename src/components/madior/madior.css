@@ -1,0 +1,392 @@
+/* Digital business card (/madior). Everything is scoped under .madior-page /
+   .madior-card / .madior-dialog so the rest of the site is unaffected. */
+
+.madior-page {
+  --m-accent: #34d27b;
+  --m-bg: #04100a;
+  --m-text: #f2f7f3;
+  --m-muted: #9db5a4;
+  --m-card: rgba(255, 255, 255, 0.04);
+  --m-border: rgba(52, 210, 123, 0.16);
+
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--m-text);
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  background:
+    radial-gradient(120% 40% at 50% 0%, rgba(52, 210, 123, 0.3), transparent 70%),
+    linear-gradient(180deg, #06150c 0%, #04100a 55%, #020805 100%);
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+.madior-page *,
+.madior-page *::before,
+.madior-page *::after {
+  box-sizing: border-box;
+}
+
+.madior-card {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding-bottom: 28px;
+  animation: madior-fade 200ms ease-out both;
+}
+
+@keyframes madior-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .madior-card {
+    animation: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .madior-page {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    background:
+      radial-gradient(70% 55% at 50% 0%, rgba(52, 210, 123, 0.34), transparent 70%),
+      linear-gradient(180deg, #0b2a19, #06150c 50%, #020805);
+  }
+  .madior-card {
+    width: 390px;
+    min-height: 0;
+    border: 1px solid rgba(52, 210, 123, 0.45);
+    border-radius: 32px;
+    background: linear-gradient(180deg, #06150c 0%, #04100a 55%, #020805 100%);
+    box-shadow: 0 24px 80px rgba(52, 210, 123, 0.18);
+  }
+}
+
+/* Reset the site's global heading / link styling inside the card */
+.madior-card h1,
+.madior-card h2,
+.madior-card p {
+  margin: 0;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.madior-card a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.madior-card button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.madior-card a:focus-visible,
+.madior-card button:focus-visible {
+  outline: 2px solid #f2f7f3;
+  outline-offset: 2px;
+}
+
+/* ---------- Hero ---------- */
+.madior-hero {
+  position: relative;
+  height: 520px;
+  overflow: hidden;
+  background: radial-gradient(85% 55% at 50% 38%, #2fa766 0%, #12673a 45%, #06150c 100%);
+}
+
+.madior-hero-photo {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 430px;
+  width: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35));
+}
+
+.madior-hero-fade {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 300px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 16, 10, 0) 0%,
+    rgba(4, 16, 10, 0.85) 70%,
+    #04100a 100%
+  );
+}
+
+.madior-location {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(4, 16, 10, 0.62);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--m-text);
+}
+
+.madior-hero-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.madior-round {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(52, 210, 123, 0.3);
+  border-radius: 999px;
+  background: rgba(4, 16, 10, 0.55);
+  color: var(--m-text);
+}
+
+.madior-name {
+  position: absolute;
+  bottom: 14px;
+  left: 20px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 58px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--m-text);
+}
+
+/* ---------- Body ---------- */
+.madior-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 16px;
+}
+
+.madior-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.madior-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.madior-tag {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px; /* tightened from 11px so all three tags fit on one line at 390px */
+  border: 1px solid var(--m-border);
+  border-radius: 999px;
+  background: var(--m-card);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--m-text);
+}
+
+.madior-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.madior-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 68px;
+  border: 1px solid var(--m-border);
+  border-radius: 16px;
+  background: var(--m-card);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-text);
+}
+
+.madior-action.is-primary {
+  border-color: var(--m-accent);
+  background: var(--m-accent);
+  color: #04100a;
+}
+
+.madior-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 52px;
+  border: 1px solid var(--m-accent);
+  border-radius: 16px;
+  background: rgba(52, 210, 123, 0.08);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-text);
+}
+
+.madior-section {
+  scroll-margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--m-border);
+  border-radius: 20px;
+  background: var(--m-card);
+}
+
+.madior-section h2 {
+  margin-bottom: 12px;
+  font-family: "Bricolage Grotesque", "Plus Jakarta Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--m-text);
+}
+
+.madior-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--m-border);
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-text);
+}
+
+.madior-link-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.madior-link-arrow {
+  color: var(--m-accent);
+}
+
+.madior-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.madior-section > .madior-chips:first-of-type {
+  margin-top: 0;
+}
+
+.madior-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--m-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-text);
+}
+
+.madior-chip svg {
+  color: var(--m-accent);
+}
+
+.madior-footer {
+  padding: 4px 0 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--m-muted);
+}
+
+.madior-footer a {
+  color: var(--m-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- QR dialog (portaled outside .madior-card) ---------- */
+.madior-dialog {
+  max-width: 320px;
+  border: 1px solid rgba(52, 210, 123, 0.3);
+  border-radius: 24px;
+  background: #06150c;
+  color: #f2f7f3;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  text-align: center;
+}
+
+.madior-dialog h2 {
+  font-family: "Bricolage Grotesque", "Plus Jakarta Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f2f7f3;
+}
+
+.madior-dialog p {
+  font-size: 13px;
+  color: #9db5a4;
+}
+
+.madior-qr {
+  display: inline-block;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  line-height: 0;
+}
+
+.madior-qr-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: #34d27b;
+  font-size: 14px;
+  font-weight: 700;
+  color: #04100a;
+  cursor: pointer;
+}
+
+.madior-dialog button:focus-visible {
+  outline: 2px solid #f2f7f3;
+  outline-offset: 2px;
+}

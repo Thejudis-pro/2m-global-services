@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as MadiorRouteImport } from './routes/madior'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAvisRouteImport } from './routes/admin/avis'
@@ -37,6 +38,11 @@ const AProposRoute = AProposRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MadiorRoute = MadiorRouteImport.update({
+  id: '/madior',
+  path: '/madior',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PanierRoute = PanierRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/madior': typeof MadiorRoute
   '/panier': typeof PanierRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/madior': typeof MadiorRoute
   '/panier': typeof PanierRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
+  '/madior': typeof MadiorRoute
   '/panier': typeof PanierRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/contact'
+    | '/madior'
     | '/panier'
     | '/admin/avis'
     | '/admin/categories'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/contact'
+    | '/madior'
     | '/panier'
     | '/admin/avis'
     | '/admin/categories'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/contact'
+    | '/madior'
     | '/panier'
     | '/admin/avis'
     | '/admin/categories'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   ContactRoute: typeof ContactRoute
+  MadiorRoute: typeof MadiorRoute
   PanierRoute: typeof PanierRoute
   AdminAvisRoute: typeof AdminAvisRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/madior': {
+      id: '/madior'
+      path: '/madior'
+      fullPath: '/madior'
+      preLoaderRoute: typeof MadiorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/panier': {
@@ -319,6 +339,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   ContactRoute: ContactRoute,
+  MadiorRoute: MadiorRoute,
   PanierRoute: PanierRoute,
   AdminAvisRoute: AdminAvisRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
