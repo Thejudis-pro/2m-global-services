@@ -25,6 +25,26 @@ const signupSchema = z
 
 type Mode = "login" | "signup";
 
+function signupErrorMessage(error: { code?: string; message: string }): string {
+  const message = error.message.toLowerCase();
+  if (error.code === "signup_disabled" || message.includes("signups not allowed")) {
+    return "Les inscriptions sont désactivées pour le moment. Contactez l'administrateur.";
+  }
+  if (error.code === "user_already_exists" || message.includes("already")) {
+    return "Un compte existe déjà avec cette adresse e-mail.";
+  }
+  if (error.code === "weak_password" || message.includes("password")) {
+    return "Mot de passe trop faible. Choisissez-en un plus long.";
+  }
+  if (error.code === "email_address_invalid" || message.includes("invalid")) {
+    return "Adresse e-mail invalide.";
+  }
+  if (error.code === "over_email_send_rate_limit" || message.includes("rate limit")) {
+    return "Trop de tentatives. Réessayez dans quelques minutes.";
+  }
+  return "Création du compte impossible pour le moment. Réessayez.";
+}
+
 export const Route = createFileRoute("/admin/connexion")({
   head: () => ({
     meta: [{ title: "Connexion administrateur | 2M Global Services" }],
@@ -74,14 +94,8 @@ function AdminLoginPage() {
         options: { emailRedirectTo: `${window.location.origin}/admin/connexion` },
       });
       if (error) {
-        const message = error.message.toLowerCase();
-        setFormError(
-          message.includes("already")
-            ? "Un compte existe déjà avec cette adresse e-mail."
-            : message.includes("password")
-              ? "Mot de passe trop faible. Choisissez-en un plus long."
-              : "Création du compte impossible pour le moment. Réessayez.",
-        );
+        console.error("[admin signup]", error.code, error.message);
+        setFormError(signupErrorMessage(error));
         return;
       }
       // With e-mail confirmation on, an already-registered address comes back
