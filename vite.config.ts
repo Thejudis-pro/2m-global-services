@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Vercel sets VERCEL=1 during its builds: emit the Vercel output format there.
+  // Every other build (Lovable, local) keeps the wrapper's Cloudflare default —
+  // inside the Lovable build sandbox the wrapper pins Cloudflare regardless.
+  ...(process.env.VERCEL ? { nitro: { preset: "vercel" } } : {}),
 });
