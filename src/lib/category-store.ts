@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { slugify } from "@/lib/slugify";
+import { useAllProducts } from "@/lib/product-store";
 
 // Categories/subcategories now live in Supabase (tables `categories` and
 // `subcategories`, seeded by supabase/migrations/20261001000000_*.sql).
@@ -56,6 +58,26 @@ async function fetchCategories(): Promise<Category[]> {
 export function useAllCategories(): Category[] {
   const { data } = useQuery({ queryKey: CATEGORIES_QUERY_KEY, queryFn: fetchCategories });
   return data ?? [];
+}
+
+// What the public storefront lists: only categories (and subcategories) that
+// hold at least one product, so a customer never lands on an empty page.
+// Admin pages keep using useAllCategories() so empty ones can still be filled.
+export function useStorefrontCategories(): Category[] {
+  const categories = useAllCategories();
+  const products = useAllProducts();
+  return useMemo(
+    () =>
+      categories
+        .filter((c) => products.some((p) => p.categorySlug === c.slug))
+        .map((c) => ({
+          ...c,
+          subcategories: c.subcategories?.filter((s) =>
+            products.some((p) => p.categorySlug === c.slug && p.subcategorySlug === s.slug),
+          ),
+        })),
+    [categories, products],
+  );
 }
 
 export function useInvalidateCategories() {

@@ -11,7 +11,7 @@ import {
   type SortOption,
 } from "@/lib/products";
 import { useAllProducts } from "@/lib/product-store";
-import { useAllCategories } from "@/lib/category-store";
+import { useStorefrontCategories } from "@/lib/category-store";
 import { formatCFA } from "@/lib/format";
 import { CONTACT } from "@/lib/categories";
 import { ProductCard } from "@/components/ProductCard";
@@ -89,7 +89,7 @@ function ProduitsPage() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const allProducts = useAllProducts();
-  const categories = useAllCategories();
+  const categories = useStorefrontCategories();
 
   const selectedCategories = useMemo(
     () => (search.category ? search.category.split(",").filter(Boolean) : []),

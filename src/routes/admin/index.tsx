@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAllOrders, ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/orders";
+import { useAllOrders, ORDER_STATUS_LABELS, isSaleStatus, type OrderStatus } from "@/lib/orders";
 import { useAllProducts } from "@/lib/product-store";
 import { useAllCategories } from "@/lib/category-store";
 import { formatCFA } from "@/lib/format";
@@ -22,6 +22,8 @@ const STATUS_PILL: Record<OrderStatus, string> = {
   en_traitement: "bg-[var(--color-gold-light)] text-[var(--color-ink)]",
   expédiée: "bg-[var(--color-cream-alt)] text-foreground",
   terminée: "bg-[var(--color-ink)] text-primary-foreground",
+  annulée: "bg-destructive/10 text-destructive",
+  retour: "bg-destructive/10 text-destructive",
 };
 
 function AdminDashboard() {
@@ -37,7 +39,11 @@ function AdminDashboard() {
     periodStart.setDate(now.getDate() - (days - 1));
     periodStart.setHours(0, 0, 0, 0);
 
-    const periodOrders = orders.filter((o) => new Date(o.createdAt) >= periodStart);
+    // Cancelled / returned orders are no sale: they stay out of revenue, the
+    // order count, the basket average and the charts below.
+    const allPeriodOrders = orders.filter((o) => new Date(o.createdAt) >= periodStart);
+    const periodOrders = allPeriodOrders.filter((o) => isSaleStatus(o.status));
+    const cancelledCount = allPeriodOrders.length - periodOrders.length;
     const revenue = periodOrders.reduce((sum, o) => sum + o.total, 0);
     const toPrepare = periodOrders.filter((o) => o.status === "nouvelle").length;
     const avgBasket = periodOrders.length > 0 ? Math.round(revenue / periodOrders.length) : 0;
@@ -93,6 +99,7 @@ function AdminDashboard() {
     return {
       revenue,
       ordersCount: periodOrders.length,
+      cancelledCount,
       toPrepare,
       avgBasket,
       outOfStock,
@@ -153,6 +160,8 @@ function AdminDashboard() {
           <div className="mt-2 font-display text-[30px] font-black">{stats.ordersCount}</div>
           <div className="mt-1 text-[13px] text-muted-foreground">
             dont {stats.toPrepare} à préparer
+            {stats.cancelledCount > 0 &&
+              ` · ${stats.cancelledCount} annulée(s)/retour(s) exclue(s)`}
           </div>
         </div>
         <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">

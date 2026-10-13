@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Download, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import type { Product } from "@/lib/products";
 import { productStore, useAllProducts, useInvalidateProducts } from "@/lib/product-store";
 import { categoryStore, useAllCategories, useInvalidateCategories } from "@/lib/category-store";
 import { slugify } from "@/lib/slugify";
 import type { Category } from "@/lib/categories";
 import { formatCFA } from "@/lib/format";
+import { exportProductsCsv } from "@/lib/csv-export";
 import { compressImageFile, uploadProductImage } from "@/lib/image-compression";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
@@ -199,7 +200,16 @@ function AdminProductsPage() {
             ))}
           </SelectContent>
         </Select>
-        <Button className="ml-auto" onClick={() => setDialogState({ mode: "add" })}>
+        <Button
+          variant="outline"
+          className="ml-auto"
+          disabled={filtered.length === 0}
+          onClick={() => exportProductsCsv(filtered, categories)}
+        >
+          <Download className="h-4 w-4" aria-hidden="true" />
+          Exporter CSV ({filtered.length})
+        </Button>
+        <Button onClick={() => setDialogState({ mode: "add" })}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Ajouter un produit
         </Button>
@@ -675,12 +685,14 @@ function ProductFormDialog({
       );
       setImages((prev) => [
         ...prev,
-        ...compressed.map((blob): ImageEntry => ({
-          kind: "pending",
-          blob,
-          previewUrl: URL.createObjectURL(blob),
-          alt: "",
-        })),
+        ...compressed.map(
+          (blob): ImageEntry => ({
+            kind: "pending",
+            blob,
+            previewUrl: URL.createObjectURL(blob),
+            alt: "",
+          }),
+        ),
       ]);
     } catch {
       toast.error("Une image n'a pas pu être traitée.");

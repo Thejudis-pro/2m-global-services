@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAllCategories } from "@/lib/category-store";
+import { useStorefrontCategories } from "@/lib/category-store";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { useAllProducts } from "@/lib/product-store";
@@ -41,9 +41,7 @@ const FEATURES = [
 
 function Index() {
   const allProducts = useAllProducts();
-  const categories = useAllCategories().filter((c) =>
-    allProducts.some((p) => p.categorySlug === c.slug),
-  );
+  const categories = useStorefrontCategories();
   const featuredProducts = allProducts.filter((p) => p.featured);
 
   const total = allProducts.length;

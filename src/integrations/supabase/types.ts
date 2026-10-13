@@ -264,7 +264,7 @@ export type Database = {
     }
     Enums: {
       delivery_method: "pickup" | "delivery"
-      order_status: "nouvelle" | "en_traitement" | "expédiée" | "terminée"
+      order_status: "nouvelle" | "en_traitement" | "expédiée" | "terminée" | "annulée" | "retour"
       payment_method: "cod" | "wave" | "bank-transfer"
     }
     CompositeTypes: {
@@ -394,7 +394,7 @@ export const Constants = {
   public: {
     Enums: {
       delivery_method: ["pickup", "delivery"],
-      order_status: ["nouvelle", "en_traitement", "expédiée", "terminée"],
+      order_status: ["nouvelle", "en_traitement", "expédiée", "terminée", "annulée", "retour"],
       payment_method: ["cod", "wave", "bank-transfer"],
     },
   },

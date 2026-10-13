@@ -8,14 +8,28 @@ export type OrderItem = {
   unitPrice: number;
 };
 
-export type OrderStatus = "nouvelle" | "en_traitement" | "expédiée" | "terminée";
+export type OrderStatus =
+  | "nouvelle"
+  | "en_traitement"
+  | "expédiée"
+  | "terminée"
+  | "annulée"
+  | "retour";
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   nouvelle: "Nouvelle",
   en_traitement: "En traitement",
   expédiée: "Expédiée",
   terminée: "Terminée",
+  annulée: "Annulée",
+  retour: "Retour",
 };
+
+// A cancelled or returned order is no sale: the dashboard leaves it out of
+// revenue, order count and average basket.
+export function isSaleStatus(status: OrderStatus): boolean {
+  return status !== "annulée" && status !== "retour";
+}
 
 export type Order = {
   orderNumber: string;
@@ -35,6 +49,17 @@ export type Order = {
   deliveryMethod: "pickup" | "delivery";
   deliverySlot?: string;
   paymentMethod: "cod" | "wave" | "bank-transfer";
+};
+
+export const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
+  cod: "À la livraison",
+  wave: "Wave",
+  "bank-transfer": "Virement bancaire",
+};
+
+export const DELIVERY_LABELS: Record<Order["deliveryMethod"], string> = {
+  pickup: "Retrait en magasin",
+  delivery: "Livraison",
 };
 
 // Orders live in Supabase (table `orders`): publicly insertable (guest
@@ -143,9 +168,23 @@ async function fetchOrders(): Promise<Order[]> {
   return (data as OrderRow[] | null)?.map(rowToOrder) ?? [];
 }
 
+// Admin-only hooks. The orders are re-fetched every 30 s (even while the tab is
+// in the background) so a new order shows up — badge + toast in the admin nav —
+// without reloading the page.
+const ORDERS_REFETCH_MS = 30_000;
+
+export function useOrdersQuery(): { orders: Order[]; loaded: boolean } {
+  const { data, isSuccess } = useQuery({
+    queryKey: ORDERS_QUERY_KEY,
+    queryFn: fetchOrders,
+    refetchInterval: ORDERS_REFETCH_MS,
+    refetchIntervalInBackground: true,
+  });
+  return { orders: data ?? [], loaded: isSuccess };
+}
+
 export function useAllOrders(): Order[] {
-  const { data } = useQuery({ queryKey: ORDERS_QUERY_KEY, queryFn: fetchOrders });
-  return data ?? [];
+  return useOrdersQuery().orders;
 }
 
 export function useInvalidateOrders() {

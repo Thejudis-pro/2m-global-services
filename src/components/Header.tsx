@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
-import { useAllCategories } from "@/lib/category-store";
+import { useStorefrontCategories } from "@/lib/category-store";
 import { useCartCount } from "@/lib/cart-store";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
@@ -14,7 +14,7 @@ export function Header() {
   const [searchValue, setSearchValue] = useState("");
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const count = useCartCount();
-  const categories = useAllCategories();
+  const categories = useStorefrontCategories();
   const navigate = useNavigate();
 
   function submitSearch(value: string, closeMobile = false) {

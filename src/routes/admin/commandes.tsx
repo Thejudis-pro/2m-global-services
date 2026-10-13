@@ -1,26 +1,15 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
-import {
-  ORDER_STATUS_LABELS,
-  updateOrderStatus,
-  useAllOrders,
-  useInvalidateOrders,
-  type Order,
-  type OrderStatus,
-} from "@/lib/orders";
+import { Download } from "lucide-react";
+import { ORDER_STATUS_LABELS, useAllOrders, type Order, type OrderStatus } from "@/lib/orders";
+import { exportOrdersCsv } from "@/lib/csv-export";
 import { formatCFA } from "@/lib/format";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
+import { OrderDetailSheet } from "@/components/OrderDetailSheet";
+import { OrderStatusSelect } from "@/components/OrderStatusSelect";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -29,16 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 const PAGE_SIZE = 10;
 
@@ -54,6 +33,7 @@ function AdminOrdersPage() {
   const orders = useAllOrders();
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [page, setPage] = useState(1);
+  const [selectedOrderNumber, setSelectedOrderNumber] = useState<string | null>(null);
 
   const filtered = useMemo(
     () => (statusFilter === "all" ? orders : orders.filter((o) => o.status === statusFilter)),
@@ -63,6 +43,8 @@ function AdminOrdersPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  // Looked up by number (not stored) so the open detail reflects status changes.
+  const selectedOrder = orders.find((o) => o.orderNumber === selectedOrderNumber) ?? null;
 
   if (!checked || !user) {
     return <div className="mx-auto max-w-6xl px-4 py-16 md:px-6" aria-hidden="true" />;
@@ -73,22 +55,34 @@ function AdminOrdersPage() {
       <h1 className="text-2xl font-bold text-foreground md:text-3xl">Commandes</h1>
       <AdminNav />
 
-      <Tabs
-        value={statusFilter}
-        onValueChange={(v) => {
-          setStatusFilter(v as OrderStatus | "all");
-          setPage(1);
-        }}
-      >
-        <TabsList>
-          <TabsTrigger value="all">Toutes</TabsTrigger>
-          {Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => (
-            <TabsTrigger key={value} value={value}>
-              {label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Tabs
+          value={statusFilter}
+          onValueChange={(v) => {
+            setStatusFilter(v as OrderStatus | "all");
+            setPage(1);
+          }}
+          className="max-w-full overflow-x-auto"
+        >
+          <TabsList>
+            <TabsTrigger value="all">Toutes</TabsTrigger>
+            {Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => (
+              <TabsTrigger key={value} value={value}>
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={filtered.length === 0}
+          onClick={() => exportOrdersCsv(filtered)}
+        >
+          <Download className="h-4 w-4" aria-hidden="true" />
+          Exporter CSV ({filtered.length})
+        </Button>
+      </div>
 
       <div className="mt-4 overflow-x-auto">
         <Table>
@@ -97,13 +91,19 @@ function AdminOrdersPage() {
               <TableHead>N° Commande</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Client</TableHead>
+              <TableHead>Articles</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Statut</TableHead>
+              <TableHead className="text-right">Détail</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {pageItems.map((order) => (
-              <AdminOrderRow key={order.orderNumber} order={order} />
+              <AdminOrderRow
+                key={order.orderNumber}
+                order={order}
+                onOpen={() => setSelectedOrderNumber(order.orderNumber)}
+              />
             ))}
           </TableBody>
         </Table>
@@ -137,75 +137,46 @@ function AdminOrdersPage() {
           </Button>
         </div>
       )}
+
+      <OrderDetailSheet order={selectedOrder} onClose={() => setSelectedOrderNumber(null)} />
     </div>
   );
 }
 
-function AdminOrderRow({ order }: { order: Order }) {
-  const invalidate = useInvalidateOrders();
-  const [pendingStatus, setPendingStatus] = useState<OrderStatus | null>(null);
+function AdminOrderRow({ order, onOpen }: { order: Order; onOpen: () => void }) {
+  const itemCount = order.items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <TableRow>
+    <TableRow className="cursor-pointer" onClick={onOpen}>
       <TableCell className="font-medium text-foreground">{order.orderNumber}</TableCell>
       <TableCell className="text-sm text-muted-foreground">
         {new Date(order.createdAt).toLocaleDateString("fr-FR")}
       </TableCell>
-      <TableCell className="text-sm text-muted-foreground">{order.customerName}</TableCell>
+      <TableCell className="text-sm text-muted-foreground">
+        <div className="text-foreground">{order.customerName}</div>
+        <div>{order.phone}</div>
+      </TableCell>
+      <TableCell className="text-sm text-muted-foreground">
+        {itemCount} article{itemCount === 1 ? "" : "s"}
+      </TableCell>
       <TableCell className="font-semibold text-foreground">{formatCFA(order.total)}</TableCell>
-      <TableCell>
-        <AlertDialog
-          open={pendingStatus !== null}
-          onOpenChange={(open) => {
-            if (!open) setPendingStatus(null);
+      {/* Stops clicks (also the ones bubbling up from the confirmation dialog's
+          portal) from opening the detail. */}
+      <TableCell onClick={(e) => e.stopPropagation()}>
+        <OrderStatusSelect order={order} />
+      </TableCell>
+      <TableCell className="text-right">
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={`Voir le détail de la commande ${order.orderNumber}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpen();
           }}
         >
-          <Select value={order.status} onValueChange={(v) => setPendingStatus(v as OrderStatus)}>
-            <SelectTrigger
-              className="w-40"
-              aria-label={`Statut de la commande ${order.orderNumber}`}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Changer le statut de la commande {order.orderNumber} ?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Le statut passera de « {ORDER_STATUS_LABELS[order.status]} » à «{" "}
-                {pendingStatus ? ORDER_STATUS_LABELS[pendingStatus] : ""} ».
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setPendingStatus(null)}>Annuler</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={async () => {
-                  if (pendingStatus) {
-                    try {
-                      await updateOrderStatus(order, pendingStatus);
-                      await invalidate();
-                      toast.success("Statut de la commande mis à jour.");
-                    } catch {
-                      toast.error("Impossible de mettre à jour le statut.");
-                    }
-                  }
-                  setPendingStatus(null);
-                }}
-              >
-                Confirmer
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          Voir
+        </Button>
       </TableCell>
     </TableRow>
   );

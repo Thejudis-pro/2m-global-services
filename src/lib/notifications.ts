@@ -100,3 +100,30 @@ export function buildOrderWhatsAppLink(order: Order): string {
   ].filter(Boolean);
   return `https://wa.me/${CONTACT.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
+
+// Normalises a customer phone number for wa.me: digits only, Senegal country
+// code (221) added when the number was typed locally ("77 123 45 67").
+export function toWhatsAppNumber(phone: string): string {
+  const digits = phone.replace(/\D/g, "").replace(/^00/, "");
+  return digits.length === 9 ? `221${digits}` : digits;
+}
+
+const CUSTOMER_STATUS_LINES: Partial<Record<Order["status"], string>> = {
+  nouvelle: "Nous avons bien reçu votre commande et la préparons.",
+  en_traitement: "Votre commande est en cours de préparation.",
+  expédiée: "Votre commande est en route vers vous.",
+  terminée: "Votre commande a été livrée, merci pour votre confiance !",
+  annulée: "Votre commande a été annulée.",
+  retour: "Nous avons bien enregistré le retour de votre commande.",
+};
+
+// Builds a wa.me link that opens a chat with the *customer*, pre-filled with a
+// message about their order — used by the admin order detail.
+export function buildCustomerWhatsAppLink(order: Order): string {
+  const lines = [
+    `Bonjour ${order.customerName}, ici 2M Global Services.`,
+    `Commande ${order.orderNumber} — ${formatCFA(order.total)}`,
+    CUSTOMER_STATUS_LINES[order.status] ?? "",
+  ].filter(Boolean);
+  return `https://wa.me/${toWhatsAppNumber(order.phone)}?text=${encodeURIComponent(lines.join("\n"))}`;
+}

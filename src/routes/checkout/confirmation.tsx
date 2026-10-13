@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { formatCFA } from "@/lib/format";
-import { loadLastOrder, type Order } from "@/lib/orders";
+import { PAYMENT_LABELS, loadLastOrder, type Order } from "@/lib/orders";
 import { buildOrderWhatsAppLink } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 
@@ -14,12 +14,6 @@ export const Route = createFileRoute("/checkout/confirmation")({
   }),
   component: ConfirmationPage,
 });
-
-const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
-  cod: "À la livraison",
-  wave: "Wave",
-  "bank-transfer": "Virement bancaire",
-};
 
 function ConfirmationPage() {
   const [order, setOrder] = useState<Order | null>(null);

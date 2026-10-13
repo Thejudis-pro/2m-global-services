@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAllProducts } from "@/lib/product-store";
-import { useAllCategories } from "@/lib/category-store";
+import { useStorefrontCategories } from "@/lib/category-store";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
@@ -33,7 +33,7 @@ const VALUES = [
 
 function AboutPage() {
   const products = useAllProducts();
-  const categories = useAllCategories();
+  const categories = useStorefrontCategories();
   const heroProduct = products.find((p) => p.featured) ?? products[0];
 
   const stats = [
