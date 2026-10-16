@@ -12,7 +12,6 @@ export type ProductDetails = {
   weightKg: number;
   dimensions: Dimensions;
   description: string;
-  inStock: boolean;
   images: GalleryImage[];
 };
 
@@ -104,7 +103,6 @@ export function getProductDetails(product: Product): ProductDetails {
         `espace de travail ou votre intérieur. 2M Global Services sélectionne chaque référence pour son ` +
         `rapport qualité-prix et sa robustesse à l'usage quotidien, avec un service après-vente disponible ` +
         `à Dakar et partout au Sénégal.`,
-    inStock: product.stockQuantity > 0,
     images: buildGallery(product),
   };
 }

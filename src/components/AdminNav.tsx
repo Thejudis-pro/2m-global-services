@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useOrdersQuery, type Order } from "@/lib/orders";
+import { useQuoteRequestsQuery } from "@/lib/quote-requests";
 import { formatCFA } from "@/lib/format";
 
 const ADMIN_LINKS = [
@@ -10,6 +11,7 @@ const ADMIN_LINKS = [
   { to: "/admin/produits", label: "Produits" },
   { to: "/admin/categories", label: "Catégories" },
   { to: "/admin/commandes", label: "Commandes" },
+  { to: "/admin/devis", label: "Demandes de devis" },
   { to: "/admin/avis", label: "Avis" },
 ];
 
@@ -52,6 +54,8 @@ export function AdminNav() {
   const { orders, loaded } = useOrdersQuery();
   useNewOrderAlerts(orders, loaded);
   const newOrdersCount = orders.filter((o) => o.status === "nouvelle").length;
+  const { quotes } = useQuoteRequestsQuery();
+  const newQuotesCount = quotes.filter((q) => q.status === "nouveau").length;
 
   return (
     <nav
@@ -74,6 +78,14 @@ export function AdminNav() {
                 aria-label={`${newOrdersCount} nouvelle${newOrdersCount === 1 ? "" : "s"} commande${newOrdersCount === 1 ? "" : "s"}`}
               >
                 {newOrdersCount}
+              </span>
+            )}
+            {link.to === "/admin/devis" && newQuotesCount > 0 && (
+              <span
+                className="ml-2 rounded-full bg-destructive px-1.5 py-0.5 text-[10px] leading-none text-white"
+                aria-label={`${newQuotesCount} nouvelle${newQuotesCount === 1 ? "" : "s"} demande${newQuotesCount === 1 ? "" : "s"} de devis`}
+              >
+                {newQuotesCount}
               </span>
             )}
           </Link>

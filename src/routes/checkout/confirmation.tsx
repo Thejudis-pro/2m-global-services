@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { formatCFA } from "@/lib/format";
-import { PAYMENT_LABELS, loadLastOrder, type Order } from "@/lib/orders";
+import { loadLastOrder, type Order } from "@/lib/orders";
 import { buildOrderWhatsAppLink } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 
@@ -57,11 +57,8 @@ function ConfirmationPage() {
         <span className="rounded-full border border-input px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
           1 · Livraison
         </span>
-        <span className="rounded-full border border-input px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
-          2 · Paiement
-        </span>
         <span className="rounded-full bg-[var(--color-ink)] px-4 py-2 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-primary-foreground">
-          3 · Confirmation
+          2 · Confirmation
         </span>
       </div>
 
@@ -74,16 +71,11 @@ function ConfirmationPage() {
             Merci, {firstName} !
           </h2>
           <p className="mb-6 max-w-[52ch] text-[15px] leading-[1.7] text-primary-foreground/85">
-            Votre commande #{order.orderNumber} est enregistrée.
-            {order.paymentMethod === "cod"
-              ? " Un conseiller vous appelle dans l'heure pour confirmer"
-              : " Un conseiller vous contactera sous peu pour confirmer"}
-            {order.deliverySlot
-              ? ` le créneau de ${order.deliverySlot.split(" — ")[0].toLowerCase()}.`
-              : "."}
+            Votre commande #{order.orderNumber} est enregistrée. Un conseiller vous contactera sous
+            peu pour confirmer votre commande et convenir de la livraison.
           </p>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="rounded-2xl bg-primary-foreground/10 p-4">
               <div className="text-[12px] text-primary-foreground/70">Total à payer</div>
               <div className="mt-1 font-display text-[18px] font-black text-[var(--color-gold-light)]">
@@ -91,16 +83,8 @@ function ConfirmationPage() {
               </div>
             </div>
             <div className="rounded-2xl bg-primary-foreground/10 p-4">
-              <div className="text-[12px] text-primary-foreground/70">Paiement</div>
-              <div className="mt-1 font-display text-[15px] font-bold">
-                {PAYMENT_LABELS[order.paymentMethod]}
-              </div>
-            </div>
-            <div className="rounded-2xl bg-primary-foreground/10 p-4">
               <div className="text-[12px] text-primary-foreground/70">Livraison</div>
-              <div className="mt-1 font-display text-[15px] font-bold">
-                {order.deliverySlot?.split(" — ")[0] ?? "—"}
-              </div>
+              <div className="mt-1 font-display text-[15px] font-bold">À convenir</div>
             </div>
           </div>
 

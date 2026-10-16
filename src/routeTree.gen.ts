@@ -20,6 +20,7 @@ import { Route as AdminAvisRouteImport } from './routes/admin/avis'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminCommandesRouteImport } from './routes/admin/commandes'
 import { Route as AdminConnexionRouteImport } from './routes/admin/connexion'
+import { Route as AdminDevisRouteImport } from './routes/admin/devis'
 import { Route as AdminProduitsRouteImport } from './routes/admin/produits'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as CheckoutConfirmationRouteImport } from './routes/checkout/confirmation'
@@ -81,6 +82,11 @@ const AdminConnexionRoute = AdminConnexionRouteImport.update({
   path: '/admin/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDevisRoute = AdminDevisRouteImport.update({
+  id: '/admin/devis',
+  path: '/admin/devis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminProduitsRoute = AdminProduitsRouteImport.update({
   id: '/admin/produits',
   path: '/admin/produits',
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/devis': typeof AdminDevisRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
   '/produits/$slug': typeof ProduitsSlugRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/devis': typeof AdminDevisRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
   '/produits/$slug': typeof ProduitsSlugRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/devis': typeof AdminDevisRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/checkout/confirmation': typeof CheckoutConfirmationRoute
   '/produits/$slug': typeof ProduitsSlugRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/devis'
     | '/admin/produits'
     | '/checkout/confirmation'
     | '/produits/$slug'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/devis'
     | '/admin/produits'
     | '/checkout/confirmation'
     | '/produits/$slug'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/devis'
     | '/admin/produits'
     | '/checkout/confirmation'
     | '/produits/$slug'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCommandesRoute: typeof AdminCommandesRoute
   AdminConnexionRoute: typeof AdminConnexionRoute
+  AdminDevisRoute: typeof AdminDevisRoute
   AdminProduitsRoute: typeof AdminProduitsRoute
   CheckoutConfirmationRoute: typeof CheckoutConfirmationRoute
   ProduitsSlugRoute: typeof ProduitsSlugRoute
@@ -317,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/devis': {
+      id: '/admin/devis'
+      path: '/admin/devis'
+      fullPath: '/admin/devis'
+      preLoaderRoute: typeof AdminDevisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/produits': {
       id: '/admin/produits'
       path: '/admin/produits'
@@ -366,6 +386,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCommandesRoute: AdminCommandesRoute,
   AdminConnexionRoute: AdminConnexionRoute,
+  AdminDevisRoute: AdminDevisRoute,
   AdminProduitsRoute: AdminProduitsRoute,
   CheckoutConfirmationRoute: CheckoutConfirmationRoute,
   ProduitsSlugRoute: ProduitsSlugRoute,

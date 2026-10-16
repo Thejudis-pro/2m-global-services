@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Loader2, Star } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
 import { productWhatsAppUrl } from "@/lib/whatsapp";
+import { logWhatsAppQuoteClick } from "@/lib/quote-requests";
 import { getSalePrice } from "@/lib/products";
 import { fetchProductById, useAllProducts } from "@/lib/product-store";
 import { getProductDetails } from "@/lib/product-details";
@@ -220,7 +221,7 @@ function ProductDetailPage() {
   }
 
   function handleAddToCart() {
-    if (!details.inStock || adding) return;
+    if (adding) return;
     setAdding(true);
     window.setTimeout(() => {
       cartStore.add(product.id, quantity);
@@ -280,9 +281,7 @@ function ProductDetailPage() {
       "@type": "Offer",
       priceCurrency: "XOF",
       price: salePrice,
-      availability: details.inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
+      availability: "https://schema.org/InStock",
       url: `/produits/${product.id}`,
     },
     ...(count > 0
@@ -364,17 +363,10 @@ function ProductDetailPage() {
           </p>
 
           <div className="mb-3 flex items-center gap-2">
-            {details.inStock ? (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-                En stock — Dakar
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-destructive">
-                <span className="h-2 w-2 rounded-full bg-destructive" aria-hidden="true" />
-                Rupture de stock
-              </span>
-            )}
+            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+              <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+              En stock — Dakar
+            </span>
           </div>
 
           {product.originalPrice > 0 && (
@@ -410,7 +402,7 @@ function ProductDetailPage() {
                 </div>
                 <button
                   type="button"
-                  disabled={!details.inStock || adding}
+                  disabled={adding}
                   onClick={handleAddToCart}
                   className="flex-1 min-w-[210px] rounded-full bg-[var(--color-ink)] px-[26px] py-[17px] text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary disabled:opacity-45"
                 >
@@ -436,6 +428,7 @@ function ProductDetailPage() {
 
           <a
             href={productWhatsAppUrl(product.name)}
+            onClick={() => void logWhatsAppQuoteClick(product.name)}
             target="_blank"
             rel="noopener noreferrer"
             className="mb-8 block rounded-full border-[1.5px] border-primary px-4 py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
@@ -457,9 +450,7 @@ function ProductDetailPage() {
             </div>
             <div className="flex justify-between border-b border-border py-[15px]">
               <span className="text-muted-foreground">Disponibilité</span>
-              <span className="font-medium text-primary">
-                {details.inStock ? "En stock — Dakar" : "Rupture de stock"}
-              </span>
+              <span className="font-medium text-primary">En stock — Dakar</span>
             </div>
             <div className="flex justify-between py-[15px]">
               <span className="text-muted-foreground">Livraison</span>

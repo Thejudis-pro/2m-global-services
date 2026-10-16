@@ -1,5 +1,5 @@
 import { MapPin, MessageCircle, Phone } from "lucide-react";
-import { DELIVERY_LABELS, PAYMENT_LABELS, type Order } from "@/lib/orders";
+import { DELIVERY_LABELS, type Order } from "@/lib/orders";
 import { buildCustomerWhatsAppLink } from "@/lib/notifications";
 import { formatCFA } from "@/lib/format";
 import { OrderStatusSelect } from "@/components/OrderStatusSelect";
@@ -86,12 +86,6 @@ export function OrderDetailSheet({ order, onClose }: { order: Order | null; onCl
                 </Field>
               </div>
               <Field label="Livraison">{DELIVERY_LABELS[order.deliveryMethod]}</Field>
-              <Field label="Paiement">{PAYMENT_LABELS[order.paymentMethod]}</Field>
-              {order.deliverySlot && (
-                <div className="col-span-2">
-                  <Field label="Créneau">{order.deliverySlot}</Field>
-                </div>
-              )}
             </dl>
 
             <div className="mt-6 border-t border-border pt-5">

@@ -64,8 +64,6 @@ export async function sendOrderNotifications(order: Order): Promise<void> {
     customer_phone: order.phone,
     customer_email: order.email,
     delivery_address: order.address,
-    delivery_slot: order.deliverySlot ?? "",
-    payment_method: order.paymentMethod,
     items_summary: orderSummaryLines(order),
     subtotal: formatCFA(order.subtotal),
     discount_total: formatCFA(order.discountTotal),
@@ -95,7 +93,6 @@ export function buildOrderWhatsAppLink(order: Order): string {
     `Commande ${order.orderNumber}`,
     orderSummaryLines(order),
     `Total : ${formatCFA(order.total)}`,
-    order.deliverySlot ? `Livraison : ${order.deliverySlot}` : "",
     `Client : ${order.customerName} — ${order.phone}`,
   ].filter(Boolean);
   return `https://wa.me/${CONTACT.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;

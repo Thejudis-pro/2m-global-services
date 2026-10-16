@@ -47,14 +47,6 @@ export type Order = {
   city: string;
   region: string;
   deliveryMethod: "pickup" | "delivery";
-  deliverySlot?: string;
-  paymentMethod: "cod" | "wave" | "bank-transfer";
-};
-
-export const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
-  cod: "À la livraison",
-  wave: "Wave",
-  "bank-transfer": "Virement bancaire",
 };
 
 export const DELIVERY_LABELS: Record<Order["deliveryMethod"], string> = {
@@ -86,8 +78,6 @@ type OrderRow = {
   city: string;
   region: string;
   delivery_method: "pickup" | "delivery";
-  delivery_slot: string | null;
-  payment_method: "cod" | "wave" | "bank-transfer";
 };
 
 function rowToOrder(row: OrderRow): Order {
@@ -107,8 +97,6 @@ function rowToOrder(row: OrderRow): Order {
     city: row.city,
     region: row.region,
     deliveryMethod: row.delivery_method,
-    deliverySlot: row.delivery_slot ?? undefined,
-    paymentMethod: row.payment_method,
   };
 }
 
@@ -129,8 +117,6 @@ function orderToRow(order: Order) {
     city: order.city,
     region: order.region,
     delivery_method: order.deliveryMethod,
-    delivery_slot: order.deliverySlot ?? null,
-    payment_method: order.paymentMethod,
   };
 }
 
@@ -140,7 +126,14 @@ export function generateOrderNumber() {
 }
 
 export async function saveOrder(order: Order): Promise<void> {
-  const { error } = await supabase.from("orders").insert(orderToRow(order));
+  const row = orderToRow(order);
+  let { error } = await supabase.from("orders").insert(row);
+  // Compatibility: until migration 20261016000000_quote_requests_and_order_cleanup.sql
+  // has been applied, orders.payment_method is still NOT NULL. Retry once with the
+  // legacy default so no order is lost; remove this once the migration is live.
+  if (error?.code === "23502" && error.message.includes("payment_method")) {
+    ({ error } = await supabase.from("orders").insert({ ...row, payment_method: "cod" }));
+  }
   if (error) throw error;
   if (typeof window !== "undefined") {
     window.sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
@@ -165,7 +158,7 @@ async function fetchOrders(): Promise<Order[]> {
     .select("*")
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data as OrderRow[] | null)?.map(rowToOrder) ?? [];
+  return (data as unknown as OrderRow[] | null)?.map(rowToOrder) ?? [];
 }
 
 // Admin-only hooks. The orders are re-fetched every 30 s (even while the tab is

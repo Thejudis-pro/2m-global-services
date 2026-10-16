@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download } from "lucide-react";
 import { ORDER_STATUS_LABELS, useAllOrders, type Order, type OrderStatus } from "@/lib/orders";
-import { exportOrdersCsv } from "@/lib/csv-export";
+import { exportOrdersXlsx } from "@/lib/excel-export";
 import { formatCFA } from "@/lib/format";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
@@ -77,10 +77,10 @@ function AdminOrdersPage() {
           variant="outline"
           size="sm"
           disabled={filtered.length === 0}
-          onClick={() => exportOrdersCsv(filtered)}
+          onClick={() => void exportOrdersXlsx(filtered)}
         >
           <Download className="h-4 w-4" aria-hidden="true" />
-          Exporter CSV ({filtered.length})
+          Exporter en Excel (.xlsx) ({filtered.length})
         </Button>
       </div>
 

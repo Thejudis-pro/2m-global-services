@@ -18,42 +18,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 // Delivery is agreed directly with the customer, so no fee is added to the order total.
 const DELIVERY_FEE = 0;
 
-const DELIVERY_SLOTS = [
-  {
-    value: "demain-matin",
-    label: "Demain · 9h–13h",
-    note: "Livraison à domicile",
-    deliveryMethod: "delivery" as const,
-    fee: DELIVERY_FEE,
-  },
-  {
-    value: "demain-apresmidi",
-    label: "Demain · 15h–19h",
-    note: "Livraison à domicile",
-    deliveryMethod: "delivery" as const,
-    fee: DELIVERY_FEE,
-  },
-];
-
-const PAYMENT_METHODS = [
-  {
-    value: "cod" as const,
-    label: "Paiement à la livraison",
-    note: "Espèces, Wave ou Orange Money à la réception",
-    badge: "Recommandé",
-  },
-  {
-    value: "wave" as const,
-    label: "Wave — Maintenant",
-    note: "Vous recevez un lien de paiement par SMS",
-  },
-  {
-    value: "bank-transfer" as const,
-    label: "Virement bancaire",
-    note: "Pour les commandes entreprise avec facture",
-  },
-];
-
 const deliverySchema = z.object({
   firstName: z.string().trim().min(2, "Le prénom est requis."),
   lastName: z.string().trim().min(2, "Le nom est requis."),
@@ -72,8 +36,7 @@ export const Route = createFileRoute("/checkout/")({
       { title: "Finaliser ma commande | 2M Global Services" },
       {
         name: "description",
-        content:
-          "Renseignez vos informations, choisissez la livraison et le paiement pour finaliser votre commande.",
+        content: "Renseignez vos informations de livraison pour finaliser votre commande.",
       },
     ],
   }),
@@ -116,21 +79,17 @@ function CheckoutPage() {
   );
   const discountTotal = subtotal - total;
 
-  const [step, setStep] = useState<"livraison" | "paiement">("livraison");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [quartier, setQuartier] = useState("");
   const [landmark, setLandmark] = useState("");
-  const [slot, setSlot] = useState(DELIVERY_SLOTS[0].value);
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "wave" | "bank-transfer">("cod");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const selectedSlot = DELIVERY_SLOTS.find((s) => s.value === slot) ?? DELIVERY_SLOTS[0];
-  const deliveryFee = selectedSlot.fee;
+  const deliveryFee = DELIVERY_FEE;
   const grandTotal = total + deliveryFee;
 
   if (items.length === 0) {
@@ -147,8 +106,9 @@ function CheckoutPage() {
     );
   }
 
-  function handleContinue(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!acceptTerms || submitting) return;
     const parsed = deliverySchema.safeParse({ firstName, lastName, phone, email, quartier });
     if (!parsed.success) {
       const nextErrors: Record<string, string> = {};
@@ -159,15 +119,8 @@ function CheckoutPage() {
       return;
     }
     setErrors({});
-    setStep("paiement");
-  }
-
-  async function handleSubmit() {
-    if (!acceptTerms || submitting) return;
     setSubmitting(true);
 
-    // Payment integration placeholder — connect a real gateway here (Wave / bank
-    // transfer). No real charge is made; this only records the order.
     const order: Order = {
       orderNumber: generateOrderNumber(),
       createdAt: new Date().toISOString(),
@@ -188,9 +141,7 @@ function CheckoutPage() {
       address: landmark ? `${quartier} — ${landmark}` : quartier,
       city: "Dakar",
       region: "Dakar",
-      deliveryMethod: selectedSlot.deliveryMethod,
-      deliverySlot: `${selectedSlot.label} — ${selectedSlot.note}`,
-      paymentMethod,
+      deliveryMethod: "delivery",
     };
 
     try {
@@ -213,163 +164,95 @@ function CheckoutPage() {
       <h1 className="mb-6 text-[30px] md:text-[46px]">Finaliser la commande</h1>
 
       <div className="mb-8 flex flex-wrap gap-2">
-        <StepPill index={1} label="Livraison" active={step === "livraison"} />
-        <StepPill index={2} label="Paiement" active={step === "paiement"} />
-        <StepPill index={3} label="Confirmation" active={false} />
+        <StepPill index={1} label="Livraison" active />
+        <StepPill index={2} label="Confirmation" active={false} />
       </div>
 
       <div className="grid items-start gap-6 lg:grid-cols-[1fr_320px]">
-        {step === "livraison" ? (
-          <form
-            onSubmit={handleContinue}
-            noValidate
-            className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-7"
-          >
-            <h2 className="m-0 mb-5 font-display text-[17px] font-black uppercase">
-              Adresse de livraison
-            </h2>
-            <div className="flex flex-col gap-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <Label htmlFor="firstName">Prénom</Label>
-                  <Input
-                    id="firstName"
-                    className="rounded-xl"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    aria-invalid={Boolean(errors.firstName)}
-                  />
-                  <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.firstName}</p>
-                </div>
-                <div>
-                  <Label htmlFor="lastName">Nom</Label>
-                  <Input
-                    id="lastName"
-                    className="rounded-xl"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    aria-invalid={Boolean(errors.lastName)}
-                  />
-                  <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.lastName}</p>
-                </div>
-              </div>
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-7"
+        >
+          <h2 className="m-0 mb-5 font-display text-[17px] font-black uppercase">
+            Adresse de livraison
+          </h2>
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label htmlFor="phone">Téléphone</Label>
+                <Label htmlFor="firstName">Prénom</Label>
                 <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="77 000 00 00"
+                  id="firstName"
                   className="rounded-xl"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  aria-invalid={Boolean(errors.phone)}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  aria-invalid={Boolean(errors.firstName)}
                 />
-                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.phone}</p>
+                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.firstName}</p>
               </div>
               <div>
-                <Label htmlFor="email">E-mail</Label>
+                <Label htmlFor="lastName">Nom</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="vous@exemple.com"
+                  id="lastName"
                   className="rounded-xl"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  aria-invalid={Boolean(errors.email)}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  aria-invalid={Boolean(errors.lastName)}
                 />
-                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.email}</p>
+                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.lastName}</p>
               </div>
-              <div>
-                <Label htmlFor="quartier">Quartier</Label>
-                <Input
-                  id="quartier"
-                  placeholder="Sacré-Cœur 3, Dakar"
-                  className="rounded-xl"
-                  value={quartier}
-                  onChange={(e) => setQuartier(e.target.value)}
-                  aria-invalid={Boolean(errors.quartier)}
-                />
-                <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.quartier}</p>
-              </div>
-              <div>
-                <Label htmlFor="landmark">Repère / Indications</Label>
-                <Textarea
-                  id="landmark"
-                  rows={3}
-                  placeholder="En face de la pharmacie, 2e étage..."
-                  className="rounded-xl"
-                  value={landmark}
-                  onChange={(e) => setLandmark(e.target.value)}
-                />
-              </div>
-
-              <div className="mt-2 border-t border-border pt-5">
-                <h3 className="mb-3 font-display text-[13px] font-bold uppercase tracking-[0.08em]">
-                  Créneau de livraison
-                </h3>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {DELIVERY_SLOTS.map((s) => (
-                    <button
-                      key={s.value}
-                      type="button"
-                      onClick={() => setSlot(s.value)}
-                      aria-pressed={slot === s.value}
-                      className={`rounded-2xl border p-4 text-left transition-colors ${
-                        slot === s.value
-                          ? "border-[var(--color-ink)] bg-[var(--color-cream-alt)]"
-                          : "border-border hover:border-accent"
-                      }`}
-                    >
-                      <div className="font-display text-[13px] font-extrabold uppercase tracking-[0.02em]">
-                        {s.label}
-                      </div>
-                      <div className="mt-1 text-[13px] text-muted-foreground">{s.note}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Button type="submit" size="lg" className="mt-2 w-full rounded-full">
-                Continuer vers le paiement
-              </Button>
             </div>
-          </form>
-        ) : (
-          <div className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-7">
-            <h2 className="m-0 mb-5 font-display text-[17px] font-black uppercase">
-              Mode de paiement
-            </h2>
-            <div className="flex flex-col gap-3">
-              {PAYMENT_METHODS.map((method) => (
-                <button
-                  key={method.value}
-                  type="button"
-                  onClick={() => setPaymentMethod(method.value)}
-                  aria-pressed={paymentMethod === method.value}
-                  className={`flex items-center justify-between gap-3 rounded-2xl border p-4 text-left transition-colors ${
-                    paymentMethod === method.value
-                      ? "border-[var(--color-ink)] bg-[var(--color-cream-alt)]"
-                      : "border-border hover:border-accent"
-                  }`}
-                >
-                  <span>
-                    <span className="block font-display text-[13px] font-extrabold uppercase tracking-[0.02em]">
-                      {method.label}
-                    </span>
-                    <span className="mt-1 block text-[13px] text-muted-foreground">
-                      {method.note}
-                    </span>
-                  </span>
-                  {method.badge && (
-                    <span className="shrink-0 font-display text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
-                      {method.badge}
-                    </span>
-                  )}
-                </button>
-              ))}
+            <div>
+              <Label htmlFor="phone">Téléphone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="77 000 00 00"
+                className="rounded-xl"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                aria-invalid={Boolean(errors.phone)}
+              />
+              <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.phone}</p>
+            </div>
+            <div>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="vous@exemple.com"
+                className="rounded-xl"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={Boolean(errors.email)}
+              />
+              <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.email}</p>
+            </div>
+            <div>
+              <Label htmlFor="quartier">Quartier</Label>
+              <Input
+                id="quartier"
+                placeholder="Sacré-Cœur 3, Dakar"
+                className="rounded-xl"
+                value={quartier}
+                onChange={(e) => setQuartier(e.target.value)}
+                aria-invalid={Boolean(errors.quartier)}
+              />
+              <p className="mt-1 min-h-[1rem] text-xs text-destructive">{errors.quartier}</p>
+            </div>
+            <div>
+              <Label htmlFor="landmark">Repère / Indications</Label>
+              <Textarea
+                id="landmark"
+                rows={3}
+                placeholder="En face de la pharmacie, 2e étage..."
+                className="rounded-xl"
+                value={landmark}
+                onChange={(e) => setLandmark(e.target.value)}
+              />
             </div>
 
-            <label className="mt-5 flex items-start gap-2 text-[14px] text-muted-foreground">
+            <label className="mt-2 flex items-start gap-2 border-t border-border pt-5 text-[14px] text-muted-foreground">
               <Checkbox
                 checked={acceptTerms}
                 onCheckedChange={(checked) => setAcceptTerms(checked === true)}
@@ -378,27 +261,16 @@ function CheckoutPage() {
               J&apos;accepte les conditions de vente.
             </label>
 
-            <div className="mt-5 flex gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-full"
-                onClick={() => setStep("livraison")}
-              >
-                Retour
-              </Button>
-              <Button
-                type="button"
-                className="flex-1 rounded-full"
-                disabled={!acceptTerms || submitting}
-                onClick={handleSubmit}
-              >
-                {submitting ? "Validation en cours..." : "Valider la commande"}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              size="lg"
+              className="mt-2 w-full rounded-full"
+              disabled={!acceptTerms || submitting}
+            >
+              {submitting ? "Validation en cours..." : "Valider la commande"}
+            </Button>
           </div>
-        )}
-
+        </form>
         <div className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-6">
           <div className="mb-4 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             Votre commande

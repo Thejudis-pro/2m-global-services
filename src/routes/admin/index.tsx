@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAllOrders, ORDER_STATUS_LABELS, isSaleStatus, type OrderStatus } from "@/lib/orders";
 import { useAllProducts } from "@/lib/product-store";
+import { useQuoteRequestsQuery } from "@/lib/quote-requests";
 import { useAllCategories } from "@/lib/category-store";
 import { formatCFA } from "@/lib/format";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
@@ -31,6 +32,8 @@ function AdminDashboard() {
   const orders = useAllOrders();
   const products = useAllProducts();
   const categories = useAllCategories();
+  const { quotes } = useQuoteRequestsQuery();
+  const newQuotes = quotes.filter((q) => q.status === "nouveau").length;
   const [days] = useState(PERIOD_DAYS);
 
   const stats = useMemo(() => {
@@ -47,7 +50,6 @@ function AdminDashboard() {
     const revenue = periodOrders.reduce((sum, o) => sum + o.total, 0);
     const toPrepare = periodOrders.filter((o) => o.status === "nouvelle").length;
     const avgBasket = periodOrders.length > 0 ? Math.round(revenue / periodOrders.length) : 0;
-    const outOfStock = products.filter((p) => p.stockQuantity === 0);
 
     const dailyTotals = Array.from({ length: days }, (_, i) => {
       const day = new Date(periodStart);
@@ -91,23 +93,16 @@ function AdminDashboard() {
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5);
 
-    const lowStock = [...products]
-      .filter((p) => p.stockQuantity <= 5)
-      .sort((a, b) => a.stockQuantity - b.stockQuantity)
-      .slice(0, 4);
-
     return {
       revenue,
       ordersCount: periodOrders.length,
       cancelledCount,
       toPrepare,
       avgBasket,
-      outOfStock,
       dailyTotals,
       maxDaily,
       topCategories,
       recentOrders,
-      lowStock,
     };
   }, [orders, products, categories, days]);
 
@@ -172,17 +167,18 @@ function AdminDashboard() {
             {formatCFA(stats.avgBasket)}
           </div>
         </div>
-        <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
+        <Link
+          to="/admin/devis"
+          className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6 hover:border-accent"
+        >
           <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Ruptures
+            Demandes de devis
           </div>
-          <div className="mt-2 font-display text-[30px] font-black text-destructive">
-            {stats.outOfStock.length}
-          </div>
+          <div className="mt-2 font-display text-[30px] font-black">{newQuotes}</div>
           <div className="mt-1 text-[13px] text-muted-foreground">
-            références à réapprovisionner
+            nouvelle{newQuotes === 1 ? "" : "s"} à traiter
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.4fr_1fr]">
@@ -246,7 +242,7 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="mb-6 rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
+      <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="m-0 text-[16px]">Commandes récentes</h2>
           <Link
@@ -292,47 +288,6 @@ function AdminDashboard() {
         ) : (
           <p className="py-8 text-center text-sm text-muted-foreground">
             Aucune commande enregistrée pour le moment.
-          </p>
-        )}
-      </div>
-
-      <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="m-0 text-[16px]">Stock à surveiller</h2>
-          <Link
-            to="/admin/produits"
-            className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-accent"
-          >
-            Gérer le catalogue
-          </Link>
-        </div>
-        {stats.lowStock.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {stats.lowStock.map((p) => (
-              <Link
-                key={p.id}
-                to="/admin/produits"
-                className="flex items-center gap-3 rounded-2xl border border-border bg-background p-3 hover:border-accent"
-              >
-                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-[var(--color-placeholder)]">
-                  <img src={p.image} alt={p.alt} className="h-full w-full object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <div className="truncate text-[13px] font-semibold leading-tight">{p.name}</div>
-                  <div
-                    className={`text-[12px] ${p.stockQuantity === 0 ? "text-destructive" : "text-accent"}`}
-                  >
-                    {p.stockQuantity === 0
-                      ? "Rupture — 0 en stock"
-                      : `${p.stockQuantity} restant${p.stockQuantity === 1 ? "" : "s"}`}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="py-8 text-center text-sm text-muted-foreground">
-            Tous les produits sont bien approvisionnés.
           </p>
         )}
       </div>

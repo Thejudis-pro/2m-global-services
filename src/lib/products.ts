@@ -309,7 +309,6 @@ export type Product = {
   popularity: number;
   isNew: boolean;
   createdAt: string;
-  stockQuantity: number;
   featured?: boolean;
   sku?: string;
   weightKg?: number;
@@ -341,7 +340,6 @@ export const PRODUCTS: Product[] = [
     popularity: 82,
     isNew: false,
     createdAt: "2025-11-02",
-    stockQuantity: 12,
     featured: true,
   },
   {
@@ -371,7 +369,6 @@ export const PRODUCTS: Product[] = [
     popularity: 70,
     isNew: true,
     createdAt: "2026-07-10",
-    stockQuantity: 18,
   },
   {
     id: "bureau-secretaire-compact-chene",
@@ -386,7 +383,6 @@ export const PRODUCTS: Product[] = [
     popularity: 65,
     isNew: false,
     createdAt: "2025-09-18",
-    stockQuantity: 25,
   },
   {
     id: "bureau-agent-simple-ligne",
@@ -405,7 +401,6 @@ export const PRODUCTS: Product[] = [
     popularity: 48,
     isNew: false,
     createdAt: "2025-06-12",
-    stockQuantity: 30,
   },
   {
     id: "caisson-rangement-3-tiroirs",
@@ -420,7 +415,6 @@ export const PRODUCTS: Product[] = [
     popularity: 55,
     isNew: false,
     createdAt: "2025-08-05",
-    stockQuantity: 40,
   },
   {
     id: "chaise-direction-ergonomique-noire",
@@ -445,7 +439,6 @@ export const PRODUCTS: Product[] = [
     popularity: 90,
     isNew: false,
     createdAt: "2025-12-01",
-    stockQuantity: 35,
   },
   {
     id: "chaise-direction-cuir-marron",
@@ -472,7 +465,6 @@ export const PRODUCTS: Product[] = [
     popularity: 58,
     isNew: false,
     createdAt: "2025-05-20",
-    stockQuantity: 20,
   },
   {
     id: "fauteuil-direction-confort-plus",
@@ -487,7 +479,6 @@ export const PRODUCTS: Product[] = [
     popularity: 95,
     isNew: false,
     createdAt: "2025-10-14",
-    stockQuantity: 28,
     featured: true,
   },
   {
@@ -503,7 +494,6 @@ export const PRODUCTS: Product[] = [
     popularity: 45,
     isNew: false,
     createdAt: "2025-04-11",
-    stockQuantity: 45,
   },
   {
     id: "armoire-metallique-4-portes",
@@ -517,7 +507,6 @@ export const PRODUCTS: Product[] = [
     popularity: 88,
     isNew: false,
     createdAt: "2025-10-02",
-    stockQuantity: 19,
     featured: true,
   },
   {
@@ -542,7 +531,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: false,
     createdAt: "2024-12-14",
-    stockQuantity: 27,
   },
   {
     id: "smartphone-samsung-galaxy-s24-ultra",
@@ -556,7 +544,6 @@ export const PRODUCTS: Product[] = [
     popularity: 70,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 8,
   },
   {
     id: "iphone-16-pro-max-scelle",
@@ -570,7 +557,6 @@ export const PRODUCTS: Product[] = [
     popularity: 88,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 6,
   },
   {
     id: "iphone-14-pro-scelle",
@@ -584,7 +570,6 @@ export const PRODUCTS: Product[] = [
     popularity: 65,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 5,
   },
   {
     id: "iphone-14-pro-occasion",
@@ -598,7 +583,6 @@ export const PRODUCTS: Product[] = [
     popularity: 52,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 3,
   },
   {
     id: "iphone-13-pro-occasion",
@@ -612,7 +596,6 @@ export const PRODUCTS: Product[] = [
     popularity: 48,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 10,
   },
   {
     id: "smartphone-google-pixel-9-pro",
@@ -626,7 +609,6 @@ export const PRODUCTS: Product[] = [
     popularity: 55,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 7,
   },
   {
     id: "airpods-pro-2-magsafe",
@@ -644,7 +626,6 @@ export const PRODUCTS: Product[] = [
     popularity: 75,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 14,
   },
   {
     id: "casque-airpods-max",
@@ -658,7 +639,6 @@ export const PRODUCTS: Product[] = [
     popularity: 60,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 9,
   },
   {
     id: "chargeur-iphone-15-promax-35w",
@@ -672,7 +652,6 @@ export const PRODUCTS: Product[] = [
     popularity: 40,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 22,
   },
   {
     id: "chargeur-usbc-apple-cable",
@@ -686,7 +665,6 @@ export const PRODUCTS: Product[] = [
     popularity: 42,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 20,
   },
   {
     id: "cable-usbc-apple-60w",
@@ -700,7 +678,6 @@ export const PRODUCTS: Product[] = [
     popularity: 35,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 25,
   },
   {
     id: "powerbank-oraimo-20000mah",
@@ -714,7 +691,6 @@ export const PRODUCTS: Product[] = [
     popularity: 58,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 18,
   },
   {
     id: "powerbank-calus-50000mah",
@@ -728,7 +704,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 12,
   },
   {
     id: "coque-iphone-17-promax-techwoven",
@@ -742,7 +717,6 @@ export const PRODUCTS: Product[] = [
     popularity: 38,
     isNew: true,
     createdAt: "2026-09-03",
-    stockQuantity: 16,
   },
   {
     id: "etui-cuir-airpods-pro",
@@ -756,7 +730,6 @@ export const PRODUCTS: Product[] = [
     popularity: 30,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 28,
   },
   {
     id: "protection-camera-iphone-14pro",
@@ -770,7 +743,6 @@ export const PRODUCTS: Product[] = [
     popularity: 25,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 35,
   },
   {
     id: "patins-silicone-multicolores",
@@ -784,7 +756,6 @@ export const PRODUCTS: Product[] = [
     popularity: 20,
     isNew: false,
     createdAt: "2026-09-03",
-    stockQuantity: 40,
   },
   {
     id: "manette-ps4-multicolore",
@@ -798,7 +769,6 @@ export const PRODUCTS: Product[] = [
     popularity: 45,
     isNew: true,
     createdAt: "2026-09-04",
-    stockQuantity: 15,
   },
   {
     id: "powerbank-20000mah-ecran-led",
@@ -812,7 +782,6 @@ export const PRODUCTS: Product[] = [
     popularity: 47,
     isNew: true,
     createdAt: "2026-09-04",
-    stockQuantity: 20,
   },
   {
     id: "batterie-magsafe-iphone",
@@ -830,7 +799,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-04",
-    stockQuantity: 17,
   },
   {
     id: "airpods-4-anc",
@@ -844,7 +812,6 @@ export const PRODUCTS: Product[] = [
     popularity: 68,
     isNew: true,
     createdAt: "2026-09-04",
-    stockQuantity: 11,
   },
   {
     id: "airpods-2eme-generation",
@@ -865,7 +832,6 @@ export const PRODUCTS: Product[] = [
     popularity: 44,
     isNew: false,
     createdAt: "2026-09-04",
-    stockQuantity: 19,
   },
   {
     id: "chargeur-samsung-45w-pd",
@@ -886,7 +852,6 @@ export const PRODUCTS: Product[] = [
     popularity: 46,
     isNew: false,
     createdAt: "2026-09-04",
-    stockQuantity: 24,
   },
   {
     id: "bureau-direction-prestige-led",
@@ -911,7 +876,6 @@ export const PRODUCTS: Product[] = [
     popularity: 85,
     isNew: true,
     createdAt: "2026-08-20",
-    stockQuantity: 6,
     featured: true,
   },
   {
@@ -937,7 +901,6 @@ export const PRODUCTS: Product[] = [
     popularity: 54,
     isNew: false,
     createdAt: "2025-09-02",
-    stockQuantity: 11,
   },
   {
     id: "bureau-direction-anthracite-design",
@@ -962,7 +925,6 @@ export const PRODUCTS: Product[] = [
     popularity: 61,
     isNew: false,
     createdAt: "2025-10-28",
-    stockQuantity: 9,
   },
   {
     id: "bureau-direction-gris-blanc",
@@ -977,7 +939,6 @@ export const PRODUCTS: Product[] = [
     popularity: 47,
     isNew: false,
     createdAt: "2025-06-19",
-    stockQuantity: 13,
   },
   {
     id: "bureau-metallique-tanker-blanc",
@@ -992,7 +953,6 @@ export const PRODUCTS: Product[] = [
     popularity: 56,
     isNew: false,
     createdAt: "2025-08-30",
-    stockQuantity: 14,
   },
   {
     id: "table-reunion-triangulaire-xxl",
@@ -1007,7 +967,6 @@ export const PRODUCTS: Product[] = [
     popularity: 72,
     isNew: true,
     createdAt: "2026-08-10",
-    stockQuantity: 3,
     featured: true,
   },
   {
@@ -1023,7 +982,6 @@ export const PRODUCTS: Product[] = [
     popularity: 68,
     isNew: true,
     createdAt: "2026-08-05",
-    stockQuantity: 2,
   },
   {
     id: "table-reunion-ovale-compacte",
@@ -1038,7 +996,6 @@ export const PRODUCTS: Product[] = [
     popularity: 43,
     isNew: false,
     createdAt: "2025-07-14",
-    stockQuantity: 7,
   },
   {
     id: "caisson-metallique-3-tiroirs",
@@ -1053,7 +1010,6 @@ export const PRODUCTS: Product[] = [
     popularity: 46,
     isNew: false,
     createdAt: "2025-05-16",
-    stockQuantity: 26,
   },
   {
     id: "caisson-mobile-3-tiroirs-bleu",
@@ -1068,7 +1024,6 @@ export const PRODUCTS: Product[] = [
     popularity: 38,
     isNew: false,
     createdAt: "2025-03-22",
-    stockQuantity: 31,
   },
   {
     id: "chariot-informatique-mobile",
@@ -1083,7 +1038,6 @@ export const PRODUCTS: Product[] = [
     popularity: 34,
     isNew: false,
     createdAt: "2025-02-11",
-    stockQuantity: 16,
   },
   {
     id: "banc-attente-3places-noir",
@@ -1105,7 +1059,6 @@ export const PRODUCTS: Product[] = [
     popularity: 42,
     isNew: false,
     createdAt: "2025-09-24",
-    stockQuantity: 10,
   },
   {
     id: "armoire-metallique-2-portes-blanche",
@@ -1130,7 +1083,6 @@ export const PRODUCTS: Product[] = [
     popularity: 58,
     isNew: false,
     createdAt: "2025-06-08",
-    stockQuantity: 23,
   },
   {
     id: "armoire-metallique-grise-2-portes",
@@ -1144,7 +1096,6 @@ export const PRODUCTS: Product[] = [
     popularity: 41,
     isNew: false,
     createdAt: "2025-04-02",
-    stockQuantity: 18,
   },
   {
     id: "classeur-metallique-5-tiroirs",
@@ -1168,7 +1119,6 @@ export const PRODUCTS: Product[] = [
     popularity: 64,
     isNew: false,
     createdAt: "2025-10-20",
-    stockQuantity: 15,
     featured: true,
   },
   {
@@ -1190,7 +1140,6 @@ export const PRODUCTS: Product[] = [
     popularity: 48,
     isNew: false,
     createdAt: "2025-05-27",
-    stockQuantity: 20,
   },
   {
     id: "classeur-metallique-multi-tiroirs",
@@ -1204,7 +1153,6 @@ export const PRODUCTS: Product[] = [
     popularity: 35,
     isNew: false,
     createdAt: "2025-01-30",
-    stockQuantity: 9,
   },
   {
     id: "armoire-vestiaire-15-casiers",
@@ -1232,7 +1180,6 @@ export const PRODUCTS: Product[] = [
     popularity: 53,
     isNew: false,
     createdAt: "2025-11-18",
-    stockQuantity: 6,
   },
   {
     id: "armoire-rideau-metallique",
@@ -1257,7 +1204,6 @@ export const PRODUCTS: Product[] = [
     popularity: 39,
     isNew: false,
     createdAt: "2025-04-19",
-    stockQuantity: 12,
   },
   {
     id: "armoire-vitree-bibliotheque",
@@ -1271,7 +1217,6 @@ export const PRODUCTS: Product[] = [
     popularity: 67,
     isNew: true,
     createdAt: "2026-07-28",
-    stockQuantity: 8,
   },
   {
     id: "etagere-industrielle-noire",
@@ -1296,7 +1241,6 @@ export const PRODUCTS: Product[] = [
     popularity: 51,
     isNew: false,
     createdAt: "2025-09-14",
-    stockQuantity: 14,
   },
   {
     id: "etagere-rangement-modulable",
@@ -1310,7 +1254,6 @@ export const PRODUCTS: Product[] = [
     popularity: 40,
     isNew: false,
     createdAt: "2025-03-15",
-    stockQuantity: 19,
   },
   {
     id: "armoire-rangement-etageres-ajustables",
@@ -1324,7 +1267,6 @@ export const PRODUCTS: Product[] = [
     popularity: 44,
     isNew: false,
     createdAt: "2025-02-24",
-    stockQuantity: 21,
   },
   {
     id: "chaise-visiteur-simili-cuir-noir",
@@ -1349,7 +1291,6 @@ export const PRODUCTS: Product[] = [
     popularity: 36,
     isNew: false,
     createdAt: "2025-09-12",
-    stockQuantity: 34,
   },
   {
     id: "chaise-visiteur-maille-noire-chrome",
@@ -1374,7 +1315,6 @@ export const PRODUCTS: Product[] = [
     popularity: 42,
     isNew: false,
     createdAt: "2025-06-24",
-    stockQuantity: 29,
   },
   {
     id: "chaise-visiteur-cuir-marron",
@@ -1396,7 +1336,6 @@ export const PRODUCTS: Product[] = [
     popularity: 39,
     isNew: false,
     createdAt: "2025-08-02",
-    stockQuantity: 26,
   },
   {
     id: "chaise-visiteur-cuir-noir-chrome",
@@ -1421,7 +1360,6 @@ export const PRODUCTS: Product[] = [
     popularity: 47,
     isNew: false,
     createdAt: "2025-07-19",
-    stockQuantity: 31,
   },
   {
     id: "chaise-visiteur-empilable-noire",
@@ -1440,7 +1378,6 @@ export const PRODUCTS: Product[] = [
     popularity: 33,
     isNew: false,
     createdAt: "2025-03-14",
-    stockQuantity: 48,
   },
   {
     id: "chaise-visiteur-empilable-resille-noire",
@@ -1465,7 +1402,6 @@ export const PRODUCTS: Product[] = [
     popularity: 28,
     isNew: false,
     createdAt: "2025-02-06",
-    stockQuantity: 52,
   },
   {
     id: "chaise-pliante-maille-noire",
@@ -1487,7 +1423,6 @@ export const PRODUCTS: Product[] = [
     popularity: 30,
     isNew: false,
     createdAt: "2025-01-15",
-    stockQuantity: 60,
   },
   {
     id: "chaise-pliante-tablette-ecritoire-noire",
@@ -1502,7 +1437,6 @@ export const PRODUCTS: Product[] = [
     popularity: 32,
     isNew: true,
     createdAt: "2026-08-20",
-    stockQuantity: 40,
   },
   {
     id: "chaise-formation-tablette-noire",
@@ -1527,7 +1461,6 @@ export const PRODUCTS: Product[] = [
     popularity: 35,
     isNew: true,
     createdAt: "2026-08-18",
-    stockQuantity: 37,
   },
   {
     id: "chaise-conference-ecritoire-bordeaux",
@@ -1542,7 +1475,6 @@ export const PRODUCTS: Product[] = [
     popularity: 38,
     isNew: true,
     createdAt: "2026-08-22",
-    stockQuantity: 18,
   },
   {
     id: "chaise-banquet-empilable-multicolore",
@@ -1557,7 +1489,6 @@ export const PRODUCTS: Product[] = [
     popularity: 27,
     isNew: false,
     createdAt: "2025-04-08",
-    stockQuantity: 80,
   },
   {
     id: "chaise-bureau-maille-noire-appuietete",
@@ -1582,7 +1513,6 @@ export const PRODUCTS: Product[] = [
     popularity: 54,
     isNew: false,
     createdAt: "2025-06-02",
-    stockQuantity: 24,
   },
   {
     id: "chaise-direction-cuir-noir-accoudoirs-chrome",
@@ -1607,7 +1537,6 @@ export const PRODUCTS: Product[] = [
     popularity: 51,
     isNew: false,
     createdAt: "2025-10-27",
-    stockQuantity: 17,
   },
   {
     id: "chaise-direction-noire-cuir-haut-dossier",
@@ -1622,7 +1551,6 @@ export const PRODUCTS: Product[] = [
     popularity: 46,
     isNew: false,
     createdAt: "2025-09-05",
-    stockQuantity: 20,
   },
   {
     id: "chaise-direction-maille-noire-appuietete",
@@ -1637,7 +1565,6 @@ export const PRODUCTS: Product[] = [
     popularity: 44,
     isNew: true,
     createdAt: "2026-08-14",
-    stockQuantity: 22,
   },
   {
     id: "fauteuil-direction-cuir-marron-chrome",
@@ -1652,7 +1579,6 @@ export const PRODUCTS: Product[] = [
     popularity: 56,
     isNew: false,
     createdAt: "2025-11-20",
-    stockQuantity: 13,
   },
   {
     id: "fauteuil-visiteur-cuir-matelasse-noir",
@@ -1667,7 +1593,6 @@ export const PRODUCTS: Product[] = [
     popularity: 37,
     isNew: false,
     createdAt: "2025-05-16",
-    stockQuantity: 21,
   },
   {
     id: "fauteuil-direction-matelasse-marron",
@@ -1682,7 +1607,6 @@ export const PRODUCTS: Product[] = [
     popularity: 53,
     isNew: false,
     createdAt: "2025-12-09",
-    stockQuantity: 11,
   },
   {
     id: "ensemble-fauteuils-cuir-noir",
@@ -1709,7 +1633,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: false,
     createdAt: "2025-09-24",
-    stockQuantity: 9,
   },
   {
     id: "ensemble-fauteuils-cuir-gris",
@@ -1724,7 +1647,6 @@ export const PRODUCTS: Product[] = [
     popularity: 41,
     isNew: false,
     createdAt: "2025-08-30",
-    stockQuantity: 8,
   },
   {
     id: "ensemble-fauteuils-cuir-marron",
@@ -1752,7 +1674,6 @@ export const PRODUCTS: Product[] = [
     popularity: 55,
     isNew: false,
     createdAt: "2025-10-06",
-    stockQuantity: 7,
   },
   {
     id: "bureau-direction-lshape-noyer-gris",
@@ -1767,7 +1688,6 @@ export const PRODUCTS: Product[] = [
     popularity: 57,
     isNew: false,
     createdAt: "2025-11-14",
-    stockQuantity: 8,
   },
   {
     id: "bureau-direction-suspensions-dorees",
@@ -1782,7 +1702,6 @@ export const PRODUCTS: Product[] = [
     popularity: 61,
     isNew: true,
     createdAt: "2026-07-28",
-    stockQuantity: 5,
   },
   {
     id: "bureau-direction-gris-led",
@@ -1815,7 +1734,6 @@ export const PRODUCTS: Product[] = [
     popularity: 59,
     isNew: true,
     createdAt: "2026-08-01",
-    stockQuantity: 4,
   },
   {
     id: "bureau-direction-anthracite-ambiance-salon",
@@ -1830,7 +1748,6 @@ export const PRODUCTS: Product[] = [
     popularity: 48,
     isNew: false,
     createdAt: "2025-10-20",
-    stockQuantity: 6,
   },
   {
     id: "bureau-direction-caisson-gris",
@@ -1845,7 +1762,6 @@ export const PRODUCTS: Product[] = [
     popularity: 45,
     isNew: false,
     createdAt: "2025-09-01",
-    stockQuantity: 9,
   },
   {
     id: "bureau-direction-blanc-bois-led",
@@ -1860,7 +1776,6 @@ export const PRODUCTS: Product[] = [
     popularity: 52,
     isNew: true,
     createdAt: "2026-07-20",
-    stockQuantity: 5,
   },
   {
     id: "bureau-direction-bois-led",
@@ -1875,7 +1790,6 @@ export const PRODUCTS: Product[] = [
     popularity: 49,
     isNew: false,
     createdAt: "2025-11-06",
-    stockQuantity: 6,
   },
   {
     id: "bureau-direction-bois-caisson-lamelles",
@@ -1890,7 +1804,6 @@ export const PRODUCTS: Product[] = [
     popularity: 40,
     isNew: false,
     createdAt: "2025-06-18",
-    stockQuantity: 10,
   },
   {
     id: "bureau-direction-premium-led-chaises-bordeaux",
@@ -1919,7 +1832,6 @@ export const PRODUCTS: Product[] = [
     popularity: 63,
     isNew: true,
     createdAt: "2026-08-12",
-    stockQuantity: 3,
   },
   {
     id: "bureau-accueil-blanc-bois",
@@ -1934,7 +1846,6 @@ export const PRODUCTS: Product[] = [
     popularity: 41,
     isNew: true,
     createdAt: "2026-07-25",
-    stockQuantity: 4,
   },
   {
     id: "bureau-agent-noyer-1m20",
@@ -1949,7 +1860,6 @@ export const PRODUCTS: Product[] = [
     popularity: 38,
     isNew: false,
     createdAt: "2025-07-02",
-    stockQuantity: 19,
   },
   {
     id: "bureau-agent-noyer-1m40",
@@ -1964,7 +1874,6 @@ export const PRODUCTS: Product[] = [
     popularity: 40,
     isNew: false,
     createdAt: "2025-07-14",
-    stockQuantity: 16,
   },
   {
     id: "bureau-agent-noyer-panneaux-nervures",
@@ -1979,7 +1888,6 @@ export const PRODUCTS: Product[] = [
     popularity: 37,
     isNew: false,
     createdAt: "2025-05-11",
-    stockQuantity: 18,
   },
   {
     id: "poste-travail-double-cloison",
@@ -1994,7 +1902,6 @@ export const PRODUCTS: Product[] = [
     popularity: 44,
     isNew: true,
     createdAt: "2026-08-08",
-    stockQuantity: 7,
   },
   {
     id: "bureau-secretaire-gris-caisson-roulant",
@@ -2009,7 +1916,6 @@ export const PRODUCTS: Product[] = [
     popularity: 33,
     isNew: false,
     createdAt: "2025-04-22",
-    stockQuantity: 23,
   },
   {
     id: "armoire-bois-2portes-noyer",
@@ -2023,7 +1929,6 @@ export const PRODUCTS: Product[] = [
     popularity: 42,
     isNew: false,
     createdAt: "2025-08-17",
-    stockQuantity: 14,
   },
   {
     id: "armoire-rideau-metallique-1m",
@@ -2041,7 +1946,6 @@ export const PRODUCTS: Product[] = [
     popularity: 36,
     isNew: false,
     createdAt: "2025-06-09",
-    stockQuantity: 15,
   },
   {
     id: "armoire-rideau-metallique-2m",
@@ -2059,7 +1963,6 @@ export const PRODUCTS: Product[] = [
     popularity: 43,
     isNew: false,
     createdAt: "2025-07-27",
-    stockQuantity: 11,
   },
   {
     id: "armoire-vestiaire-12casiers",
@@ -2080,7 +1983,6 @@ export const PRODUCTS: Product[] = [
     popularity: 47,
     isNew: false,
     createdAt: "2025-09-15",
-    stockQuantity: 10,
   },
   {
     id: "armoire-vestiaire-12casiers-beige",
@@ -2094,7 +1996,6 @@ export const PRODUCTS: Product[] = [
     popularity: 39,
     isNew: false,
     createdAt: "2025-09-22",
-    stockQuantity: 8,
   },
   {
     id: "armoire-vestiaire-9casiers",
@@ -2115,7 +2016,6 @@ export const PRODUCTS: Product[] = [
     popularity: 40,
     isNew: false,
     createdAt: "2025-08-28",
-    stockQuantity: 12,
   },
   {
     id: "armoire-vitree-bibliotheque-noir-blanc",
@@ -2129,7 +2029,6 @@ export const PRODUCTS: Product[] = [
     popularity: 46,
     isNew: false,
     createdAt: "2025-10-11",
-    stockQuantity: 9,
   },
   {
     id: "canape-3places-cuir-beige",
@@ -2144,7 +2043,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-07-30",
-    stockQuantity: 6,
   },
   {
     id: "canape-3places-cuir-marron",
@@ -2159,7 +2057,6 @@ export const PRODUCTS: Product[] = [
     popularity: 48,
     isNew: false,
     createdAt: "2025-11-24",
-    stockQuantity: 5,
   },
   {
     id: "table-reunion-rectangulaire",
@@ -2174,7 +2071,6 @@ export const PRODUCTS: Product[] = [
     popularity: 42,
     isNew: false,
     createdAt: "2025-08-14",
-    stockQuantity: 7,
   },
   {
     id: "table-reunion-rectangulaire-bicolore",
@@ -2189,7 +2085,6 @@ export const PRODUCTS: Product[] = [
     popularity: 44,
     isNew: true,
     createdAt: "2026-07-12",
-    stockQuantity: 5,
   },
   {
     id: "parfum-takeoff-capri",
@@ -2204,7 +2099,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2220,7 +2114,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2236,7 +2129,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2252,7 +2144,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2268,7 +2159,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2284,7 +2174,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2300,7 +2189,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2316,7 +2204,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2332,7 +2219,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2348,7 +2234,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2364,7 +2249,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2380,7 +2264,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2396,7 +2279,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2412,7 +2294,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 100 ml — collection Scent of Journey.",
   },
   {
@@ -2428,7 +2309,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2444,7 +2324,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — collection Scent of Journey.",
   },
   {
@@ -2460,7 +2339,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2476,7 +2354,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme — 50 ml.",
   },
   {
@@ -2492,7 +2369,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2508,7 +2384,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2524,7 +2399,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme — 50 ml.",
   },
   {
@@ -2540,7 +2414,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2556,7 +2429,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2572,7 +2444,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 50 ml.",
   },
   {
@@ -2588,7 +2459,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 50 ml.",
   },
   {
@@ -2604,7 +2474,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme — 50 ml.",
   },
   {
@@ -2620,7 +2489,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2636,7 +2504,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2652,7 +2519,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme — 50 ml.",
   },
   {
@@ -2668,7 +2534,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2684,7 +2549,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2700,7 +2564,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme — 50 ml.",
   },
   {
@@ -2716,7 +2579,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2732,7 +2594,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2748,7 +2609,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 50 ml.",
   },
   {
@@ -2764,7 +2624,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum — 50 ml.",
   },
   {
@@ -2780,7 +2639,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2796,7 +2654,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2812,7 +2669,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2828,7 +2684,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe — 50 ml.",
   },
   {
@@ -2844,7 +2699,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-12",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme — 50 ml.",
   },
   {
@@ -2860,7 +2714,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe vaporisateur — 40 ml.",
   },
   {
@@ -2876,7 +2729,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Extrait de Parfum Unisexe.",
   },
   {
@@ -2892,7 +2744,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum — 40 ml.",
   },
   {
@@ -2908,7 +2759,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -2924,7 +2774,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -2940,7 +2789,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -2956,7 +2804,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -2972,7 +2819,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -2988,7 +2834,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -3004,7 +2849,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -3020,7 +2864,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum.",
   },
   {
@@ -3036,7 +2879,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum.",
   },
   {
@@ -3052,7 +2894,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3068,7 +2909,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3084,7 +2924,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3100,7 +2939,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3116,7 +2954,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3132,7 +2969,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3148,7 +2984,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3164,7 +2999,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -3180,7 +3014,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum.",
   },
   {
@@ -3196,7 +3029,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -3212,7 +3044,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Femme.",
   },
   {
@@ -3228,7 +3059,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Unisexe.",
   },
   {
@@ -3244,7 +3074,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3260,7 +3089,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3276,7 +3104,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3292,7 +3119,6 @@ export const PRODUCTS: Product[] = [
     popularity: 50,
     isNew: true,
     createdAt: "2026-09-23",
-    stockQuantity: 15,
     description: "Eau de Parfum Homme.",
   },
   {
@@ -3308,7 +3134,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-chaises-cuir-marron-direction-visiteurs",
@@ -3323,7 +3148,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-chaises-matelassees-marron",
@@ -3348,7 +3172,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-chaises-matelassees-noir",
@@ -3363,7 +3186,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-chaises-cuir-noir-nervurees",
@@ -3378,7 +3200,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-cuir-noir-appui-tete-nervuree",
@@ -3393,7 +3214,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-cuir-noir-dossier-plisse",
@@ -3408,7 +3228,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-noire-haut-dossier-cadre-chrome",
@@ -3423,7 +3242,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-noire-couture-centrale",
@@ -3438,7 +3256,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-taupe-haut-dossier",
@@ -3453,7 +3270,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-ivoire-accoudoirs-aluminium",
@@ -3468,7 +3284,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-taupe-dossier-arche",
@@ -3483,7 +3298,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-verte-haut-dossier",
@@ -3498,7 +3312,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-direction-camel-matelassee",
@@ -3513,7 +3326,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-direction-gris-vert-et-camel",
@@ -3528,7 +3340,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-direction-noire-et-marron-nervurees",
@@ -3543,7 +3354,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-direction-nervurees-blanc-taupe-rouge",
@@ -3568,7 +3378,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-chaises-cuir-marron-accoudoirs-chrome",
@@ -3583,7 +3392,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "gamme-chaises-direction-noire-taupe-maille",
@@ -3598,7 +3406,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "fauteuil-direction-inclinable-repose-pieds-taupe",
@@ -3613,7 +3420,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "fauteuil-direction-inclinable-repose-pieds-marron",
@@ -3628,7 +3434,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "fauteuil-direction-inclinable-repose-pieds-noir",
@@ -3643,7 +3448,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "fauteuil-direction-inclinable-noir-bande-chrome",
@@ -3658,7 +3462,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-visiteur-taupe-matelassees",
@@ -3673,7 +3476,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-visiteur-cuir-marron-matelassee",
@@ -3688,7 +3490,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-visiteur-cuir-noir-4-pieds-chrome",
@@ -3703,7 +3504,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-visiteur-cuir-noir-nervure-haut-dossier",
@@ -3718,7 +3518,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-visiteur-tissu-noir-tablette-ecritoire",
@@ -3733,7 +3532,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaise-visiteur-empilable-simili-noir",
@@ -3748,7 +3546,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-banquet-empilables-ovales",
@@ -3763,7 +3560,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "chaises-empilables-tissu-bleu-rouge",
@@ -3778,7 +3574,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "banc-attente-3places-bleu",
@@ -3793,7 +3588,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "salon-cuir-noir-canape-fauteuils-table-basse",
@@ -3808,7 +3602,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "salon-cuir-marron-canape-fauteuils-table-basse",
@@ -3823,7 +3616,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "salon-cuir-taupe-canape-fauteuils-table-basse",
@@ -3838,7 +3630,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "meuble-bas-bois-3-portes",
@@ -3852,7 +3643,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "armoire-vestiaire-3-portes-noir-blanc",
@@ -3866,7 +3656,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "armoire-rideau-metallique-basse-blanche",
@@ -3880,7 +3669,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "armoire-bois-2-portes-poignees-inox",
@@ -3894,7 +3682,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "armoire-basse-metallique-2-tiroirs-2-portes",
@@ -3908,7 +3695,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
   {
     id: "ensemble-armoire-bois-2-portes-vitrine",
@@ -3922,7 +3708,6 @@ export const PRODUCTS: Product[] = [
     popularity: 0,
     isNew: true,
     createdAt: "2026-10-12",
-    stockQuantity: 5,
   },
 ];
 

@@ -8,7 +8,7 @@ import { categoryStore, useAllCategories, useInvalidateCategories } from "@/lib/
 import { slugify } from "@/lib/slugify";
 import type { Category } from "@/lib/categories";
 import { formatCFA } from "@/lib/format";
-import { exportProductsCsv } from "@/lib/csv-export";
+import { exportProductsXlsx } from "@/lib/excel-export";
 import { compressImageFile, uploadProductImage } from "@/lib/image-compression";
 import { useRequireAdmin } from "@/hooks/use-require-admin";
 import { AdminNav } from "@/components/AdminNav";
@@ -204,10 +204,10 @@ function AdminProductsPage() {
           variant="outline"
           className="ml-auto"
           disabled={filtered.length === 0}
-          onClick={() => exportProductsCsv(filtered, categories)}
+          onClick={() => void exportProductsXlsx(filtered, categories)}
         >
           <Download className="h-4 w-4" aria-hidden="true" />
-          Exporter CSV ({filtered.length})
+          Exporter en Excel (.xlsx) ({filtered.length})
         </Button>
         <Button onClick={() => setDialogState({ mode: "add" })}>
           <Plus className="h-4 w-4" aria-hidden="true" />
@@ -327,7 +327,6 @@ function AdminProductsPage() {
               <TableHead>Prix</TableHead>
               <TableHead>Réduction</TableHead>
               <TableHead>Prix soldé</TableHead>
-              <TableHead>Stock</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -409,19 +408,16 @@ function AdminProductRow({
   const invalidate = useInvalidateProducts();
   const [price, setPrice] = useState(String(product.originalPrice));
   const [discount, setDiscount] = useState(String(product.discountPercent));
-  const [stock, setStock] = useState(String(product.stockQuantity));
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setPrice(String(product.originalPrice));
     setDiscount(String(product.discountPercent));
-    setStock(String(product.stockQuantity));
-  }, [product.originalPrice, product.discountPercent, product.stockQuantity]);
+  }, [product.originalPrice, product.discountPercent]);
 
   async function handleSave() {
     const priceNum = Number(price);
     const discountNum = Number(discount);
-    const stockNum = Number(stock);
     if (Number.isNaN(priceNum) || priceNum < 0) {
       toast.error("Prix invalide.");
       return;
@@ -430,16 +426,11 @@ function AdminProductRow({
       toast.error("Réduction invalide (0-100).");
       return;
     }
-    if (Number.isNaN(stockNum) || stockNum < 0) {
-      toast.error("Stock invalide.");
-      return;
-    }
     setSaving(true);
     try {
       await productStore.updateProduct(product.id, {
         originalPrice: priceNum,
         discountPercent: discountNum,
-        stockQuantity: stockNum,
       });
       await invalidate();
       toast.success(`« ${product.name} » mis à jour.`);
@@ -490,16 +481,6 @@ function AdminProductRow({
         />
       </TableCell>
       <TableCell className="text-sm text-muted-foreground">{formatCFA(salePrice)}</TableCell>
-      <TableCell>
-        <Input
-          type="number"
-          min={0}
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-          className="w-20"
-          aria-label={`Stock de ${product.name}`}
-        />
-      </TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
           <Button variant="outline" size="sm" disabled={saving} onClick={handleSave}>
@@ -634,7 +615,6 @@ function ProductFormDialog({
   const [subcategorySlug, setSubcategorySlug] = useState(product?.subcategorySlug ?? "");
   const [originalPrice, setOriginalPrice] = useState(String(product?.originalPrice ?? ""));
   const [discountPercent, setDiscountPercent] = useState(String(product?.discountPercent ?? 0));
-  const [stockQuantity, setStockQuantity] = useState(String(product?.stockQuantity ?? ""));
   const [description, setDescription] = useState(product?.description ?? "");
   const [sku, setSku] = useState(product?.sku ?? "");
   const [weightKg, setWeightKg] = useState(
@@ -721,8 +701,6 @@ function ProductFormDialog({
     if (Number.isNaN(discountNum) || discountNum < 0 || discountNum > 100) {
       nextErrors.discount = "Réduction invalide (0-100).";
     }
-    const stockNum = Number(stockQuantity);
-    if (Number.isNaN(stockNum) || stockNum < 0) nextErrors.stock = "Stock invalide.";
     if (mode === "add" && images.length === 0) {
       nextErrors.images = "Ajoutez au moins une image.";
     } else if (images.some((img) => img.alt.trim().length === 0)) {
@@ -782,7 +760,6 @@ function ProductFormDialog({
           subcategorySlug: subcategorySlug || undefined,
           originalPrice: priceNum,
           discountPercent: discountNum,
-          stockQuantity: stockNum,
           description: description.trim() || undefined,
           sku: sku.trim() || undefined,
           weightKg: weightNum,
@@ -797,7 +774,6 @@ function ProductFormDialog({
           subcategorySlug: subcategorySlug || undefined,
           originalPrice: priceNum,
           discountPercent: discountNum,
-          stockQuantity: stockNum,
           description: description.trim() || undefined,
           sku: sku.trim() || undefined,
           weightKg: weightNum,
@@ -908,7 +884,7 @@ function ProductFormDialog({
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor="product-price">Prix (CFA)</Label>
               <Input
@@ -946,25 +922,6 @@ function ProductFormDialog({
                 className="mt-1 min-h-[1rem] text-xs text-destructive"
               >
                 {errors.discount}
-              </p>
-            </div>
-            <div>
-              <Label htmlFor="product-stock">Stock</Label>
-              <Input
-                id="product-stock"
-                type="number"
-                min={0}
-                value={stockQuantity}
-                onChange={(e) => setStockQuantity(e.target.value)}
-                aria-invalid={Boolean(errors.stock)}
-                aria-describedby="product-stock-error"
-              />
-              <p
-                id="product-stock-error"
-                role="alert"
-                className="mt-1 min-h-[1rem] text-xs text-destructive"
-              >
-                {errors.stock}
               </p>
             </div>
           </div>

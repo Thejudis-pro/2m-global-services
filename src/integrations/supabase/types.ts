@@ -51,7 +51,7 @@ export type Database = {
           email: string
           items: Json
           order_number: string
-          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
           phone: string
           region: string
           status: Database["public"]["Enums"]["order_status"]
@@ -70,7 +70,7 @@ export type Database = {
           email: string
           items: Json
           order_number: string
-          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
           phone: string
           region: string
           status?: Database["public"]["Enums"]["order_status"]
@@ -89,7 +89,7 @@ export type Database = {
           email?: string
           items?: Json
           order_number?: string
-          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
           phone?: string
           region?: string
           status?: Database["public"]["Enums"]["order_status"]
@@ -181,6 +181,42 @@ export type Database = {
             referencedColumns: ["category_slug", "slug"]
           },
         ]
+      }
+      quote_requests: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string | null
+          phone: string | null
+          products: string | null
+          source: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          products?: string | null
+          source?: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          products?: string | null
+          source?: string
+          status?: string
+        }
+        Relationships: []
       }
       reviews: {
         Row: {

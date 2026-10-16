@@ -25,7 +25,6 @@ type ProductRow = {
   popularity: number;
   is_new: boolean;
   created_at: string;
-  stock_quantity: number;
   featured: boolean;
   sku: string | null;
   weight_kg: string | number | null;
@@ -48,7 +47,6 @@ function rowToProduct(row: ProductRow): Product {
     popularity: row.popularity,
     isNew: row.is_new,
     createdAt: row.created_at,
-    stockQuantity: row.stock_quantity,
     featured: row.featured,
     sku: row.sku ?? undefined,
     weightKg: row.weight_kg === null ? undefined : Number(row.weight_kg),
@@ -72,7 +70,6 @@ function productToRow(product: Product) {
     popularity: product.popularity,
     is_new: product.isNew,
     created_at: product.createdAt,
-    stock_quantity: product.stockQuantity,
     featured: product.featured ?? false,
     sku: product.sku ?? null,
     weight_kg: product.weightKg ?? null,
@@ -157,7 +154,6 @@ export const productStore = {
     if (patch.rating !== undefined) row.rating = patch.rating;
     if (patch.popularity !== undefined) row.popularity = patch.popularity;
     if (patch.isNew !== undefined) row.is_new = patch.isNew;
-    if (patch.stockQuantity !== undefined) row.stock_quantity = patch.stockQuantity;
     if (patch.featured !== undefined) row.featured = patch.featured;
     if (patch.sku !== undefined) row.sku = patch.sku;
     if (patch.weightKg !== undefined) row.weight_kg = patch.weightKg ?? null;

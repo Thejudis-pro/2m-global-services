@@ -111,7 +111,7 @@ function PanierPage() {
                       {product.name}
                     </a>
                     <div className="mt-[5px] text-[13px] text-muted-foreground">
-                      {categoryLabel} · {product.stockQuantity > 0 ? "En stock" : "Sur commande"}
+                      {categoryLabel} · En stock
                     </div>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -226,9 +226,6 @@ function PanierPage() {
             >
               Finaliser sur WhatsApp
             </a>
-            <p className="mt-4 text-[13px] leading-[1.6] text-primary-foreground/72">
-              Paiement à la livraison : Wave, Orange Money ou espèces.
-            </p>
           </div>
         </div>
       )}
