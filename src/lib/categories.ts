@@ -52,10 +52,7 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CONTACT = {
-  phones: [
-    { label: "76 192 34 41", tel: "+221761923441" },
-    { label: "78 144 17 66", tel: "+221781441766" },
-  ],
+  phones: [{ label: "76 192 34 41", tel: "+221761923441" }],
   // Not displayed on the site — only used as the recipient of order notifications.
   email: "contact@2mglobalservices.com",
   whatsapp: "https://wa.me/221761923441",

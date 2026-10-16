@@ -262,7 +262,7 @@ function Index() {
         <h2 className="m-0 mb-6 border-b border-border pb-4 text-[22px] md:text-[32px]">
           Nos univers
         </h2>
-        <div className="grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-[14px] sm:grid-cols-3">
           {categories.map((c) => {
             const productsInCategory = allProducts.filter((p) => p.categorySlug === c.slug);
             const cover = productsInCategory[0];
@@ -272,7 +272,7 @@ function Index() {
                 href={`/produits?category=${c.slug}`}
                 className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-4 transition-all hover:-translate-y-[3px] hover:border-accent"
               >
-                <div className="mb-[14px] h-[110px] w-full overflow-hidden rounded-xl bg-[var(--color-placeholder)]">
+                <div className="mb-[14px] h-[110px] lg:h-[150px] w-full overflow-hidden rounded-xl bg-[var(--color-placeholder)]">
                   {cover && (
                     <img src={cover.image} alt={c.label} className="h-full w-full object-cover" />
                   )}
