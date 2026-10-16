@@ -15,7 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 
-const DELIVERY_FEE = 2000;
+// Delivery is agreed directly with the customer, so no fee is added to the order total.
+const DELIVERY_FEE = 0;
 
 const DELIVERY_SLOTS = [
   {
@@ -435,7 +436,7 @@ function CheckoutPage() {
             )}
             <div className="flex justify-between text-muted-foreground">
               <dt>Livraison</dt>
-              <dd>{deliveryFee > 0 ? formatCFA(deliveryFee) : "Gratuite"}</dd>
+              <dd>{deliveryFee > 0 ? formatCFA(deliveryFee) : "À convenir"}</dd>
             </div>
             <div className="flex items-baseline justify-between border-t border-border pt-3 font-display text-[12px] font-extrabold uppercase tracking-[0.1em]">
               <dt>Total</dt>

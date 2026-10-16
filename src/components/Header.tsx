@@ -85,7 +85,7 @@ export function Header() {
               2M Global Services
             </div>
             <div className="mt-1 text-[9px] uppercase tracking-[0.32em] text-muted-foreground">
-              Dakar · depuis 2011
+              Dakar · depuis 2021
             </div>
           </div>
         </Link>

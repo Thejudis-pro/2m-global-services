@@ -155,7 +155,7 @@ function ConfirmationPage() {
             )}
             <div className="flex justify-between text-muted-foreground">
               <dt>Livraison</dt>
-              <dd>{order.deliveryFee > 0 ? formatCFA(order.deliveryFee) : "Gratuite"}</dd>
+              <dd>{order.deliveryFee > 0 ? formatCFA(order.deliveryFee) : "À convenir"}</dd>
             </div>
             <div className="flex items-baseline justify-between border-t border-border pt-3 font-display text-[12px] font-extrabold uppercase tracking-[0.1em]">
               <dt>Total</dt>

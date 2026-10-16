@@ -120,7 +120,8 @@ export function VideoEmbed({ src, title, poster, className = "" }: VideoEmbedPro
           aria-label={title}
           className="absolute inset-0 h-full w-full bg-black object-contain"
         >
-          <source src={video.url} type={video.mime} />
+          {/* #t=0.1 makes browsers that don't preload (iOS) show a frame instead of a black box. */}
+          <source src={`${video.url}#t=0.1`} type={video.mime} />
         </video>
       )}
     </div>

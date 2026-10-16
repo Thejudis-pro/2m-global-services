@@ -1,33 +1,38 @@
+import homeVideo from "@/assets/products/ec53ddaa-b7a6-476c-9193-60614fa295f8.mp4";
+
 // Editable content of the home page and À propos page.
-// Placeholder images live in /public/placeholders — overwrite the file (same name)
-// or point `image` to another file in /public.
+// Photos are taken from the product catalogue by product id — swap an id to change a photo.
 
-export const HERO_IMAGE = "/placeholders/hero.svg";
+export const EXPERIENCE_STAT = { value: "5+", label: "Années d'expérience" };
 
-// Shown on the home page and on À propos. Replace `value` with the real figure
-// (e.g. "10+ ans") once it is confirmed.
-export const EXPERIENCE_STAT = { value: "[À REMPLACER]", label: "Expérience" };
+export const HERO_PRODUCT_ID = "bureau-direction-prestige-led";
 
-export type ShowcaseCard = { title: string; href: string; image: string };
+// The two cards on the right of the hero.
+export const HERO_CARD_PRODUCT_IDS = {
+  electroniques: "smartphone-samsung-galaxy-s24-ultra",
+  armoires: "armoire-bois-2portes-noyer",
+};
+
+export type ShowcaseCard = { title: string; href: string; productId: string };
 
 export const SHOWCASE_CARDS: ShowcaseCard[] = [
   {
     title: "Nouvel arrivage",
     href: "/produits?newArrival=true",
-    image: "/placeholders/nouvel-arrivage.svg",
+    productId: "salon-cuir-marron-canape-fauteuils-table-basse",
   },
   {
     title: "Armoires",
     href: "/produits?category=armoires",
-    image: "/placeholders/armoires.svg",
+    productId: "ensemble-armoire-bois-2-portes-vitrine",
   },
   {
     title: "Rangement",
     href: "/produits?category=meubles-de-bureau&subcategory=meubles-de-rangement",
-    image: "/placeholders/rangement.svg",
+    productId: "armoire-rangement-etageres-ajustables",
   },
 ];
 
-// YouTube / Vimeo link or an .mp4 file (e.g. "/videos/presentation.mp4" in /public).
-// Leave empty to show the "Vidéo à ajouter" placeholder.
-export const HOME_VIDEO_SRC = "";
+// A showroom clip from src/assets/products. Can also be a YouTube / Vimeo link
+// or any .mp4 URL (see VideoEmbed).
+export const HOME_VIDEO_SRC: string = homeVideo;

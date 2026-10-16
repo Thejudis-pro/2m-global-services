@@ -17,17 +17,6 @@ export const Route = createFileRoute("/a-propos")({
   component: AboutPage,
 });
 
-const VALUES = [
-  {
-    title: "Tout est en stock",
-    text: "Ce que vous voyez est disponible aujourd'hui, livré sous 24 à 48 heures dans Dakar.",
-  },
-  {
-    title: "On reste joignables",
-    text: "Garantie 2 ans et un WhatsApp qui répond en moins de 10 minutes.",
-  },
-];
-
 function AboutPage() {
   const products = useAllProducts();
   const categories = useStorefrontCategories();
@@ -46,7 +35,7 @@ function AboutPage() {
         Qui sommes-nous
       </div>
       <h1 className="mb-6 max-w-[24ch] text-[32px] leading-[1] md:text-[64px]">
-        La qualité à moindre coût, depuis 2011
+        La qualité à moindre coût, depuis 2021
       </h1>
       <p className="mb-11 max-w-[58ch] text-[19px] leading-[1.75] text-[var(--color-muted-4)]">
         2M Global Services équipe les foyers et les bureaux de Dakar : mobilier, armoires, rangement
@@ -64,29 +53,16 @@ function AboutPage() {
         </div>
       )}
 
-      <div className="mb-14 grid grid-cols-2 gap-[14px] md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-[14px] md:grid-cols-4">
         {stats.map((s) => (
           <div
             key={s.label}
             className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-6"
           >
-            <div
-              className={`font-display font-black leading-none tracking-[-0.03em] text-primary ${
-                s.value.length > 8 ? "text-[15px] leading-tight md:text-[22px]" : "text-[38px]"
-              }`}
-            >
+            <div className="font-display text-[38px] font-black leading-none tracking-[-0.03em] text-primary">
               {s.value}
             </div>
             <div className="mt-2 text-[14px] text-muted-foreground">{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-        {VALUES.map((v) => (
-          <div key={v.title}>
-            <h3 className="mb-3 text-[19px] tracking-[0.02em]">{v.title}</h3>
-            <p className="m-0 text-[15px] leading-[1.8] text-[var(--color-muted-4)]">{v.text}</p>
           </div>
         ))}
       </div>

@@ -35,26 +35,18 @@ export function Footer() {
             Catalogue
           </h2>
           <ul className="flex flex-col gap-[10px] text-[14px] text-primary-foreground/78">
-            {categories.map((c) => (
-              <li key={c.slug}>
-                <a
-                  href={`/produits?category=${c.slug}`}
-                  className="hover:text-[var(--color-gold-light)]"
-                >
-                  {c.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href="https://2mparfumeriedk.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--color-gold-light)]"
-              >
-                Parfumerie
-              </a>
-            </li>
+            {categories
+              .filter((c) => c.slug !== "parfumerie")
+              .map((c) => (
+                <li key={c.slug}>
+                  <a
+                    href={`/produits?category=${c.slug}`}
+                    className="hover:text-[var(--color-gold-light)]"
+                  >
+                    {c.label}
+                  </a>
+                </li>
+              ))}
           </ul>
         </nav>
 

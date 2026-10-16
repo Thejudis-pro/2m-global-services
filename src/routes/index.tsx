@@ -3,10 +3,16 @@ import { useStorefrontCategories } from "@/lib/category-store";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { useAllProducts } from "@/lib/product-store";
-import { getSalePrice } from "@/lib/products";
+import { getSalePrice, PLACEHOLDER_IMAGE } from "@/lib/products";
 import { formatCFA } from "@/lib/format";
 import { VideoEmbed } from "@/components/VideoEmbed";
-import { EXPERIENCE_STAT, HERO_IMAGE, HOME_VIDEO_SRC, SHOWCASE_CARDS } from "@/lib/home-content";
+import {
+  EXPERIENCE_STAT,
+  HERO_CARD_PRODUCT_IDS,
+  HERO_PRODUCT_ID,
+  HOME_VIDEO_SRC,
+  SHOWCASE_CARDS,
+} from "@/lib/home-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -51,6 +57,15 @@ function Index() {
     .sort((a, b) => b.discountPercent - a.discountPercent)
     .slice(0, 8);
 
+  // Catalogue product (with a real photo) pinned by id in src/lib/home-content.ts.
+  const photoOf = (id: string) => {
+    const product = allProducts.find((p) => p.id === id);
+    return product && product.image !== PLACEHOLDER_IMAGE ? product : undefined;
+  };
+  const heroProduct = photoOf(HERO_PRODUCT_ID) ?? allProducts.find((p) => p.featured);
+  const electroniquesPhoto = photoOf(HERO_CARD_PRODUCT_IDS.electroniques);
+  const armoiresPhoto = photoOf(HERO_CARD_PRODUCT_IDS.armoires);
+
   const armoires = allProducts.filter((p) => p.categorySlug === "armoires" && p.originalPrice > 0);
   const minArmoirePrice = armoires.length
     ? Math.min(...armoires.map((p) => getSalePrice(p)))
@@ -61,11 +76,16 @@ function Index() {
       {/* Hero */}
       <section className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="relative min-h-[400px] overflow-hidden rounded-[20px] bg-[var(--color-ink)] lg:col-span-2">
-          {/* Placeholder image (same cover behaviour as before) — see src/lib/home-content.ts */}
-          <img
-            src={HERO_IMAGE}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-55"
+          {heroProduct && (
+            <img
+              src={heroProduct.image}
+              alt={heroProduct.alt}
+              className="absolute inset-0 h-full w-full object-cover opacity-55"
+            />
+          )}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink)]/75 via-[var(--color-ink)]/35 to-transparent"
           />
           <div className="relative max-w-[580px] p-[26px] text-primary-foreground md:p-[48px]">
             <div className="mb-[22px] inline-flex items-center whitespace-nowrap rounded-full border border-[var(--color-gold-light)] px-[15px] py-2 font-display text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-gold-light)]">
@@ -102,9 +122,17 @@ function Index() {
         <div className="grid gap-4">
           <a
             href="/produits?category=electroniques"
-            className="flex min-h-[190px] flex-col justify-between rounded-[20px] bg-primary p-[26px] text-primary-foreground"
+            className="relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-[20px] bg-primary p-[26px] text-primary-foreground"
           >
-            <div>
+            {electroniquesPhoto && (
+              <img
+                src={electroniquesPhoto.image}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover opacity-45"
+              />
+            )}
+            <div className="relative">
               <div className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]">
                 Nouvel arrivage
               </div>
@@ -114,16 +142,24 @@ function Index() {
                 &amp; smartphones
               </div>
             </div>
-            <div className="mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-[var(--color-gold-light)]">
+            <div className="relative mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-[var(--color-gold-light)]">
               Découvrir →
             </div>
           </a>
           <a
             href="/produits?category=armoires"
-            className="flex min-h-[190px] flex-col justify-between rounded-[20px] border border-border bg-[var(--color-cream-alt)] p-[26px]"
+            className="relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-[20px] bg-[var(--color-ink)] p-[26px] text-primary-foreground"
           >
-            <div>
-              <div className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
+            {armoiresPhoto && (
+              <img
+                src={armoiresPhoto.image}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover opacity-45"
+              />
+            )}
+            <div className="relative">
+              <div className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]">
                 Armoires &amp; rangement
               </div>
               <div className="font-display text-[26px] font-black leading-[1.05]">
@@ -138,7 +174,7 @@ function Index() {
                 )}
               </div>
             </div>
-            <div className="mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-primary">
+            <div className="relative mt-[18px] font-display text-[12px] font-bold uppercase tracking-[0.14em] text-[var(--color-gold-light)]">
               Voir les modèles →
             </div>
           </a>
@@ -166,33 +202,38 @@ function Index() {
           À la une
         </h2>
         <div className="grid grid-cols-3 gap-3 md:gap-5">
-          {SHOWCASE_CARDS.map((card) => (
-            <a
-              key={card.title}
-              href={card.href}
-              className="group overflow-hidden rounded-[18px] border border-border bg-[var(--color-cream-light)] transition-all hover:-translate-y-[3px] hover:border-accent md:rounded-[20px]"
-            >
-              <div className="aspect-square overflow-hidden bg-[var(--color-placeholder)] md:aspect-[4/3]">
-                <img
-                  src={card.image}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="flex items-center justify-between gap-2 p-3 md:p-5">
-                <h3 className="m-0 font-display text-[11px] font-black uppercase leading-[1.2] tracking-[0.04em] text-foreground md:text-[17px]">
-                  {card.title}
-                </h3>
-                <span
-                  aria-hidden="true"
-                  className="hidden font-display text-[16px] font-black text-primary md:inline"
-                >
-                  →
-                </span>
-              </div>
-            </a>
-          ))}
+          {SHOWCASE_CARDS.map((card) => {
+            const photo = photoOf(card.productId);
+            return (
+              <a
+                key={card.title}
+                href={card.href}
+                className="group overflow-hidden rounded-[18px] border border-border bg-[var(--color-cream-light)] transition-all hover:-translate-y-[3px] hover:border-accent md:rounded-[20px]"
+              >
+                <div className="aspect-square overflow-hidden bg-[var(--color-placeholder)] md:aspect-[4/3]">
+                  {photo && (
+                    <img
+                      src={photo.image}
+                      alt={photo.alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-2 p-3 md:p-5">
+                  <h3 className="m-0 font-display text-[11px] font-black uppercase leading-[1.2] tracking-[0.04em] text-foreground md:text-[17px]">
+                    {card.title}
+                  </h3>
+                  <span
+                    aria-hidden="true"
+                    className="hidden font-display text-[16px] font-black text-primary md:inline"
+                  >
+                    →
+                  </span>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </section>
 
@@ -303,7 +344,7 @@ function Index() {
             Demander un devis
           </a>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             EXPERIENCE_STAT,
             { value: String(total), label: "Références" },
@@ -311,11 +352,7 @@ function Index() {
             { value: "48h", label: "Livraison" },
           ].map((s) => (
             <div key={s.label} className="rounded-2xl bg-primary-foreground/10 p-5">
-              <div
-                className={`font-display font-black leading-tight text-[var(--color-gold-light)] ${
-                  s.value.length > 8 ? "break-words text-[14px]" : "text-[28px]"
-                }`}
-              >
+              <div className="font-display text-[28px] font-black text-[var(--color-gold-light)]">
                 {s.value}
               </div>
               <div className="text-[13px] text-primary-foreground/80">{s.label}</div>

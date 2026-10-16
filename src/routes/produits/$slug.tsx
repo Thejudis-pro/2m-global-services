@@ -27,13 +27,6 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 const MIN_QTY = 1;
 const MAX_QTY = 10;
 
-// The perfume category is kept out of titles, descriptions and structured data so the
-// site's search presence stays about furniture (mobilier, rangement, armoires, maison).
-function getSeoCategoryLabel(categorySlug: string): string {
-  if (categorySlug === "parfumerie") return "";
-  return CATEGORIES.find((c) => c.slug === categorySlug)?.label ?? "";
-}
-
 export const Route = createFileRoute("/produits/$slug")({
   loader: async ({ params }) => {
     const product = await fetchProductById(params.slug);
@@ -43,25 +36,19 @@ export const Route = createFileRoute("/produits/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return {};
-    const categoryLabel = getSeoCategoryLabel(product.categorySlug);
+    const categoryLabel = CATEGORIES.find((c) => c.slug === product.categorySlug)?.label ?? "";
     const salePrice = getSalePrice(product);
     return {
       meta: [
-        {
-          title: categoryLabel
-            ? `${product.name} — ${categoryLabel} | 2M Global Services`
-            : `${product.name} | 2M Global Services`,
-        },
+        { title: `${product.name} — ${categoryLabel} | 2M Global Services` },
         {
           name: "description",
-          content: `${categoryLabel ? `${product.name} : ${categoryLabel.toLowerCase()}` : product.name} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
+          content: `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
         },
         { property: "og:title", content: product.name },
         {
           property: "og:description",
-          content: categoryLabel
-            ? `${categoryLabel} — ${product.name} disponible chez 2M Global Services.`
-            : `${product.name} disponible chez 2M Global Services.`,
+          content: `${categoryLabel} — ${product.name} disponible chez 2M Global Services.`,
         },
         { property: "og:url", content: `/produits/${product.id}` },
       ],
@@ -185,7 +172,6 @@ function ProductDetailPage() {
   const subcategoryLabel = CATEGORIES.find(
     (c) => c.slug === product.categorySlug,
   )?.subcategories?.find((s) => s.slug === product.subcategorySlug)?.label;
-  const seoCategoryLabel = getSeoCategoryLabel(product.categorySlug);
   const salePrice = getSalePrice(product);
 
   const [quantity, setQuantity] = useState(1);
@@ -287,11 +273,9 @@ function ProductDetailPage() {
     "@type": "Product",
     name: product.name,
     image: details.images.map((img) => img.src).filter((src): src is string => src !== null),
-    description: seoCategoryLabel
-      ? details.description
-      : `${product.name} — disponible chez 2M Global Services à Dakar.`,
+    description: details.description,
     sku: details.sku,
-    ...(seoCategoryLabel ? { category: seoCategoryLabel } : {}),
+    category: categoryLabel,
     offers: {
       "@type": "Offer",
       priceCurrency: "XOF",

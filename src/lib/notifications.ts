@@ -69,7 +69,7 @@ export async function sendOrderNotifications(order: Order): Promise<void> {
     items_summary: orderSummaryLines(order),
     subtotal: formatCFA(order.subtotal),
     discount_total: formatCFA(order.discountTotal),
-    delivery_fee: formatCFA(order.deliveryFee),
+    delivery_fee: order.deliveryFee > 0 ? formatCFA(order.deliveryFee) : "À convenir",
     total: formatCFA(order.total),
     owner_email: CONTACT.email,
   };
