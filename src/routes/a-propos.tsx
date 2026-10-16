@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAllProducts } from "@/lib/product-store";
 import { useStorefrontCategories } from "@/lib/category-store";
+import { EXPERIENCE_STAT } from "@/lib/home-content";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
@@ -18,16 +19,12 @@ export const Route = createFileRoute("/a-propos")({
 
 const VALUES = [
   {
-    title: "Import direct",
-    text: "Nous achetons à l'usine et stockons dans notre dépôt de Front de Terre. Aucun intermédiaire à payer.",
-  },
-  {
     title: "Tout est en stock",
-    text: "Ce que vous voyez est disponible aujourd'hui, livré et monté sous 24 à 48 heures dans Dakar.",
+    text: "Ce que vous voyez est disponible aujourd'hui, livré sous 24 à 48 heures dans Dakar.",
   },
   {
     title: "On reste joignables",
-    text: "Échange sous 7 jours, garantie 2 ans, et un WhatsApp qui répond en moins de 10 minutes.",
+    text: "Garantie 2 ans et un WhatsApp qui répond en moins de 10 minutes.",
   },
 ];
 
@@ -37,7 +34,7 @@ function AboutPage() {
   const heroProduct = products.find((p) => p.featured) ?? products[0];
 
   const stats = [
-    { value: "15", label: "Années d'expérience" },
+    EXPERIENCE_STAT,
     { value: String(products.length), label: "Références en stock" },
     { value: "3 200+", label: "Clients satisfaits" },
     { value: String(categories.length), label: "Catégories" },
@@ -52,16 +49,17 @@ function AboutPage() {
         La qualité à moindre coût, depuis 2011
       </h1>
       <p className="mb-11 max-w-[58ch] text-[19px] leading-[1.75] text-[var(--color-muted-4)]">
-        2M Global Services équipe les foyers et les bureaux de Dakar. Nous importons en direct, nous
-        stockons sur place et nous montons nous-mêmes — c&apos;est tout le secret de nos prix.
+        2M Global Services équipe les foyers et les bureaux de Dakar : mobilier, armoires, rangement
+        et électroniques, tout en stock et aux meilleurs prix.
       </p>
 
       {heroProduct && (
-        <div className="mb-12 overflow-hidden rounded-[24px] bg-[var(--color-placeholder)]">
+        // Fixed-ratio frame: the photo is never stretched and the crop is predictable.
+        <div className="mb-12 aspect-[4/3] overflow-hidden rounded-[24px] bg-[var(--color-placeholder)] md:aspect-[16/9]">
           <img
             src={heroProduct.image}
             alt={heroProduct.alt}
-            className="h-[min(52vh,460px)] w-full object-cover"
+            className="h-full w-full object-cover object-[center_40%]"
           />
         </div>
       )}
@@ -72,7 +70,11 @@ function AboutPage() {
             key={s.label}
             className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-6"
           >
-            <div className="font-display text-[38px] font-black leading-none tracking-[-0.03em] text-primary">
+            <div
+              className={`font-display font-black leading-none tracking-[-0.03em] text-primary ${
+                s.value.length > 8 ? "text-[15px] leading-tight md:text-[22px]" : "text-[38px]"
+              }`}
+            >
               {s.value}
             </div>
             <div className="mt-2 text-[14px] text-muted-foreground">{s.label}</div>
@@ -80,7 +82,7 @@ function AboutPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {VALUES.map((v) => (
           <div key={v.title}>
             <h3 className="mb-3 text-[19px] tracking-[0.02em]">{v.title}</h3>

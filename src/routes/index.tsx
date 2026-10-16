@@ -5,7 +5,8 @@ import { ProductCard } from "@/components/ProductCard";
 import { useAllProducts } from "@/lib/product-store";
 import { getSalePrice } from "@/lib/products";
 import { formatCFA } from "@/lib/format";
-import { CONTACT } from "@/lib/categories";
+import { VideoEmbed } from "@/components/VideoEmbed";
+import { EXPERIENCE_STAT, HERO_IMAGE, HOME_VIDEO_SRC, SHOWCASE_CARDS } from "@/lib/home-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau et de maison, fauteuils, armoires, rangement, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       {
         property: "og:title",
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau et de maison, fauteuils, armoires, rangement, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:url", content: "/" },
     ],
@@ -35,15 +36,13 @@ export const Route = createFileRoute("/")({
 const FEATURES = [
   { title: "Livraison 24h", detail: "Partout dans Dakar" },
   { title: "Payez à la réception", detail: "Wave, Orange Money, espèces" },
-  { title: "Échange 7 jours", detail: "Sans justification" },
-  { title: "Montage inclus", detail: "Par nos équipes" },
+  { title: "Garantie 2 ans", detail: "Sur nos produits" },
+  { title: "Devis gratuit", detail: "Sur demande, sous 24 h" },
 ];
 
 function Index() {
   const allProducts = useAllProducts();
   const categories = useStorefrontCategories();
-  const featuredProducts = allProducts.filter((p) => p.featured);
-
   const total = allProducts.length;
   const maxDiscount = Math.max(0, ...allProducts.map((p) => p.discountPercent));
 
@@ -51,8 +50,6 @@ function Index() {
     .filter((p) => p.discountPercent > 0 && p.originalPrice > 0)
     .sort((a, b) => b.discountPercent - a.discountPercent)
     .slice(0, 8);
-
-  const heroProduct = featuredProducts[3] ?? featuredProducts[0] ?? allProducts[0];
 
   const armoires = allProducts.filter((p) => p.categorySlug === "armoires" && p.originalPrice > 0);
   const minArmoirePrice = armoires.length
@@ -64,13 +61,12 @@ function Index() {
       {/* Hero */}
       <section className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="relative min-h-[400px] overflow-hidden rounded-[20px] bg-[var(--color-ink)] lg:col-span-2">
-          {heroProduct && (
-            <img
-              src={heroProduct.image}
-              alt={heroProduct.alt}
-              className="absolute inset-0 h-full w-full object-cover opacity-55"
-            />
-          )}
+          {/* Placeholder image (same cover behaviour as before) — see src/lib/home-content.ts */}
+          <img
+            src={HERO_IMAGE}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+          />
           <div className="relative max-w-[580px] p-[26px] text-primary-foreground md:p-[48px]">
             <div className="mb-[22px] inline-flex items-center whitespace-nowrap rounded-full border border-[var(--color-gold-light)] px-[15px] py-2 font-display text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-gold-light)]">
               Déstockage en cours
@@ -80,24 +76,24 @@ function Index() {
               <br />
               sur le mobilier
             </h1>
-            <p className="mb-[28px] max-w-[42ch] text-[17px] leading-[1.7] text-primary-foreground/90">
-              {total} références en stock à Dakar — bureaux, sièges, armoires, électroniques et
-              coffres-forts. Livrées et montées chez vous en 24h.
+            <p className="mb-[28px] max-w-[42ch] text-[17px] leading-[1.6] text-primary-foreground/90">
+              <strong className="font-extrabold text-primary-foreground">
+                {total} références en stock
+              </strong>{" "}
+              à Dakar. Livraison 24h.
             </p>
             <div className="flex flex-wrap gap-3">
               <a
-                href="/produits"
-                className="whitespace-nowrap rounded-full bg-background px-[28px] py-[16px] font-display text-[13px] font-extrabold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-gold-light)]"
+                href="/contact"
+                className="whitespace-nowrap rounded-full bg-[var(--color-gold-light)] px-[28px] py-[16px] font-display text-[13px] font-black uppercase tracking-[0.12em] text-[var(--color-ink)] transition-colors hover:bg-background"
               >
-                Voir les offres
+                Devis gratuit sur demande
               </a>
               <a
-                href={CONTACT.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/produits"
                 className="whitespace-nowrap rounded-full border border-primary-foreground/55 px-[28px] py-[16px] font-display text-[13px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary-foreground/14"
               >
-                Commander sur WhatsApp
+                Voir les offres
               </a>
             </div>
           </div>
@@ -156,12 +152,48 @@ function Index() {
             key={f.title}
             className="rounded-2xl border border-border bg-[var(--color-cream-light)] p-[18px]"
           >
-            <div className="mb-1 font-display text-[14px] font-extrabold uppercase tracking-[0.04em]">
+            <div className="mb-1 font-display text-[14px] font-black uppercase tracking-[0.04em] text-foreground">
               {f.title}
             </div>
-            <div className="text-[14px] text-muted-foreground">{f.detail}</div>
+            <div className="text-[14px] font-semibold text-foreground">{f.detail}</div>
           </div>
         ))}
+      </section>
+
+      {/* Showcase: Nouvel arrivage / Armoires / Rangement */}
+      <section className="mb-[52px]">
+        <h2 className="m-0 mb-6 border-b border-border pb-4 text-[22px] md:text-[32px]">
+          À la une
+        </h2>
+        <div className="grid grid-cols-3 gap-3 md:gap-5">
+          {SHOWCASE_CARDS.map((card) => (
+            <a
+              key={card.title}
+              href={card.href}
+              className="group overflow-hidden rounded-[18px] border border-border bg-[var(--color-cream-light)] transition-all hover:-translate-y-[3px] hover:border-accent md:rounded-[20px]"
+            >
+              <div className="aspect-square overflow-hidden bg-[var(--color-placeholder)] md:aspect-[4/3]">
+                <img
+                  src={card.image}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-2 p-3 md:p-5">
+                <h3 className="m-0 font-display text-[11px] font-black uppercase leading-[1.2] tracking-[0.04em] text-foreground md:text-[17px]">
+                  {card.title}
+                </h3>
+                <span
+                  aria-hidden="true"
+                  className="hidden font-display text-[16px] font-black text-primary md:inline"
+                >
+                  →
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
       </section>
 
       {/* Deals */}
@@ -216,6 +248,18 @@ function Index() {
         </div>
       </section>
 
+      {/* Video */}
+      <section className="mb-[52px]">
+        <h2 className="m-0 mb-6 border-b border-border pb-4 text-[22px] md:text-[32px]">
+          En vidéo
+        </h2>
+        <VideoEmbed
+          src={HOME_VIDEO_SRC}
+          title="Présentation de 2M Global Services"
+          className="mx-auto max-w-[960px]"
+        />
+      </section>
+
       {/* Perfume sibling brand */}
       <section className="mb-[52px] grid grid-cols-1 items-center gap-6 rounded-[24px] border border-[var(--color-gold-light)] bg-[var(--color-cream-light)] p-[26px] md:grid-cols-[1fr_auto] md:p-[40px]">
         <div>
@@ -244,28 +288,34 @@ function Index() {
             Équipez votre bureau
           </div>
           <h3 className="mb-4 text-[26px] leading-[1.02] md:text-[44px]">
-            Devis gratuit dès 5 postes
+            Devis gratuit sur demande
           </h3>
-          <p className="mb-[26px] max-w-[44ch] text-[16px] leading-[1.75] text-primary-foreground/86">
-            Bureaux, sièges, armoires et coffres : nous chiffrons tout sous 24 heures et nous
-            installons.
+          <p className="mb-[26px] max-w-[44ch] text-[16px] leading-[1.6] text-primary-foreground/86">
+            <strong className="font-extrabold text-primary-foreground">
+              Bureaux, sièges, armoires, coffres :
+            </strong>{" "}
+            réponse sous 24 h.
           </p>
           <a
             href="/contact"
-            className="inline-block rounded-full bg-[var(--color-gold-light)] px-[28px] py-[16px] font-display text-[12px] font-extrabold uppercase tracking-[0.14em] text-[var(--color-ink)] transition-colors hover:bg-background"
+            className="inline-block rounded-full bg-[var(--color-gold-light)] px-[28px] py-[16px] font-display text-[12px] font-black uppercase tracking-[0.14em] text-[var(--color-ink)] transition-colors hover:bg-background"
           >
             Demander un devis
           </a>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3">
           {[
-            { value: "15", label: "Années à Dakar" },
+            EXPERIENCE_STAT,
             { value: String(total), label: "Références" },
             { value: "3 200+", label: "Clients" },
             { value: "48h", label: "Livraison" },
           ].map((s) => (
             <div key={s.label} className="rounded-2xl bg-primary-foreground/10 p-5">
-              <div className="font-display text-[28px] font-black text-[var(--color-gold-light)]">
+              <div
+                className={`font-display font-black leading-tight text-[var(--color-gold-light)] ${
+                  s.value.length > 8 ? "break-words text-[14px]" : "text-[28px]"
+                }`}
+              >
                 {s.value}
               </div>
               <div className="text-[13px] text-primary-foreground/80">{s.label}</div>

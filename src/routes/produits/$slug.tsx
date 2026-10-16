@@ -3,7 +3,8 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Loader2, Star } from "lucide-react";
-import { CATEGORIES, CONTACT } from "@/lib/categories";
+import { CATEGORIES } from "@/lib/categories";
+import { productWhatsAppUrl } from "@/lib/whatsapp";
 import { getSalePrice } from "@/lib/products";
 import { fetchProductById, useAllProducts } from "@/lib/product-store";
 import { getProductDetails } from "@/lib/product-details";
@@ -26,6 +27,13 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 const MIN_QTY = 1;
 const MAX_QTY = 10;
 
+// The perfume category is kept out of titles, descriptions and structured data so the
+// site's search presence stays about furniture (mobilier, rangement, armoires, maison).
+function getSeoCategoryLabel(categorySlug: string): string {
+  if (categorySlug === "parfumerie") return "";
+  return CATEGORIES.find((c) => c.slug === categorySlug)?.label ?? "";
+}
+
 export const Route = createFileRoute("/produits/$slug")({
   loader: async ({ params }) => {
     const product = await fetchProductById(params.slug);
@@ -35,19 +43,25 @@ export const Route = createFileRoute("/produits/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return {};
-    const categoryLabel = CATEGORIES.find((c) => c.slug === product.categorySlug)?.label ?? "";
+    const categoryLabel = getSeoCategoryLabel(product.categorySlug);
     const salePrice = getSalePrice(product);
     return {
       meta: [
-        { title: `${product.name} — ${categoryLabel} | 2M Global Services` },
+        {
+          title: categoryLabel
+            ? `${product.name} — ${categoryLabel} | 2M Global Services`
+            : `${product.name} | 2M Global Services`,
+        },
         {
           name: "description",
-          content: `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
+          content: `${categoryLabel ? `${product.name} : ${categoryLabel.toLowerCase()}` : product.name} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
         },
         { property: "og:title", content: product.name },
         {
           property: "og:description",
-          content: `${categoryLabel} — ${product.name} disponible chez 2M Global Services.`,
+          content: categoryLabel
+            ? `${categoryLabel} — ${product.name} disponible chez 2M Global Services.`
+            : `${product.name} disponible chez 2M Global Services.`,
         },
         { property: "og:url", content: `/produits/${product.id}` },
       ],
@@ -171,6 +185,7 @@ function ProductDetailPage() {
   const subcategoryLabel = CATEGORIES.find(
     (c) => c.slug === product.categorySlug,
   )?.subcategories?.find((s) => s.slug === product.subcategorySlug)?.label;
+  const seoCategoryLabel = getSeoCategoryLabel(product.categorySlug);
   const salePrice = getSalePrice(product);
 
   const [quantity, setQuantity] = useState(1);
@@ -272,9 +287,11 @@ function ProductDetailPage() {
     "@type": "Product",
     name: product.name,
     image: details.images.map((img) => img.src).filter((src): src is string => src !== null),
-    description: details.description,
+    description: seoCategoryLabel
+      ? details.description
+      : `${product.name} — disponible chez 2M Global Services à Dakar.`,
     sku: details.sku,
-    category: categoryLabel,
+    ...(seoCategoryLabel ? { category: seoCategoryLabel } : {}),
     offers: {
       "@type": "Offer",
       priceCurrency: "XOF",
@@ -434,12 +451,12 @@ function ProductDetailPage() {
           )}
 
           <a
-            href={CONTACT.whatsapp}
+            href={productWhatsAppUrl(product.name)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mb-8 block rounded-full border-[1.5px] border-primary py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="mb-8 block rounded-full border-[1.5px] border-primary px-4 py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Commander sur WhatsApp
+            Commander / Demander un devis sur WhatsApp
           </a>
 
           <div className="border-t border-border text-[15px]">

@@ -1,7 +1,7 @@
 const MESSAGES = [
   "Livraison 24h dans Dakar",
   "Paiement à la livraison",
-  "Montage offert dès 200.000 CFA",
+  "Devis gratuit sur demande",
   "Déstockage en cours",
 ];
 

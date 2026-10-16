@@ -22,7 +22,6 @@ import {
 
 const MIN_QTY = 1;
 const MAX_QTY = 10;
-const DELIVERY_ESTIMATE = 2000;
 
 export const Route = createFileRoute("/panier")({
   head: () => ({
@@ -57,7 +56,6 @@ function PanierPage() {
     0,
   );
   const discountTotal = subtotal - total;
-  const grandTotal = total + (items.length > 0 ? DELIVERY_ESTIMATE : 0);
 
   function updateQuantity(productId: string, next: number) {
     if (next < MIN_QTY) return;
@@ -205,16 +203,12 @@ function PanierPage() {
                   </dd>
                 </div>
               )}
-              <div className="flex justify-between">
-                <dt className="text-primary-foreground/80">Livraison &amp; montage</dt>
-                <dd className="font-medium">{formatCFA(DELIVERY_ESTIMATE)}</dd>
-              </div>
               <div className="flex items-baseline justify-between border-t border-primary-foreground/20 pt-4">
                 <dt className="font-display text-[12px] font-extrabold uppercase tracking-[0.16em]">
                   Total
                 </dt>
                 <dd className="font-display text-[28px] font-black text-[var(--color-gold-light)]">
-                  {formatCFA(grandTotal)}
+                  {formatCFA(total)}
                 </dd>
               </div>
             </dl>

@@ -92,9 +92,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau et de maison, fauteuils, armoires, rangement, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { name: "author", content: "2M Global Services" },
+      {
+        name: "keywords",
+        content:
+          "mobilier de bureau Dakar, meubles Dakar, armoires métalliques, armoires bois, rangement bureau, fauteuils de bureau, mobilier maison Sénégal, salon, chambre à coucher, coffre-fort, 2M Global Services",
+      },
       {
         property: "og:title",
         content: "Accueil — 2M Global Services | Mobilier de bureau à Dakar",
@@ -102,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau et de maison, fauteuils, armoires, rangement, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "2M Global Services" },
@@ -114,7 +119,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "twitter:description",
         content:
-          "2M Global Services à Dakar : mobilier de bureau, fauteuils, armoires, électroniques et coffres-forts. La Qualité à moindre Coût.",
+          "2M Global Services à Dakar : mobilier de bureau et de maison, fauteuils, armoires, rangement, électroniques et coffres-forts. La Qualité à moindre Coût.",
       },
       {
         property: "og:image",
@@ -138,6 +143,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/logo.png", type: "image/png" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),

@@ -16,8 +16,6 @@ export function Footer() {
             2M Global Services
           </h2>
           <div className="text-[14px] leading-[1.9] text-primary-foreground/72">
-            {CONTACT.address}
-            <br />
             {CONTACT.phones.map((p, i) => (
               <span key={p.tel}>
                 <a href={`tel:${p.tel}`} className="hover:text-[var(--color-gold-light)]">
@@ -26,10 +24,6 @@ export function Footer() {
                 {i < CONTACT.phones.length - 1 && " · "}
               </span>
             ))}
-            <br />
-            <a href={`mailto:${CONTACT.email}`} className="hover:text-[var(--color-gold-light)]">
-              {CONTACT.email}
-            </a>
           </div>
         </section>
 
@@ -64,12 +58,12 @@ export function Footer() {
           </ul>
         </nav>
 
-        <nav aria-labelledby="footer-maison">
+        <nav aria-labelledby="footer-entreprise">
           <h2
-            id="footer-maison"
+            id="footer-entreprise"
             className="mb-4 font-display text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]"
           >
-            Maison
+            Entreprise
           </h2>
           <ul className="flex flex-col gap-[10px] text-[14px] text-primary-foreground/78">
             <li>

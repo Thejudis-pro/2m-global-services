@@ -28,7 +28,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Contactez 2M Global Services à Dakar : adresse, téléphone, e-mail et formulaire de contact.",
+          "Contactez 2M Global Services à Dakar : téléphone, WhatsApp et formulaire de devis pour votre mobilier.",
       },
     ],
   }),
@@ -107,27 +107,11 @@ function ContactPage() {
 
           <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
             <div className="mb-[10px] text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-              Notre adresse
+              Livraison
             </div>
-            <div className="font-display text-[17px] font-bold leading-[1.55]">
-              {CONTACT.address}
+            <div className="text-[14px] text-muted-foreground">
+              Livraison dans tout Dakar — commandez par téléphone ou WhatsApp.
             </div>
-            <div className="mt-[10px] text-[14px] text-muted-foreground">
-              Livraison dans tout Dakar — pas de boutique physique, commandez par téléphone ou
-              WhatsApp.
-            </div>
-          </div>
-
-          <div className="rounded-[20px] border border-border bg-[var(--color-cream-light)] p-6">
-            <div className="mb-[10px] text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-              E-mail
-            </div>
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="font-display text-[16px] font-bold hover:text-accent"
-            >
-              {CONTACT.email}
-            </a>
           </div>
         </div>
 

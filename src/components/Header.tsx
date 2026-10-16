@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { useStorefrontCategories } from "@/lib/category-store";
@@ -16,6 +16,15 @@ export function Header() {
   const count = useCartCount();
   const categories = useStorefrontCategories();
   const navigate = useNavigate();
+  // The logo is /public/logo.png. Until that file exists, fall back to the text wordmark.
+  const [logoFailed, setLogoFailed] = useState(false);
+  const logoRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // The image may have failed before React hydrated, so onError never fired.
+    const img = logoRef.current;
+    if (img && img.complete && img.naturalWidth === 0) setLogoFailed(true);
+  }, []);
 
   function submitSearch(value: string, closeMobile = false) {
     const query = value.trim();
@@ -36,7 +45,7 @@ export function Header() {
             Catalogue
           </Link>
           <a href="/a-propos" className={navLinkClass}>
-            Maison
+            À propos
           </a>
           <a href="/contact" className={navLinkClass}>
             Contact
@@ -51,12 +60,33 @@ export function Header() {
           </a>
         </nav>
 
-        <Link to="/" className="text-center" aria-label="2M Global Services — Accueil">
-          <div className="font-display text-[20px] font-black uppercase leading-none tracking-[-0.01em] text-foreground md:text-[22px]">
-            2M Global Services
-          </div>
-          <div className="mt-1 text-[9px] uppercase tracking-[0.32em] text-muted-foreground">
-            Dakar · depuis 2011
+        <Link
+          to="/"
+          className="flex min-w-0 items-center justify-center gap-2.5 text-center"
+          aria-label="2M Global Services — Accueil"
+        >
+          {!logoFailed && (
+            <img
+              ref={logoRef}
+              src="/logo.png"
+              alt=""
+              className="h-9 w-auto shrink-0 object-contain md:h-11"
+              onError={() => setLogoFailed(true)}
+            />
+          )}
+          <div className="min-w-0">
+            <div
+              className={`font-display font-black uppercase leading-none tracking-[-0.01em] text-foreground ${
+                logoFailed
+                  ? "text-[20px] md:text-[22px]"
+                  : "text-[16px] sm:text-[20px] md:text-[22px]"
+              }`}
+            >
+              2M Global Services
+            </div>
+            <div className="mt-1 text-[9px] uppercase tracking-[0.32em] text-muted-foreground">
+              Dakar · depuis 2011
+            </div>
           </div>
         </Link>
 
@@ -194,7 +224,7 @@ export function Header() {
                   onClick={() => setOpen(false)}
                   className="px-4 py-3 font-display text-base font-bold uppercase tracking-[0.02em]"
                 >
-                  Maison
+                  À propos
                 </a>
                 <a
                   href="/contact"

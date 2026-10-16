@@ -101,7 +101,7 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="font-display text-[17px] font-black text-primary">
+              <span className="font-display text-[17px] font-black text-foreground">
                 {formatCFA(salePrice)}
               </span>
               {product.discountPercent > 0 && (

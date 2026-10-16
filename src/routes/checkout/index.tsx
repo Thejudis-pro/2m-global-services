@@ -21,14 +21,14 @@ const DELIVERY_SLOTS = [
   {
     value: "demain-matin",
     label: "Demain · 9h–13h",
-    note: "Montage inclus · offerte",
+    note: "Livraison à domicile",
     deliveryMethod: "delivery" as const,
     fee: DELIVERY_FEE,
   },
   {
     value: "demain-apresmidi",
     label: "Demain · 15h–19h",
-    note: "Montage inclus · offerte",
+    note: "Livraison à domicile",
     deliveryMethod: "delivery" as const,
     fee: DELIVERY_FEE,
   },
@@ -434,7 +434,7 @@ function CheckoutPage() {
               </div>
             )}
             <div className="flex justify-between text-muted-foreground">
-              <dt>Livraison &amp; montage</dt>
+              <dt>Livraison</dt>
               <dd>{deliveryFee > 0 ? formatCFA(deliveryFee) : "Gratuite"}</dd>
             </div>
             <div className="flex items-baseline justify-between border-t border-border pt-3 font-display text-[12px] font-extrabold uppercase tracking-[0.1em]">
