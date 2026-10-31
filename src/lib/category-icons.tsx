@@ -1,6 +1,7 @@
 import {
   Archive,
   Armchair,
+  CarFront,
   Cpu,
   ShieldCheck,
   Sofa,
@@ -15,6 +16,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "salon-chambre": Sofa,
   armoires: Archive,
   electroniques: Cpu,
+  vehicules: CarFront,
   "coffre-fort": ShieldCheck,
   parfumerie: Sparkles,
 };

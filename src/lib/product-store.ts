@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { PRODUCTS as SEED_PRODUCTS, type Product } from "@/lib/products";
 import { slugify } from "@/lib/slugify";
+import { ensureVehicleCategory, isVehicle, readVehicleFromJson } from "@/lib/vehicles";
 
 // Products now live in Supabase (table `products`, RLS: public read, admin
 // write). Until the one-time catalog import has run (see the "Importer le
@@ -28,11 +29,13 @@ type ProductRow = {
   featured: boolean;
   sku: string | null;
   weight_kg: string | number | null;
-  dimensions: { height: number; width: number; depth: number } | null;
+  // For vehicles this holds { vehicle: VehicleSpecs } instead (see vehicles.ts).
+  dimensions: { height: number; width: number; depth: number } | { vehicle: unknown } | null;
   description: string | null;
 };
 
 function rowToProduct(row: ProductRow): Product {
+  const vehicle = readVehicleFromJson(row.dimensions);
   return {
     id: row.id,
     name: row.name,
@@ -50,8 +53,10 @@ function rowToProduct(row: ProductRow): Product {
     featured: row.featured,
     sku: row.sku ?? undefined,
     weightKg: row.weight_kg === null ? undefined : Number(row.weight_kg),
-    dimensions: row.dimensions ?? undefined,
+    dimensions:
+      vehicle || !row.dimensions || "vehicle" in row.dimensions ? undefined : row.dimensions,
     description: row.description ?? undefined,
+    vehicle,
   };
 }
 
@@ -73,7 +78,7 @@ function productToRow(product: Product) {
     featured: product.featured ?? false,
     sku: product.sku ?? null,
     weight_kg: product.weightKg ?? null,
-    dimensions: product.dimensions ?? null,
+    dimensions: product.vehicle ? { vehicle: product.vehicle } : (product.dimensions ?? null),
     description: product.description ?? null,
   };
 }
@@ -137,11 +142,15 @@ export const productStore = {
       createdAt: new Date().toISOString().slice(0, 10),
       sku: input.sku ?? `2M-ADM-${Date.now().toString().slice(-6)}`,
     };
+    if (isVehicle(product)) await ensureVehicleCategory(product.subcategorySlug);
     const { error } = await supabase.from("products").insert(productToRow(product));
     if (error) throw error;
     return product;
   },
   async updateProduct(id: string, patch: Partial<Product>): Promise<void> {
+    if (patch.categorySlug !== undefined && isVehicle({ categorySlug: patch.categorySlug })) {
+      await ensureVehicleCategory(patch.subcategorySlug);
+    }
     const row: Database["public"]["Tables"]["products"]["Update"] = {};
     if (patch.name !== undefined) row.name = patch.name;
     if (patch.alt !== undefined) row.alt = patch.alt;
@@ -157,7 +166,8 @@ export const productStore = {
     if (patch.featured !== undefined) row.featured = patch.featured;
     if (patch.sku !== undefined) row.sku = patch.sku;
     if (patch.weightKg !== undefined) row.weight_kg = patch.weightKg ?? null;
-    if (patch.dimensions !== undefined) row.dimensions = patch.dimensions ?? null;
+    if (patch.vehicle !== undefined) row.dimensions = { vehicle: patch.vehicle };
+    else if (patch.dimensions !== undefined) row.dimensions = patch.dimensions ?? null;
     if (patch.description !== undefined) row.description = patch.description ?? null;
     const { error } = await supabase.from("products").update(row).eq("id", id);
     if (error) throw error;
@@ -174,6 +184,7 @@ export const productStore = {
     categorySlug: string,
     subcategorySlug?: string,
   ): Promise<void> {
+    if (isVehicle({ categorySlug })) await ensureVehicleCategory(subcategorySlug);
     const { error } = await supabase
       .from("products")
       .update({ category_slug: categorySlug, subcategory_slug: subcategorySlug ?? null })

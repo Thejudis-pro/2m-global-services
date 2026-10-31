@@ -6,7 +6,14 @@ import type { Product } from "@/lib/products";
 import { productStore, useAllProducts, useInvalidateProducts } from "@/lib/product-store";
 import { categoryStore, useAllCategories, useInvalidateCategories } from "@/lib/category-store";
 import { slugify } from "@/lib/slugify";
-import type { Category } from "@/lib/categories";
+import { CATEGORIES, type Category } from "@/lib/categories";
+import {
+  CONDITION_OPTIONS,
+  FUEL_OPTIONS,
+  GEARBOX_OPTIONS,
+  VEHICLE_CATEGORY_SLUG,
+  type VehicleSpecs,
+} from "@/lib/vehicles";
 import { formatCFA } from "@/lib/format";
 import { exportProductsXlsx } from "@/lib/excel-export";
 import { compressImageFile, uploadProductImage } from "@/lib/image-compression";
@@ -595,10 +602,75 @@ function InlineCreate({
   );
 }
 
+// Text inputs of the "Fiche véhicule" section (numbers are kept as strings
+// while typing, like the other numeric fields of this form).
+type VehicleForm = {
+  brand: string;
+  model: string;
+  year: string;
+  mileageKm: string;
+  fuel: string;
+  gearbox: string;
+  color: string;
+  seats: string;
+  condition: string;
+  customsCleared: "" | "oui" | "non";
+  location: string;
+};
+
+function vehicleToForm(v?: VehicleSpecs): VehicleForm {
+  return {
+    brand: v?.brand ?? "",
+    model: v?.model ?? "",
+    year: v?.year !== undefined ? String(v.year) : "",
+    mileageKm: v?.mileageKm !== undefined ? String(v.mileageKm) : "",
+    fuel: v?.fuel ?? "",
+    gearbox: v?.gearbox ?? "",
+    color: v?.color ?? "",
+    seats: v?.seats !== undefined ? String(v.seats) : "",
+    condition: v?.condition ?? "",
+    customsCleared: v?.customsCleared === undefined ? "" : v.customsCleared ? "oui" : "non",
+    location: v?.location ?? "Dakar",
+  };
+}
+
+function VehicleSelect({
+  id,
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  options: readonly string[];
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <Label htmlFor={id}>{label}</Label>
+      <Select value={value || "none"} onValueChange={(v) => onChange(v === "none" ? "" : v)}>
+        <SelectTrigger id={id}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">—</SelectItem>
+          {options.map((o) => (
+            <SelectItem key={o} value={o}>
+              {o}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 function ProductFormDialog({
   mode,
   product,
-  categories,
+  categories: dbCategories,
   onClose,
 }: {
   mode: "add" | "edit";
@@ -606,6 +678,13 @@ function ProductFormDialog({
   categories: Category[];
   onClose: () => void;
 }) {
+  // "Véhicules" is offered even before it exists in the database: it is
+  // created automatically when the first vehicle is saved (see vehicles.ts).
+  const categories = useMemo(() => {
+    if (dbCategories.some((c) => c.slug === VEHICLE_CATEGORY_SLUG)) return dbCategories;
+    const def = CATEGORIES.find((c) => c.slug === VEHICLE_CATEGORY_SLUG);
+    return def ? [...dbCategories, def] : dbCategories;
+  }, [dbCategories]);
   const invalidate = useInvalidateProducts();
   const invalidateCategories = useInvalidateCategories();
   const [name, setName] = useState(product?.name ?? "");
@@ -629,6 +708,9 @@ function ProductFormDialog({
   const [depth, setDepth] = useState(
     product?.dimensions?.depth !== undefined ? String(product.dimensions.depth) : "",
   );
+  const [vehicleForm, setVehicleForm] = useState<VehicleForm>(() =>
+    vehicleToForm(product?.vehicle),
+  );
   const [featured, setFeatured] = useState(product?.featured ?? false);
   const [isNew, setIsNew] = useState(product?.isNew ?? true);
   const [images, setImages] = useState<ImageEntry[]>(
@@ -639,6 +721,11 @@ function ProductFormDialog({
   const [saving, setSaving] = useState(false);
 
   const selectedCategory = categories.find((c) => c.slug === categorySlug);
+  const isVehicleForm = categorySlug === VEHICLE_CATEGORY_SLUG;
+
+  function setVehicleField<K extends keyof VehicleForm>(key: K, value: VehicleForm[K]) {
+    setVehicleForm((prev) => ({ ...prev, [key]: value }));
+  }
 
   async function createCategory(name: string) {
     await categoryStore.addCategory(name);
@@ -665,14 +752,12 @@ function ProductFormDialog({
       );
       setImages((prev) => [
         ...prev,
-        ...compressed.map(
-          (blob): ImageEntry => ({
-            kind: "pending",
-            blob,
-            previewUrl: URL.createObjectURL(blob),
-            alt: "",
-          }),
-        ),
+        ...compressed.map((blob): ImageEntry => ({
+          kind: "pending",
+          blob,
+          previewUrl: URL.createObjectURL(blob),
+          alt: "",
+        })),
       ]);
     } catch {
       toast.error("Une image n'a pas pu être traitée.");
@@ -693,7 +778,46 @@ function ProductFormDialog({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const nextErrors: Record<string, string> = {};
-    if (name.trim().length < 2) nextErrors.name = "Le nom du produit est requis.";
+    // For a vehicle, an empty name is built from marque + modèle + année.
+    const vf = vehicleForm;
+    const finalName =
+      isVehicleForm && name.trim().length === 0
+        ? [vf.brand.trim(), vf.model.trim(), vf.year.trim()].filter(Boolean).join(" ")
+        : name.trim();
+    if (finalName.length < 2) nextErrors.name = "Le nom du produit est requis.";
+    let vehicle: VehicleSpecs | undefined;
+    if (isVehicleForm) {
+      const toInt = (v: string) => (v.trim() ? Number(v) : undefined);
+      const year = toInt(vf.year);
+      const mileageKm = toInt(vf.mileageKm);
+      const seats = toInt(vf.seats);
+      const thisYear = new Date().getFullYear();
+      if (!vf.brand.trim() || !vf.model.trim()) {
+        nextErrors.vehicle = "La marque et le modèle sont requis.";
+      } else if (
+        year !== undefined &&
+        (!Number.isInteger(year) || year < 1950 || year > thisYear + 1)
+      ) {
+        nextErrors.vehicle = "Année invalide.";
+      } else if (mileageKm !== undefined && (Number.isNaN(mileageKm) || mileageKm < 0)) {
+        nextErrors.vehicle = "Kilométrage invalide.";
+      } else if (seats !== undefined && (!Number.isInteger(seats) || seats < 1 || seats > 60)) {
+        nextErrors.vehicle = "Nombre de places invalide.";
+      }
+      vehicle = {
+        brand: vf.brand.trim(),
+        model: vf.model.trim(),
+        ...(year !== undefined ? { year } : {}),
+        ...(mileageKm !== undefined ? { mileageKm: Math.round(mileageKm) } : {}),
+        ...(vf.fuel ? { fuel: vf.fuel } : {}),
+        ...(vf.gearbox ? { gearbox: vf.gearbox } : {}),
+        ...(vf.color.trim() ? { color: vf.color.trim() } : {}),
+        ...(seats !== undefined ? { seats } : {}),
+        ...(vf.condition ? { condition: vf.condition } : {}),
+        ...(vf.customsCleared ? { customsCleared: vf.customsCleared === "oui" } : {}),
+        ...(vf.location.trim() ? { location: vf.location.trim() } : {}),
+      };
+    }
     if (!categorySlug) nextErrors.category = "Veuillez choisir une catégorie.";
     const priceNum = Number(originalPrice);
     if (Number.isNaN(priceNum) || priceNum <= 0) nextErrors.price = "Prix invalide.";
@@ -722,6 +846,11 @@ function ProductFormDialog({
       nextErrors.dimensions = "Dimensions invalides.";
     }
 
+    if (isVehicleForm) {
+      // Weight and dimensions are hidden for a vehicle: ignore stale values.
+      delete nextErrors.weight;
+      delete nextErrors.dimensions;
+    }
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
@@ -738,7 +867,7 @@ function ProductFormDialog({
           ? { height: heightNum, width: widthNum, depth: depthNum }
           : undefined;
 
-      const productId = mode === "add" ? productStore.generateId(name.trim()) : product!.id;
+      const productId = mode === "add" ? productStore.generateId(finalName) : product!.id;
 
       // Upload any newly-selected images now that we know the final product id.
       const resolvedImages = await Promise.all(
@@ -752,7 +881,7 @@ function ProductFormDialog({
       if (mode === "add") {
         await productStore.addProduct({
           id: productId,
-          name: name.trim(),
+          name: finalName,
           alt: resolvedImages[0].alt,
           image: resolvedImages[0].src,
           images: resolvedImages,
@@ -762,29 +891,31 @@ function ProductFormDialog({
           discountPercent: discountNum,
           description: description.trim() || undefined,
           sku: sku.trim() || undefined,
-          weightKg: weightNum,
-          dimensions,
+          weightKg: isVehicleForm ? undefined : weightNum,
+          dimensions: isVehicleForm ? undefined : dimensions,
+          vehicle,
           featured,
         });
-        toast.success(`« ${name.trim()} » ajouté au catalogue.`);
+        toast.success(`« ${finalName} » ajouté au catalogue.`);
       } else if (product) {
         await productStore.updateProduct(product.id, {
-          name: name.trim(),
+          name: finalName,
           categorySlug,
           subcategorySlug: subcategorySlug || undefined,
           originalPrice: priceNum,
           discountPercent: discountNum,
           description: description.trim() || undefined,
           sku: sku.trim() || undefined,
-          weightKg: weightNum,
-          dimensions,
+          weightKg: isVehicleForm ? undefined : weightNum,
+          dimensions: isVehicleForm ? undefined : dimensions,
+          ...(vehicle ? { vehicle } : {}),
           featured,
           isNew,
           ...(resolvedImages.length > 0
             ? { images: resolvedImages, image: resolvedImages[0].src, alt: resolvedImages[0].alt }
             : {}),
         });
-        toast.success(`« ${name.trim()} » mis à jour.`);
+        toast.success(`« ${finalName} » mis à jour.`);
       }
       await invalidate();
       onClose();
@@ -810,7 +941,9 @@ function ProductFormDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
-            <Label htmlFor="product-name">Nom</Label>
+            <Label htmlFor="product-name">
+              Nom{isVehicleForm ? " (optionnel : marque + modèle + année si vide)" : ""}
+            </Label>
             <Input
               id="product-name"
               value={name}
@@ -936,70 +1069,193 @@ function ProductFormDialog({
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <Label htmlFor="product-sku">Référence / SKU (optionnel)</Label>
-              <Input
-                id="product-sku"
-                value={sku}
-                onChange={(e) => setSku(e.target.value)}
-                placeholder="Généré automatiquement si vide"
-              />
-            </div>
-            <div>
-              <Label htmlFor="product-weight">Poids en kg (optionnel)</Label>
-              <Input
-                id="product-weight"
-                type="number"
-                min={0}
-                step="0.1"
-                value={weightKg}
-                onChange={(e) => setWeightKg(e.target.value)}
-                aria-invalid={Boolean(errors.weight)}
-                aria-describedby="product-weight-error"
-              />
-              <p
-                id="product-weight-error"
-                role="alert"
-                className="mt-1 min-h-[1rem] text-xs text-destructive"
-              >
-                {errors.weight}
+          {isVehicleForm && (
+            <fieldset className="space-y-4 rounded-lg border border-border p-4">
+              <legend className="px-1 text-sm font-semibold text-foreground">Fiche véhicule</legend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="vehicle-brand">Marque *</Label>
+                  <Input
+                    id="vehicle-brand"
+                    value={vehicleForm.brand}
+                    onChange={(e) => setVehicleField("brand", e.target.value)}
+                    placeholder="Toyota"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="vehicle-model">Modèle *</Label>
+                  <Input
+                    id="vehicle-model"
+                    value={vehicleForm.model}
+                    onChange={(e) => setVehicleField("model", e.target.value)}
+                    placeholder="Land Cruiser Prado"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="vehicle-year">Année</Label>
+                  <Input
+                    id="vehicle-year"
+                    type="number"
+                    min={1950}
+                    value={vehicleForm.year}
+                    onChange={(e) => setVehicleField("year", e.target.value)}
+                    placeholder="2018"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="vehicle-mileage">Kilométrage (km)</Label>
+                  <Input
+                    id="vehicle-mileage"
+                    type="number"
+                    min={0}
+                    value={vehicleForm.mileageKm}
+                    onChange={(e) => setVehicleField("mileageKm", e.target.value)}
+                    placeholder="85000"
+                  />
+                </div>
+                <VehicleSelect
+                  id="vehicle-fuel"
+                  label="Carburant"
+                  value={vehicleForm.fuel}
+                  options={FUEL_OPTIONS}
+                  onChange={(v) => setVehicleField("fuel", v)}
+                />
+                <VehicleSelect
+                  id="vehicle-gearbox"
+                  label="Boîte de vitesses"
+                  value={vehicleForm.gearbox}
+                  options={GEARBOX_OPTIONS}
+                  onChange={(v) => setVehicleField("gearbox", v)}
+                />
+                <VehicleSelect
+                  id="vehicle-condition"
+                  label="État"
+                  value={vehicleForm.condition}
+                  options={CONDITION_OPTIONS}
+                  onChange={(v) => setVehicleField("condition", v)}
+                />
+                <VehicleSelect
+                  id="vehicle-customs"
+                  label="Dédouané"
+                  value={
+                    vehicleForm.customsCleared === "oui"
+                      ? "Oui"
+                      : vehicleForm.customsCleared === "non"
+                        ? "Non"
+                        : ""
+                  }
+                  options={["Oui", "Non"]}
+                  onChange={(v) =>
+                    setVehicleField(
+                      "customsCleared",
+                      v === "Oui" ? "oui" : v === "Non" ? "non" : "",
+                    )
+                  }
+                />
+                <div>
+                  <Label htmlFor="vehicle-color">Couleur</Label>
+                  <Input
+                    id="vehicle-color"
+                    value={vehicleForm.color}
+                    onChange={(e) => setVehicleField("color", e.target.value)}
+                    placeholder="Blanc nacré"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="vehicle-seats">Nombre de places</Label>
+                  <Input
+                    id="vehicle-seats"
+                    type="number"
+                    min={1}
+                    value={vehicleForm.seats}
+                    onChange={(e) => setVehicleField("seats", e.target.value)}
+                    placeholder="5"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <Label htmlFor="vehicle-location">Visible à</Label>
+                  <Input
+                    id="vehicle-location"
+                    value={vehicleForm.location}
+                    onChange={(e) => setVehicleField("location", e.target.value)}
+                    placeholder="Dakar"
+                  />
+                </div>
+              </div>
+              <p role="alert" className="min-h-[1rem] text-xs text-destructive">
+                {errors.vehicle}
               </p>
-            </div>
-          </div>
+            </fieldset>
+          )}
 
-          <div>
-            <Label>Dimensions en cm (optionnel)</Label>
-            <div className="grid gap-2 sm:grid-cols-3">
-              <Input
-                type="number"
-                min={0}
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                placeholder="Hauteur"
-                aria-label="Hauteur en cm"
-              />
-              <Input
-                type="number"
-                min={0}
-                value={width}
-                onChange={(e) => setWidth(e.target.value)}
-                placeholder="Largeur"
-                aria-label="Largeur en cm"
-              />
-              <Input
-                type="number"
-                min={0}
-                value={depth}
-                onChange={(e) => setDepth(e.target.value)}
-                placeholder="Profondeur"
-                aria-label="Profondeur en cm"
-              />
-            </div>
-            <p role="alert" className="mt-1 min-h-[1rem] text-xs text-destructive">
-              {errors.dimensions}
-            </p>
-          </div>
+          {!isVehicleForm && (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="product-sku">Référence / SKU (optionnel)</Label>
+                  <Input
+                    id="product-sku"
+                    value={sku}
+                    onChange={(e) => setSku(e.target.value)}
+                    placeholder="Généré automatiquement si vide"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="product-weight">Poids en kg (optionnel)</Label>
+                  <Input
+                    id="product-weight"
+                    type="number"
+                    min={0}
+                    step="0.1"
+                    value={weightKg}
+                    onChange={(e) => setWeightKg(e.target.value)}
+                    aria-invalid={Boolean(errors.weight)}
+                    aria-describedby="product-weight-error"
+                  />
+                  <p
+                    id="product-weight-error"
+                    role="alert"
+                    className="mt-1 min-h-[1rem] text-xs text-destructive"
+                  >
+                    {errors.weight}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Label>Dimensions en cm (optionnel)</Label>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  <Input
+                    type="number"
+                    min={0}
+                    value={height}
+                    onChange={(e) => setHeight(e.target.value)}
+                    placeholder="Hauteur"
+                    aria-label="Hauteur en cm"
+                  />
+                  <Input
+                    type="number"
+                    min={0}
+                    value={width}
+                    onChange={(e) => setWidth(e.target.value)}
+                    placeholder="Largeur"
+                    aria-label="Largeur en cm"
+                  />
+                  <Input
+                    type="number"
+                    min={0}
+                    value={depth}
+                    onChange={(e) => setDepth(e.target.value)}
+                    placeholder="Profondeur"
+                    aria-label="Profondeur en cm"
+                  />
+                </div>
+                <p role="alert" className="mt-1 min-h-[1rem] text-xs text-destructive">
+                  {errors.dimensions}
+                </p>
+              </div>
+            </>
+          )}
 
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2 text-sm text-foreground">

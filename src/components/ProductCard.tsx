@@ -6,6 +6,7 @@ import { formatCFA } from "@/lib/format";
 import { cartStore } from "@/lib/cart-store";
 import { useAllCategories } from "@/lib/category-store";
 import { getSalePrice, PLACEHOLDER_IMAGE, type Product } from "@/lib/products";
+import { isVehicle, vehicleSummary, vehicleWhatsAppUrl } from "@/lib/vehicles";
 
 function AddToCartButton({ productId, productName }: { productId: string; productName: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "added">("idle");
@@ -47,6 +48,8 @@ export function ProductCard({ product }: { product: Product }) {
   const hasRealPhoto = product.image && product.image !== PLACEHOLDER_IMAGE;
   const categories = useAllCategories();
   const categoryLabel = categories.find((c) => c.slug === product.categorySlug)?.label ?? "";
+  const vehicle = isVehicle(product);
+  const summary = product.vehicle ? vehicleSummary(product.vehicle) : "";
 
   return (
     <FusionCard
@@ -93,6 +96,7 @@ export function ProductCard({ product }: { product: Product }) {
             {product.name}
           </a>
         </h3>
+        {summary && <p className="text-[12px] leading-snug text-muted-foreground">{summary}</p>}
 
         <div className="flex flex-1 items-end">
           {product.originalPrice === 0 ? (
@@ -113,8 +117,19 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        {product.originalPrice > 0 && (
-          <AddToCartButton productId={product.id} productName={product.name} />
+        {vehicle ? (
+          <a
+            href={vehicleWhatsAppUrl(product)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1.5 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-ink)] px-[12px] py-[12px] font-display text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary"
+          >
+            Je suis intéressé
+          </a>
+        ) : (
+          product.originalPrice > 0 && (
+            <AddToCartButton productId={product.id} productName={product.name} />
+          )
         )}
       </div>
     </FusionCard>

@@ -10,6 +10,12 @@ import { getSalePrice } from "@/lib/products";
 import { fetchProductById, useAllProducts } from "@/lib/product-store";
 import { getProductDetails } from "@/lib/product-details";
 import {
+  isVehicle,
+  vehicleSpecRows,
+  vehicleTestDriveUrl,
+  vehicleWhatsAppUrl,
+} from "@/lib/vehicles";
+import {
   getReviewSummary,
   reviewsStore,
   useApprovedReviews,
@@ -44,7 +50,9 @@ export const Route = createFileRoute("/produits/$slug")({
         { title: `${product.name} — ${categoryLabel} | 2M Global Services` },
         {
           name: "description",
-          content: `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
+          content: isVehicle(product)
+            ? `${product.name} à vendre chez 2M Global Services à Dakar — ${formatCFA(salePrice)}. Contactez-nous sur WhatsApp pour une visite ou un essai.`
+            : `${product.name} : ${categoryLabel.toLowerCase()} au meilleur prix chez 2M Global Services à Dakar, à partir de ${formatCFA(salePrice)}. Livraison à Dakar et partout au Sénégal.`,
         },
         { property: "og:title", content: product.name },
         {
@@ -174,6 +182,8 @@ function ProductDetailPage() {
     (c) => c.slug === product.categorySlug,
   )?.subcategories?.find((s) => s.slug === product.subcategorySlug)?.label;
   const salePrice = getSalePrice(product);
+  const vehicle = isVehicle(product);
+  const specRows = product.vehicle ? vehicleSpecRows(product.vehicle) : [];
 
   const [quantity, setQuantity] = useState(1);
   const [quantityError, setQuantityError] = useState("");
@@ -315,7 +325,14 @@ function ProductDetailPage() {
         <a href="/produits" className="hover:text-accent">
           Catalogue
         </a>{" "}
-        — {categoryLabel}
+        —{" "}
+        {vehicle ? (
+          <a href="/vehicules" className="hover:text-accent">
+            {categoryLabel}
+          </a>
+        ) : (
+          categoryLabel
+        )}
       </nav>
 
       <div className="grid items-start gap-11 lg:grid-cols-2">
@@ -365,11 +382,34 @@ function ProductDetailPage() {
           <div className="mb-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
               <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-              En stock — Dakar
+              {vehicle ? "Disponible — visible sur rendez-vous" : "En stock — Dakar"}
             </span>
           </div>
 
-          {product.originalPrice > 0 && (
+          {vehicle && (
+            <div className="mb-8 mt-5 flex flex-col gap-3">
+              <a
+                href={vehicleWhatsAppUrl(product)}
+                onClick={() => void logWhatsAppQuoteClick(product.name)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-full bg-[var(--color-ink)] px-[26px] py-[17px] text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary"
+              >
+                Je suis intéressé · WhatsApp
+              </a>
+              <a
+                href={vehicleTestDriveUrl(product)}
+                onClick={() => void logWhatsAppQuoteClick(`Essai — ${product.name}`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-full border-[1.5px] border-primary px-4 py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                Demander une visite ou un essai
+              </a>
+            </div>
+          )}
+
+          {!vehicle && product.originalPrice > 0 && (
             <>
               <div className="mb-3 flex flex-wrap gap-3">
                 <div
@@ -426,44 +466,63 @@ function ProductDetailPage() {
             </>
           )}
 
-          <a
-            href={productWhatsAppUrl(product.name)}
-            onClick={() => void logWhatsAppQuoteClick(product.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mb-8 block rounded-full border-[1.5px] border-primary px-4 py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-          >
-            Commander / Demander un devis sur WhatsApp
-          </a>
+          {!vehicle && (
+            <a
+              href={productWhatsAppUrl(product.name)}
+              onClick={() => void logWhatsAppQuoteClick(product.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-8 block rounded-full border-[1.5px] border-primary px-4 py-4 text-center font-display text-[13px] font-extrabold uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            >
+              Commander / Demander un devis sur WhatsApp
+            </a>
+          )}
 
-          <div className="border-t border-border text-[15px]">
-            <div className="flex justify-between border-b border-border py-[15px]">
-              <span className="text-muted-foreground">Dimensions</span>
-              <span className="font-medium">
-                {details.dimensions.height} × {details.dimensions.width} ×{" "}
-                {details.dimensions.depth} cm
-              </span>
+          {vehicle ? (
+            <div className="border-t border-border text-[15px]">
+              <h2 className="m-0 border-b border-border py-[15px] text-[13px] uppercase tracking-[0.18em]">
+                Caractéristiques
+              </h2>
+              {specRows.map((row) => (
+                <div
+                  key={row.label}
+                  className="flex justify-between gap-4 border-b border-border py-[13px]"
+                >
+                  <span className="text-muted-foreground">{row.label}</span>
+                  <span className="text-right font-medium">{row.value}</span>
+                </div>
+              ))}
             </div>
-            <div className="flex justify-between border-b border-border py-[15px]">
-              <span className="text-muted-foreground">Poids</span>
-              <span className="font-medium">{details.weightKg} kg</span>
+          ) : (
+            <div className="border-t border-border text-[15px]">
+              <div className="flex justify-between border-b border-border py-[15px]">
+                <span className="text-muted-foreground">Dimensions</span>
+                <span className="font-medium">
+                  {details.dimensions.height} × {details.dimensions.width} ×{" "}
+                  {details.dimensions.depth} cm
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-border py-[15px]">
+                <span className="text-muted-foreground">Poids</span>
+                <span className="font-medium">{details.weightKg} kg</span>
+              </div>
+              <div className="flex justify-between border-b border-border py-[15px]">
+                <span className="text-muted-foreground">Disponibilité</span>
+                <span className="font-medium text-primary">En stock — Dakar</span>
+              </div>
+              <div className="flex justify-between py-[15px]">
+                <span className="text-muted-foreground">Livraison</span>
+                <span className="font-medium">24–48h</span>
+              </div>
             </div>
-            <div className="flex justify-between border-b border-border py-[15px]">
-              <span className="text-muted-foreground">Disponibilité</span>
-              <span className="font-medium text-primary">En stock — Dakar</span>
-            </div>
-            <div className="flex justify-between py-[15px]">
-              <span className="text-muted-foreground">Livraison</span>
-              <span className="font-medium">24–48h</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
       {similarProducts.length > 0 && (
         <section className="mt-16">
           <h2 className="m-0 mb-[22px] border-b border-border pb-4 text-[26px]">
-            Souvent achetés ensemble
+            {vehicle ? "Autres véhicules disponibles" : "Souvent achetés ensemble"}
           </h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {similarProducts.map((p) => (

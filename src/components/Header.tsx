@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { useStorefrontCategories } from "@/lib/category-store";
 import { useCartCount } from "@/lib/cart-store";
+import { categoryHref, VEHICLE_CATEGORY_SLUG } from "@/lib/vehicles";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
 const navLinkClass =
@@ -15,6 +16,8 @@ export function Header() {
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const count = useCartCount();
   const categories = useStorefrontCategories();
+  // The "Véhicules" link shows as soon as one vehicle is online.
+  const hasVehicles = categories.some((c) => c.slug === VEHICLE_CATEGORY_SLUG);
   const navigate = useNavigate();
   // The logo is /public/logo.png. Until that file exists, fall back to the text wordmark.
   const [logoFailed, setLogoFailed] = useState(false);
@@ -44,6 +47,11 @@ export function Header() {
           <Link to="/produits" className={navLinkClass}>
             Catalogue
           </Link>
+          {hasVehicles && (
+            <a href="/vehicules" className={navLinkClass}>
+              Véhicules
+            </a>
+          )}
           <a href="/a-propos" className={navLinkClass}>
             À propos
           </a>
@@ -212,7 +220,7 @@ export function Header() {
                 {categories.map((c) => (
                   <a
                     key={c.slug}
-                    href={`/produits?category=${c.slug}`}
+                    href={categoryHref(c.slug)}
                     onClick={() => setOpen(false)}
                     className="px-6 py-2 text-sm text-muted-foreground hover:text-accent"
                   >

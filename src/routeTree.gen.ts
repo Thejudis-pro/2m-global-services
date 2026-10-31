@@ -15,6 +15,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as MadiorRouteImport } from './routes/madior'
 import { Route as MaisonRouteImport } from './routes/maison'
 import { Route as PanierRouteImport } from './routes/panier'
+import { Route as VehiculesRouteImport } from './routes/vehicules'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAvisRouteImport } from './routes/admin/avis'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
@@ -55,6 +56,11 @@ const MaisonRoute = MaisonRouteImport.update({
 const PanierRoute = PanierRouteImport.update({
   id: '/panier',
   path: '/panier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VehiculesRoute = VehiculesRouteImport.update({
+  id: '/vehicules',
+  path: '/vehicules',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/madior': typeof MadiorRoute
   '/maison': typeof MaisonRoute
   '/panier': typeof PanierRoute
+  '/vehicules': typeof VehiculesRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/madior': typeof MadiorRoute
   '/maison': typeof MaisonRoute
   '/panier': typeof PanierRoute
+  '/vehicules': typeof VehiculesRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/madior': typeof MadiorRoute
   '/maison': typeof MaisonRoute
   '/panier': typeof PanierRoute
+  '/vehicules': typeof VehiculesRoute
   '/admin/avis': typeof AdminAvisRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/commandes': typeof AdminCommandesRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/madior'
     | '/maison'
     | '/panier'
+    | '/vehicules'
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/madior'
     | '/maison'
     | '/panier'
+    | '/vehicules'
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/madior'
     | '/maison'
     | '/panier'
+    | '/vehicules'
     | '/admin/avis'
     | '/admin/categories'
     | '/admin/commandes'
@@ -238,6 +250,7 @@ export interface RootRouteChildren {
   MadiorRoute: typeof MadiorRoute
   MaisonRoute: typeof MaisonRoute
   PanierRoute: typeof PanierRoute
+  VehiculesRoute: typeof VehiculesRoute
   AdminAvisRoute: typeof AdminAvisRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCommandesRoute: typeof AdminCommandesRoute
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/panier'
       fullPath: '/panier'
       preLoaderRoute: typeof PanierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vehicules': {
+      id: '/vehicules'
+      path: '/vehicules'
+      fullPath: '/vehicules'
+      preLoaderRoute: typeof VehiculesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -382,6 +402,7 @@ const rootRouteChildren: RootRouteChildren = {
   MadiorRoute: MadiorRoute,
   MaisonRoute: MaisonRoute,
   PanierRoute: PanierRoute,
+  VehiculesRoute: VehiculesRoute,
   AdminAvisRoute: AdminAvisRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCommandesRoute: AdminCommandesRoute,

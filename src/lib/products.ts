@@ -4,6 +4,8 @@
 // is available and the placeholder disappears automatically.
 export const PLACEHOLDER_IMAGE = "placeholder";
 
+import type { VehicleSpecs } from "@/lib/vehicles";
+
 import bureauDirectionAcajouStudio from "@/assets/products/bureau-direction-acajou-studio.jpg";
 import bureauDirectionCaissonBoisPhoto from "@/assets/products/bureau-direction-caisson-bois-photo.jpg";
 import bureauDirectionGrisRender from "@/assets/products/bureau-direction-gris-render.jpg";
@@ -314,6 +316,8 @@ export type Product = {
   weightKg?: number;
   dimensions?: { height: number; width: number; depth: number };
   description?: string;
+  // Only for the "vehicules" category — see src/lib/vehicles.ts.
+  vehicle?: VehicleSpecs;
 };
 
 export const PRODUCTS: Product[] = [

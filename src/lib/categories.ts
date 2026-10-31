@@ -33,6 +33,16 @@ export const CATEGORIES: Category[] = [
   },
   { slug: "armoires", label: "Armoires Métalliques & Bois" },
   { slug: "electroniques", label: "Électroniques" },
+  {
+    slug: "vehicules",
+    label: "Véhicules",
+    subcategories: [
+      { slug: "berlines", label: "Berlines" },
+      { slug: "suv-4x4", label: "SUV & 4x4" },
+      { slug: "pick-up-utilitaires", label: "Pick-up & Utilitaires" },
+      { slug: "citadines", label: "Citadines" },
+    ],
+  },
   { slug: "coffre-fort", label: "Coffre Fort" },
   {
     slug: "parfumerie",

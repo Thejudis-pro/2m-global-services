@@ -58,6 +58,12 @@ const CATEGORY_SPECS: Record<string, CategorySpec> = {
     descriptionIntro:
       "sélectionné pour équiper efficacement votre bureau ou votre maison au quotidien",
   },
+  vehicules: {
+    skuPrefix: "VEH",
+    weightKg: 0,
+    dimensions: { height: 0, width: 0, depth: 0 },
+    descriptionIntro: "",
+  },
   "coffre-fort": {
     skuPrefix: "CFT",
     weightKg: 35,
@@ -88,6 +94,16 @@ function buildGallery(product: Product): GalleryImage[] {
   return [{ src: product.image, alt: product.alt }];
 }
 
+function vehicleDescription(product: Product): string {
+  const v = product.vehicle;
+  const title = v ? [v.brand, v.model, v.year].filter(Boolean).join(" ") : product.name;
+  return (
+    `${title} disponible chez 2M Global Services à Dakar. Véhicule visible sur rendez-vous : ` +
+    `contactez-nous sur WhatsApp pour plus de photos, l'historique d'entretien ou pour organiser ` +
+    `un essai. Paiement et documents traités en toute transparence.`
+  );
+}
+
 export function getProductDetails(product: Product): ProductDetails {
   const spec = CATEGORY_SPECS[product.categorySlug] ?? CATEGORY_SPECS["meubles-de-bureau"];
   const categoryLabel = CATEGORIES.find((c) => c.slug === product.categorySlug)?.label ?? "";
@@ -98,6 +114,7 @@ export function getProductDetails(product: Product): ProductDetails {
     dimensions: product.dimensions ?? spec.dimensions,
     description:
       product.description ??
+      (product.categorySlug === "vehicules" ? vehicleDescription(product) : undefined) ??
       `${product.name} est ${spec.descriptionIntro}. Fabriqué avec des matériaux durables et un ` +
         `souci du détail, ce produit de la catégorie ${categoryLabel} s'intègre facilement dans votre ` +
         `espace de travail ou votre intérieur. 2M Global Services sélectionne chaque référence pour son ` +

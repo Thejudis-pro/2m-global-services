@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useStorefrontCategories } from "@/lib/category-store";
+import { categoryHref, VEHICLE_CATEGORY_SLUG } from "@/lib/vehicles";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { useAllProducts } from "@/lib/product-store";
@@ -269,7 +270,7 @@ function Index() {
             return (
               <a
                 key={c.slug}
-                href={`/produits?category=${c.slug}`}
+                href={categoryHref(c.slug)}
                 className="rounded-[18px] border border-border bg-[var(--color-cream-light)] p-4 transition-all hover:-translate-y-[3px] hover:border-accent"
               >
                 <div className="mb-[14px] h-[110px] lg:h-[150px] w-full overflow-hidden rounded-xl bg-[var(--color-placeholder)]">
@@ -281,7 +282,8 @@ function Index() {
                   {c.label}
                 </div>
                 <div className="mt-[5px] text-[13px] text-muted-foreground">
-                  {productsInCategory.length} produits
+                  {productsInCategory.length}{" "}
+                  {c.slug === VEHICLE_CATEGORY_SLUG ? "véhicules" : "produits"}
                 </div>
               </a>
             );
