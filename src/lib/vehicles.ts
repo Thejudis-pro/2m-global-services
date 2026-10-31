@@ -29,6 +29,7 @@ export type VehicleSpecs = {
   seats?: number;
   condition?: string;
   customsCleared?: boolean;
+  // No longer filled from the admin; kept so older entries still parse.
   location?: string;
 };
 
@@ -75,7 +76,6 @@ export function vehicleSpecRows(specs: VehicleSpecs): { label: string; value: st
       label: "Dédouané",
       value: specs.customsCleared === undefined ? undefined : specs.customsCleared ? "Oui" : "Non",
     },
-    { label: "Visible à", value: specs.location },
   ];
   return rows.filter((r): r is { label: string; value: string } => Boolean(r.value));
 }

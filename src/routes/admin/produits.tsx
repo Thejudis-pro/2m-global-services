@@ -615,7 +615,6 @@ type VehicleForm = {
   seats: string;
   condition: string;
   customsCleared: "" | "oui" | "non";
-  location: string;
 };
 
 function vehicleToForm(v?: VehicleSpecs): VehicleForm {
@@ -630,7 +629,6 @@ function vehicleToForm(v?: VehicleSpecs): VehicleForm {
     seats: v?.seats !== undefined ? String(v.seats) : "",
     condition: v?.condition ?? "",
     customsCleared: v?.customsCleared === undefined ? "" : v.customsCleared ? "oui" : "non",
-    location: v?.location ?? "Dakar",
   };
 }
 
@@ -815,7 +813,6 @@ function ProductFormDialog({
         ...(seats !== undefined ? { seats } : {}),
         ...(vf.condition ? { condition: vf.condition } : {}),
         ...(vf.customsCleared ? { customsCleared: vf.customsCleared === "oui" } : {}),
-        ...(vf.location.trim() ? { location: vf.location.trim() } : {}),
       };
     }
     if (!categorySlug) nextErrors.category = "Veuillez choisir une catégorie.";
@@ -1170,15 +1167,6 @@ function ProductFormDialog({
                     value={vehicleForm.seats}
                     onChange={(e) => setVehicleField("seats", e.target.value)}
                     placeholder="5"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label htmlFor="vehicle-location">Visible à</Label>
-                  <Input
-                    id="vehicle-location"
-                    value={vehicleForm.location}
-                    onChange={(e) => setVehicleField("location", e.target.value)}
-                    placeholder="Dakar"
                   />
                 </div>
               </div>
