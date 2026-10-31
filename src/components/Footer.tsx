@@ -1,6 +1,7 @@
 import { CONTACT } from "@/lib/categories";
 import { useStorefrontCategories } from "@/lib/category-store";
 import { Newsletter } from "@/components/Newsletter";
+import { categoryHref } from "@/lib/vehicles";
 
 export function Footer() {
   const categories = useStorefrontCategories();
@@ -39,10 +40,7 @@ export function Footer() {
               .filter((c) => c.slug !== "parfumerie")
               .map((c) => (
                 <li key={c.slug}>
-                  <a
-                    href={`/produits?category=${c.slug}`}
-                    className="hover:text-[var(--color-gold-light)]"
-                  >
+                  <a href={categoryHref(c.slug)} className="hover:text-[var(--color-gold-light)]">
                     {c.label}
                   </a>
                 </li>

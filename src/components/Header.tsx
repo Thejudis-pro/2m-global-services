@@ -7,7 +7,10 @@ import { categoryHref, VEHICLE_CATEGORY_SLUG } from "@/lib/vehicles";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
 const navLinkClass =
-  "font-display text-[12px] font-bold uppercase tracking-[0.14em] text-foreground hover:text-accent transition-colors";
+  "whitespace-nowrap font-display text-[12px] font-bold uppercase tracking-[0.14em] text-foreground hover:text-accent transition-colors";
+
+// Desktop menu links: slightly tighter on laptop widths so the 5 links stay on one line.
+const desktopNavLinkClass = `${navLinkClass} max-2xl:tracking-[0.1em] max-xl:text-[11px] max-xl:tracking-[0.06em]`;
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -41,28 +44,28 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
       <div className="mx-auto grid max-w-[1320px] grid-cols-[1fr_auto] items-center gap-4 px-[18px] py-[16px] md:grid-cols-[1fr_auto_1fr] md:px-[28px]">
         <nav
-          className="hidden flex-wrap items-center gap-6 md:flex"
+          className="hidden flex-wrap items-center gap-x-4 gap-y-2 md:flex xl:gap-x-5"
           aria-label="Navigation principale"
         >
-          <Link to="/produits" className={navLinkClass}>
+          <Link to="/produits" className={desktopNavLinkClass}>
             Catalogue
           </Link>
           {hasVehicles && (
-            <a href="/vehicules" className={navLinkClass}>
+            <a href="/vehicules" className={desktopNavLinkClass}>
               Véhicules
             </a>
           )}
-          <a href="/a-propos" className={navLinkClass}>
+          <a href="/a-propos" className={desktopNavLinkClass}>
             À propos
           </a>
-          <a href="/contact" className={navLinkClass}>
+          <a href="/contact" className={desktopNavLinkClass}>
             Contact
           </a>
           <a
             href="https://2mparfumeriedk.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={navLinkClass}
+            className={desktopNavLinkClass}
           >
             Parfumerie
           </a>
