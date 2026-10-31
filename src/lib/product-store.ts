@@ -94,7 +94,13 @@ async function fetchProducts(): Promise<Product[]> {
       return SEED_PRODUCTS;
     }
     if (!data || data.length === 0) return SEED_PRODUCTS;
-    return (data as ProductRow[]).map(rowToProduct);
+    const rows = (data as ProductRow[]).map(rowToProduct);
+    // Vehicles are added from the admin while the furniture catalogue is still
+    // the bundled seed (never imported into the table). As long as the table
+    // only holds vehicles, keep showing the seed next to them — otherwise the
+    // first car saved would hide every other product.
+    if (rows.every(isVehicle)) return [...rows, ...SEED_PRODUCTS];
+    return rows;
   } catch (err) {
     // The Supabase client throws (rather than returning `error`) when its env
     // vars are missing, e.g. a local checkout without a .env file.
