@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, ShoppingCart } from "lucide-react";
 import { FusionCard } from "@/components/FusionCard";
 import { ProductImagePlaceholder } from "@/components/ProductImagePlaceholder";
 import { formatCFA } from "@/lib/format";
@@ -27,7 +27,7 @@ function AddToCartButton({ productId, productName }: { productId: string; produc
       onClick={handleClick}
       disabled={status === "loading"}
       aria-label={`Ajouter ${productName} au panier`}
-      className="mt-1.5 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-ink)] px-[12px] py-[12px] font-display text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary disabled:opacity-45"
+      className="mt-1.5 inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--color-ink)] px-[12px] py-[12px] font-display text-[12px] font-bold uppercase tracking-[0.12em] text-primary-foreground transition-colors hover:bg-primary disabled:opacity-45"
     >
       {status === "loading" ? (
         <>
@@ -37,7 +37,12 @@ function AddToCartButton({ productId, productName }: { productId: string; produc
       ) : status === "added" ? (
         "Ajouté !"
       ) : (
-        "Ajouter au panier"
+        <>
+          {/* Narrow cards (2-up on phones, 4-up beside the filters) get the short label. */}
+          <ShoppingCart className="h-4 w-4 shrink-0 @[190px]:hidden" aria-hidden="true" />
+          <span className="@[190px]:hidden">Ajouter</span>
+          <span className="hidden @[190px]:inline">Ajouter au panier</span>
+        </>
       )}
     </button>
   );
@@ -87,7 +92,7 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </a>
 
-      <div className="flex flex-1 flex-col gap-2 p-[15px]">
+      <div className="@container flex flex-1 flex-col gap-2 p-[15px]">
         <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
           {categoryLabel}
         </div>

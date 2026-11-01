@@ -62,7 +62,7 @@ function ConfirmationPage() {
         </span>
       </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="rounded-[22px] bg-primary p-7 text-primary-foreground">
           <div className="mb-3 font-display text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold-light)]">
             Commande confirmée

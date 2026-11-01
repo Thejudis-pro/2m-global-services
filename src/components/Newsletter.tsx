@@ -43,7 +43,7 @@ export function Newsletter({
 
   return (
     <form onSubmit={onSubmit} noValidate className={compact ? "" : "space-y-2"}>
-      <div className={`flex gap-2 ${compact ? "flex-wrap" : ""}`}>
+      <div className="flex flex-wrap gap-2">
         <input
           id="newsletter-email"
           type="email"

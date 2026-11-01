@@ -168,11 +168,11 @@ function CheckoutPage() {
         <StepPill index={2} label="Confirmation" active={false} />
       </div>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-7"
+          className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-5 sm:p-7"
         >
           <h2 className="m-0 mb-5 font-display text-[17px] font-black uppercase">
             Adresse de livraison
@@ -271,7 +271,7 @@ function CheckoutPage() {
             </Button>
           </div>
         </form>
-        <div className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-6">
+        <div className="rounded-[22px] border border-border bg-[var(--color-cream-light)] p-5 sm:p-6">
           <div className="mb-4 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             Votre commande
           </div>

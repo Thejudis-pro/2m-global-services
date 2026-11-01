@@ -120,7 +120,7 @@ function Index() {
           </div>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
           <a
             href="/produits?category=electroniques"
             className="relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-[20px] bg-primary p-[26px] text-primary-foreground"
@@ -325,7 +325,7 @@ function Index() {
       </section>
 
       {/* Dark CTA banner */}
-      <section className="mb-[52px] grid grid-cols-1 items-center gap-8 rounded-[24px] bg-primary p-[28px] text-primary-foreground md:grid-cols-2 md:p-[52px]">
+      <section className="mb-[52px] grid grid-cols-1 items-center gap-8 rounded-[24px] bg-primary p-[28px] text-primary-foreground md:p-[52px] lg:grid-cols-2">
         <div>
           <div className="mb-4 font-display text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-gold-light)]">
             Équipez votre bureau
@@ -346,7 +346,7 @@ function Index() {
             Demander un devis
           </a>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
           {[
             EXPERIENCE_STAT,
             { value: String(total), label: "Références" },

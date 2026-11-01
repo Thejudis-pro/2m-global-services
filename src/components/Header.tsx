@@ -9,8 +9,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/comp
 const navLinkClass =
   "whitespace-nowrap font-display text-[12px] font-bold uppercase tracking-[0.14em] text-foreground hover:text-accent transition-colors";
 
-// Desktop menu links: slightly tighter on laptop widths so the 5 links stay on one line.
-const desktopNavLinkClass = `${navLinkClass} max-2xl:tracking-[0.1em] max-xl:text-[11px] max-xl:tracking-[0.06em]`;
+// Desktop menu links: slightly tighter tracking so the 5 links stay on one line.
+const desktopNavLinkClass = `${navLinkClass} xl:tracking-[0.1em]`;
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -42,9 +42,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
-      <div className="mx-auto grid max-w-[1320px] grid-cols-[1fr_auto] items-center gap-4 px-[18px] py-[16px] md:grid-cols-[1fr_auto_1fr] md:px-[28px]">
+      <div className="mx-auto grid max-w-[1320px] grid-cols-[1fr_auto] items-center gap-4 px-[18px] py-[16px] xl:grid-cols-[1fr_auto_1fr] md:px-[28px]">
         <nav
-          className="hidden flex-wrap items-center gap-x-4 gap-y-2 md:flex xl:gap-x-5"
+          className="hidden flex-wrap items-center gap-x-3.5 gap-y-2 xl:flex"
           aria-label="Navigation principale"
         >
           <Link to="/produits" className={desktopNavLinkClass}>
@@ -101,7 +101,7 @@ export function Header() {
           </div>
         </Link>
 
-        <div className="hidden items-center justify-end gap-4 md:flex">
+        <div className="hidden items-center justify-end gap-4 xl:flex">
           {searchOpen ? (
             <form
               className="flex items-center gap-2"
@@ -146,7 +146,7 @@ export function Header() {
           </a>
         </div>
 
-        <div className="ml-auto flex items-center gap-2 md:hidden">
+        <div className="ml-auto flex items-center gap-2 xl:hidden">
           <a
             href="/panier"
             className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 font-display text-[12px] font-bold text-primary-foreground"
